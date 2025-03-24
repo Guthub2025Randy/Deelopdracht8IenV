@@ -20,7 +20,7 @@ number of buttocks [-],4
 Entrance angle factor [% of Bwl],30
 X division method [-],1
 Flip loft surface [-],0
-Filling Tank 1 [%h1],50
-Filling Tank 2 [%h2],44.8906
-Filling Tank 3 [%h3],61.9134
+Filling Tank 1 [%h1],66.5299
+Filling Tank 2 [%h2],6.7186
+Filling Tank 3 [%h3],71.4998
 
