@@ -1,4 +1,4 @@
-MAIN DIMENSIONS(Moulded) Group 22; Version 2.0
+MAIN DIMENSIONS(Moulded) Group 22; Version 1.0
 Loa  [m],150
 B [m],23.998
 H [m],14.999

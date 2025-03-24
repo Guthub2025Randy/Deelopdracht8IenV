@@ -1,4 +1,4 @@
-INPUT DATA Group 22; Version 2.0
+INPUT DATA Group 22; Version 1.0
 Loa [m],150
 Boa [m],24
 Doa [m],15
@@ -21,6 +21,6 @@ Entrance angle factor [% of Bwl],30
 X division method [-],1
 Flip loft surface [-],0
 Filling Tank 1 [%h1],50
-Filling Tank 2 [%h2],44.9963
-Filling Tank 3 [%h3],61.8742
+Filling Tank 2 [%h2],44.8906
+Filling Tank 3 [%h3],61.9134
 
