@@ -21,8 +21,8 @@ Bovenstaande gegevens zijn nodig voor het antwoordblad.
 g = 9.81
 WATERDICHTHEID = 1025
 STAALGEWICHT = 7850
-transom_bhd_thickness = 0.01 # m
-rest_thickness = 0.02 # m
+transom_bhd_thickness = 0.001 # m
+rest_thickness = 0.001 # m
 WEIGHT_STAAL = 2.1*g*STAALGEWICHT
 WEIGHT_WATER = g*WATERDICHTHEID
 kraan_lcg = 10
