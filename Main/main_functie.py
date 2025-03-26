@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from schip_functies import *
 from output_1 import output_1
 from output_kraan import output_kraan
+# Begin Deelopdracht 7
 #Tank 3: er wordt een waarde gekozen voor het volume van tank 3. Vervolgens wordt hiervan het gewicht en
 #het zwaartepunt bepaald
 volume_t3 = d3["vol_3"][4]+643
@@ -83,3 +84,4 @@ vulperc2ip = ip.interp1d(d2['vol_2'], d2['vulling_%_2'][:7], kind = "cubic")
 vulperc2 = vulperc2ip(volume_t2)
 vulperc3ip = ip.interp1d(d3['vol_3'], d3['vulling_%_3'][:7], kind = "cubic")
 vulperc3 = vulperc3ip(volume_t3)
+# Eind deelopdracht 7
