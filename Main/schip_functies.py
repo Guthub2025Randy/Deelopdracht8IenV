@@ -297,5 +297,5 @@ def Opwaartse_kracht(dictio_CSA, zwaartekracht):
     plt.title("De verdeelde opwaartse kracht")
     plt.legend()
     plt.grid(True)
-    return None
+    return opwaartse_kracht
 
