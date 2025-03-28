@@ -85,5 +85,5 @@ vulperc2 = vulperc2ip(volume_t2)
 vulperc3ip = ip.interp1d(d3['vol_3'], d3['vulling_%_3'][:7], kind = "cubic")
 vulperc3 = vulperc3ip(volume_t3)
 # Eind deelopdracht 7
-
+# Begin deelopdracht 8
 Opwaartse_kracht = Opwaartse_kracht(B_CSA2, g)
