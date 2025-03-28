@@ -281,3 +281,21 @@ def calculateG_M(onderwatervolume, SIt, KG, KB, It):
     g_m = gm - gnulg
     return g_m
 
+def Opwaartse_kracht(dictio_CSA, zwaartekracht):
+    oppervlakte = dictio_CSA[" crossarea_in_m2"]
+    lps = dictio_CSA["x_in_m"]
+    Onderwater_volume = [0]
+    for i in range(len(oppervlakte)-1):
+        dx = lps[i+1]-lps[i]
+        Onderwater_volume.append(((oppervlakte[i]*dx)+(oppervlakte[i+1]*dx))/2)
+    opwaartse_kracht = -np.array(Onderwater_volume)*zwaartekracht
+    plt.figure(figsize=(8,5))
+    plt.plot(lps, opwaartse_kracht, color='b', label='Opwaartse kracht')
+    plt.fill_between(lps, opwaartse_kracht, alpha=0.2, color='b')
+    plt.xlabel("Lengte van het schip (L) in [m]")
+    plt.ylabel("Opwaartse kracht (p) in [N]")
+    plt.title("De verdeelde opwaartse kracht")
+    plt.legend()
+    plt.grid(True)
+    return None
+

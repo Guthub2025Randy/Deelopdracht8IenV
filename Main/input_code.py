@@ -21,6 +21,7 @@ df_twp3 = pd.read_csv("Tank3_Diagram_Waterplane_Gr22_V{0}.0.txt".format(versienu
 df_bhd = pd.read_csv("TankBHD_Data_Gr22_V{0}.0.txt".format(versienummer), header=1)
 df_had = pd.read_csv("HullAreaData_Gr22_V{0}.0.txt".format(versienummer))
 mainsp = "MainShipParticulars_Gr22_V{0}.0.txt".format(versienummer)
+df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{}.0.txt".format(versienummer), header=2)
 
 resistance =pd.read_csv("ResistanceData_Gr22_V{0}.0.txt".format(versienummer),header=6)
 
@@ -121,4 +122,25 @@ dbh1, dbh2, dbh = databh(df_bhd)
 msp = file_to_dic(mainsp)
 dha = dataha(df_had)
 
+def dic_csa(df):
+    """
+    Deze functie zet de df van de bouyant_csa om in een dictionary.
 
+    Parameters
+    ----------
+    df : TYPE: dataframe
+        DESCRIPTION.
+
+    Returns
+    -------
+    dic : TYPE: dictionary
+        DESCRIPTION.
+
+    """
+    df2 = np.append(df.iloc[:,0].values, 148.143)
+    df3 = np.append(df.iloc[:,1].values, 0)
+    dic = {
+        "x_in_m": df2,
+        " crossarea_in_m2": df3
+        }
+    return dic

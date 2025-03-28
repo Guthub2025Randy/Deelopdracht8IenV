@@ -56,3 +56,4 @@ VCG_kraanboom = (H+1+(0.5*32.5*np.sin(np.deg2rad(60))))
 LCG_heisgerei = kraan_lcg
 TCG_heisgerei = 8+(32.5*np.cos(np.deg2rad(60)))
 VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
+B_CSA2 = dic_csa(df_csa)
