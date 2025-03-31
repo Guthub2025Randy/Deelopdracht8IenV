@@ -10,7 +10,7 @@ import numpy as np
 deze code heeft als doel de data uit de textbestanden te halen en in een vorm te zetten die later bruikbaar is. De meeste
 data zal worden geplaatst in dictionaries.
 """
-versienummer = 1
+versienummer = 6
 
 df_tv1 = pd.read_csv("Tank1_Diagram_Volume_Gr22_V{0}.0.txt".format(versienummer), header=2)
 df_twp1 = pd.read_csv("Tank1_Diagram_Waterplane_Gr22_V{0}.0.txt".format(versienummer), header=2)
@@ -21,7 +21,8 @@ df_twp3 = pd.read_csv("Tank3_Diagram_Waterplane_Gr22_V{0}.0.txt".format(versienu
 df_bhd = pd.read_csv("TankBHD_Data_Gr22_V{0}.0.txt".format(versienummer), header=1)
 df_had = pd.read_csv("HullAreaData_Gr22_V{0}.0.txt".format(versienummer))
 mainsp = "MainShipParticulars_Gr22_V{0}.0.txt".format(versienummer)
-df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{}.0.txt".format(versienummer), header=2)
+df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
+df_shell_csa = pd.read_csv("Shell_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
 
 resistance =pd.read_csv("ResistanceData_Gr22_V{0}.0.txt".format(versienummer),header=6)
 
@@ -121,7 +122,7 @@ d3 = datatanks(df_t3)
 dbh1, dbh2, dbh = databh(df_bhd)
 msp = file_to_dic(mainsp)
 dha = dataha(df_had)
-
+# Begin deelopdracht 8
 def dic_csa(df):
     """
     Deze functie zet de df van de bouyant_csa om in een dictionary.
@@ -144,3 +145,23 @@ def dic_csa(df):
         " crossarea_in_m2": df3
         }
     return dic
+
+def traagheidsdic(df_I):
+    """
+    deze functie vraagt een dataframe en plaatst de relevante data in een dictionary en geeft deze vervolgens terug
+    """
+    dic = {}
+    dic["X [m]".format(df_I.iloc[0,11])] = df_I.iloc[:,0].to_numpy()
+    dic["OUTLINE LENGTH [m]".format(df_I.iloc[0,11])] = df_I.iloc[:,1].to_numpy()
+    dic["CROSS SECTION AREA OF SHELL PLATING [m2]".format(df_I.iloc[0,11])] = df_I.iloc[:,2].to_numpy()
+    dic["CENTROID_X[m]".format(df_I.iloc[0,11])] = df_I.iloc[:,3].to_numpy()
+    dic["CENTROID_Y[m]".format(df_I.iloc[0,11])] = df_I.iloc[:,4].to_numpy()
+    dic["CENTROID_Z[m]".format(df_I.iloc[0,11])] = df_I.iloc[:,5].to_numpy()
+    dic["INERTIA_X[m4]".format(df_I.iloc[0,11])] = df_I.iloc[:,6].to_numpy()
+    dic["INERTIA_Y[m4]".format(df_I.iloc[0,11])] = df_I.iloc[:,7].to_numpy()
+    dic["INERTIA_Z[m4]".format(df_I.iloc[0,11])] = df_I.iloc[:,8].to_numpy()
+    dic["Z_Keel[m]".format(df_I.iloc[0,11])] = df_I.iloc[:,9].to_numpy()
+    dic["Z_DECK[m]".format(df_I.iloc[0,11])] = df_I.iloc[:,10].to_numpy()
+    return dic
+
+dic_Shell_CSA = traagheidsdic(df_shell_csa)

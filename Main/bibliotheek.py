@@ -56,4 +56,8 @@ VCG_kraanboom = (H+1+(0.5*32.5*np.sin(np.deg2rad(60))))
 LCG_heisgerei = kraan_lcg
 TCG_heisgerei = 8+(32.5*np.cos(np.deg2rad(60)))
 VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
+# Begin deelopdracht 8
 B_CSA2 = dic_csa(df_csa)
+E = 205*10**9
+L_shell = dic_Shell_CSA["X [m]"]
+I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]

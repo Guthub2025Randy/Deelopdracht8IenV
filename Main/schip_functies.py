@@ -289,7 +289,8 @@ def Opwaartse_kracht(dictio_CSA, zwaartekracht):
         dx = lps[i+1]-lps[i]
         Onderwater_volume.append(((oppervlakte[i]*dx)+(oppervlakte[i+1]*dx))/2)
     opwaartse_kracht = np.array(Onderwater_volume)*zwaartekracht
-    lps_cm = np.linspace(min(lps), max(lps), 14900)
+    opwaartse_kracht[-2]=0
+    lps_cm = np.linspace(-9, 141, 15000)
     interpoleer_opwaarts = ip.interp1d(lps, opwaartse_kracht, kind='cubic', fill_value="extrapolate")
     opwaartse_kracht_cm = interpoleer_opwaarts(lps_cm)
     plt.figure(figsize=(8,5))
@@ -300,5 +301,17 @@ def Opwaartse_kracht(dictio_CSA, zwaartekracht):
     plt.title("De verdeelde opwaartse kracht")
     plt.legend()
     plt.grid(True)
+    plt.show()
     return opwaartse_kracht_cm
+
+def traagheidsmoment_over_lengte(traagheidsmoment, Lengte_schip):
+    plt.plot(Lengte_schip, traagheidsmoment, label="Traagheidsmoment", color='purple')
+    plt.fill_between(Lengte_schip, traagheidsmoment, alpha=0.3, color='purple')
+    plt.xlabel("Lengte van het schip L [m]")
+    plt.ylabel("Traagheidsmoment I [m4]")
+    plt.title("Traagheidsmoment grafiek")
+    plt.legend()
+    plt.grid()
+    plt.show()
+    return traagheidsmoment
 
