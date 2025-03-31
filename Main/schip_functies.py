@@ -288,13 +288,13 @@ def Opwaartse_kracht(dictio_CSA, zwaartekracht):
     for i in range(len(oppervlakte)-1):
         dx = lps[i+1]-lps[i]
         Onderwater_volume.append(((oppervlakte[i]*dx)+(oppervlakte[i+1]*dx))/2)
-    opwaartse_kracht = -np.array(Onderwater_volume)*zwaartekracht
-    lps_cm = np.linspace(min(lps), max(lps), 14000)
+    opwaartse_kracht = np.array(Onderwater_volume)*zwaartekracht
+    lps_cm = np.linspace(min(lps), max(lps), 14900)
     interpoleer_opwaarts = ip.interp1d(lps, opwaartse_kracht, kind='cubic', fill_value="extrapolate")
     opwaartse_kracht_cm = interpoleer_opwaarts(lps_cm)
     plt.figure(figsize=(8,5))
-    plt.plot(lps_cm, opwaartse_kracht_cm, color='b', label='Opwaartse kracht')
-    plt.fill_between(lps_cm, opwaartse_kracht_cm, alpha=0.2, color='b')
+    plt.plot(lps_cm, -opwaartse_kracht_cm, color='b', label='Opwaartse kracht')
+    plt.fill_between(lps_cm, -opwaartse_kracht_cm, alpha=0.2, color='b')
     plt.xlabel("Lengte van het schip (L) in [m]")
     plt.ylabel("Opwaartse kracht (p) in [N]")
     plt.title("De verdeelde opwaartse kracht")

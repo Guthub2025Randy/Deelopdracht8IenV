@@ -30,6 +30,8 @@ benodigde1 = 100
 Dikte = 10
 Breedte = 6 
 traagheidsmoment1 = (tplaat*Dikte**2*(Dikte-Breedte))/6
+Lengte_schip = np.linspace(-9, 140, 14000)
+Dikte_op_lengte = np.array(dingen)
 plaatdiktes = [0.001]
 traagheidsmomenten = [traagheidsmoment1]
 
@@ -41,3 +43,6 @@ plt.ylabel("Plaatdiktes (t) in [m]")
 plt.title("Traagheidsmomenten als functie van de plaatdiktes")
 plt.legend()
 plt.grid(True)
+
+for i in range(len(Lenge_schip)):
+    
