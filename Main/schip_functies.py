@@ -340,10 +340,14 @@ def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
     Water_volume1.append(0)
     Water_volume2.append(0)
     Water_volume3.append(0)
-    Neerwaartse_kracht = (np.array(Water_volume1)+np.array(Water_volume2)+np.array(Water_volume3))*zwaartekracht
-    lps_cm = np.linspace(-9, 141, 15001)
-    interpoleer_opwaarts = ip.interp1d(lps1, Neerwaartse_kracht, kind='quadratic', fill_value="extrapolate")
-    Neerwaartse_kracht_cm = interpoleer_opwaarts(lps_cm)
+    Neerwaartse_kracht1 = np.array(Water_volume1)*zwaartekracht
+    Neerwaartse_kracht2 = np.array(Water_volume2)*zwaartekracht
+    Neerwaartse_kracht3 = np.array(Water_volume3)*zwaartekracht
+    lps_cm = np.linspace(-9, 141, 15000)
+    kracht_interp1 = np.interp(lps_cm, lps1, Neerwaartse_kracht1, left=0, right=0)
+    kracht_interp2 = np.interp(lps_cm, lps2, Neerwaartse_kracht2, left=0, right=0)
+    kracht_interp3 = np.interp(lps_cm, lps3, Neerwaartse_kracht3, left=0, right=0)
+    Neerwaartse_kracht_cm = kracht_interp1 + kracht_interp2 + kracht_interp3
     plt.figure(figsize=(8,5))
     plt.plot(lps_cm, Neerwaartse_kracht_cm, color='r', label='Ballast')
     plt.fill_between(lps_cm, Neerwaartse_kracht_cm, alpha=0.2, color='r')
@@ -353,5 +357,5 @@ def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
     plt.legend()
     plt.grid(True)
     plt.show()
-    return Neerwaartse_kracht_cm
+    return -Neerwaartse_kracht_cm
 

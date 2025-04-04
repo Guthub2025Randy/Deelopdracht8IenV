@@ -90,3 +90,13 @@ Opwaartse_kracht = Opwaartse_kracht(B_CSA2, g)
 I = traagheidsmoment_over_lengte(I_x_shell, L_shell)
 Kracht_Ballast = ballastwater_kracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, g)
 
+q = Kracht_Ballast + Opwaartse_kracht # De netto belasting
+lengte_cm = np.linspace(-9, 141, 15000)
+plt.plot(lengte_cm, q, color='black', label='Netto load')
+plt.fill_between(lengte_cm, q, alpha=0.2, color='black')
+plt.xlabel("Lengte van het schip (L) in [m]")
+plt.ylabel("Netto verdeelde belasting (q) in [N]")
+plt.title("De netto verdeelde belasting")
+plt.legend()
+plt.grid(True)
+plt.show()
