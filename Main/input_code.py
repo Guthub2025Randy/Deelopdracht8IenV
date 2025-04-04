@@ -10,7 +10,7 @@ import numpy as np
 deze code heeft als doel de data uit de textbestanden te halen en in een vorm te zetten die later bruikbaar is. De meeste
 data zal worden geplaatst in dictionaries.
 """
-versienummer = 6
+versienummer = 7
 
 df_tv1 = pd.read_csv("Tank1_Diagram_Volume_Gr22_V{0}.0.txt".format(versienummer), header=2)
 df_twp1 = pd.read_csv("Tank1_Diagram_Waterplane_Gr22_V{0}.0.txt".format(versienummer), header=2)

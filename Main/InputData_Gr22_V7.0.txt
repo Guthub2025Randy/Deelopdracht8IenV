@@ -1,4 +1,4 @@
-INPUT DATA Group 22; Version 6.0
+INPUT DATA Group 22; Version 7.0
 Loa [m],150
 Boa [m],24
 Doa [m],15

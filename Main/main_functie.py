@@ -88,3 +88,4 @@ vulperc3 = vulperc3ip(volume_t3)
 # Begin deelopdracht 8
 Opwaartse_kracht = Opwaartse_kracht(B_CSA2, g)
 I = traagheidsmoment_over_lengte(I_x_shell, L_shell)
+

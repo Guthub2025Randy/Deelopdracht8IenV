@@ -280,18 +280,18 @@ def calculateG_M(onderwatervolume, SIt, KG, KB, It):
     gnulg = SIt/onderwatervolume
     g_m = gm - gnulg
     return g_m
-
+# Begin deelopdracht 8
 def Opwaartse_kracht(dictio_CSA, zwaartekracht):
     oppervlakte = dictio_CSA[" crossarea_in_m2"]
     lps = dictio_CSA["x_in_m"]
-    Onderwater_volume = [0]
+    Onderwater_volume = []
     for i in range(len(oppervlakte)-1):
         dx = lps[i+1]-lps[i]
-        Onderwater_volume.append(((oppervlakte[i]*dx)+(oppervlakte[i+1]*dx))/2)
+        Onderwater_volume.append(oppervlakte[i]*dx)
+    Onderwater_volume.append(0)
     opwaartse_kracht = np.array(Onderwater_volume)*zwaartekracht
-    opwaartse_kracht[-2]=0
     lps_cm = np.linspace(-9, 141, 15000)
-    interpoleer_opwaarts = ip.interp1d(lps, opwaartse_kracht, kind='cubic', fill_value="extrapolate")
+    interpoleer_opwaarts = ip.interp1d(lps, opwaartse_kracht, kind='quadratic', fill_value="extrapolate")
     opwaartse_kracht_cm = interpoleer_opwaarts(lps_cm)
     plt.figure(figsize=(8,5))
     plt.plot(lps_cm, -opwaartse_kracht_cm, color='b', label='Opwaartse kracht')
@@ -304,14 +304,17 @@ def Opwaartse_kracht(dictio_CSA, zwaartekracht):
     plt.show()
     return opwaartse_kracht_cm
 
-def traagheidsmoment_over_lengte(traagheidsmoment, Lengte_schip):
-    plt.plot(Lengte_schip, traagheidsmoment, label="Traagheidsmoment", color='purple')
-    plt.fill_between(Lengte_schip, traagheidsmoment, alpha=0.3, color='purple')
+def traagheidsmoment_over_lengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell):
+    Lengte_schip_csa_shell_cm = np.linspace(-9, 141, 15000)
+    Interpoleer_naar_cm = ip.interp1d(Lengte_schip_csa_shell, traagheidsmoment_csa_shell)
+    traagheidsmoment_csa_shell_cm = Interpoleer_naar_cm(Lengte_schip_csa_shell_cm)
+    plt.plot(Lengte_schip_csa_shell_cm, traagheidsmoment_csa_shell_cm, label="Traagheidsmoment", color='purple')
+    plt.fill_between(Lengte_schip_csa_shell_cm, traagheidsmoment_csa_shell_cm, alpha=0.2, color='purple')
     plt.xlabel("Lengte van het schip L [m]")
     plt.ylabel("Traagheidsmoment I [m4]")
     plt.title("Traagheidsmoment grafiek")
     plt.legend()
-    plt.grid()
+    plt.grid(True)
     plt.show()
-    return traagheidsmoment
+    return traagheidsmoment_csa_shell_cm
 
