@@ -37,7 +37,7 @@ COB = msp["COB [m]"]
 buoyant_volume = float(msp["Buoyant Volume [m3]"])
 it = float(msp["Inertia WPA around COF [m4]"][0])
 lcg_tp = kraan_lcg
-tcg_tp = -2
+tcg_tp = 0
 vcg_tp = H+10
 lengte_kraan_fundatie = 1
 Draaihoogte_kraan = 1
@@ -61,3 +61,7 @@ B_CSA2 = dic_csa(df_csa)
 E = 205*10**9
 L_shell = dic_Shell_CSA["X [m]"]
 I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
+dic_csa_tank1 = dic_csa_ballast_tanks(df_tank1_csa)
+dic_csa_tank2 = dic_csa_ballast_tanks(df_tank2_csa)
+dic_csa_tank3 = dic_csa_ballast_tanks(df_tank3_csa)
+

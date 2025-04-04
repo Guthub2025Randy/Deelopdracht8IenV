@@ -21,9 +21,13 @@ df_twp3 = pd.read_csv("Tank3_Diagram_Waterplane_Gr22_V{0}.0.txt".format(versienu
 df_bhd = pd.read_csv("TankBHD_Data_Gr22_V{0}.0.txt".format(versienummer), header=1)
 df_had = pd.read_csv("HullAreaData_Gr22_V{0}.0.txt".format(versienummer))
 mainsp = "MainShipParticulars_Gr22_V{0}.0.txt".format(versienummer)
+# Bestanden voor deelopdracht 8
 df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
 df_shell_csa = pd.read_csv("Shell_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
-
+df_tank1_csa = pd.read_csv("Tank1_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
+df_tank2_csa = pd.read_csv("Tank2_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
+df_tank3_csa = pd.read_csv("Tank3_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
+# Einde bestanden voor deelopdracht 8
 resistance =pd.read_csv("ResistanceData_Gr22_V{0}.0.txt".format(versienummer),header=6)
 
 
@@ -165,3 +169,26 @@ def traagheidsdic(df_I):
     return dic
 
 dic_Shell_CSA = traagheidsdic(df_shell_csa)
+
+def dic_csa_ballast_tanks(df_tank):
+    """
+    Deze functie zet de df van de ballast tanks om in een dictionary.
+
+    Parameters
+    ----------
+    df : TYPE: dataframe
+        DESCRIPTION.
+
+    Returns
+    -------
+    dic : TYPE: dictionary
+        DESCRIPTION.
+
+    """
+    df2 = np.array(df_tank.iloc[:,0].values)
+    df3 = np.array(df_tank.iloc[:,1].values)
+    dic_tank = {
+        "x_in_m": df2,
+        " crossarea_in_m2": df3
+        }
+    return dic_tank

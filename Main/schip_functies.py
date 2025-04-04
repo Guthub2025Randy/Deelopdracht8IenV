@@ -45,7 +45,7 @@ def calculateWeightKraan(Krachten, Posities, H, kraan_lcg, SWLMax):
     ZwaarteKhuis = -SWLMax*0.34
     arrayPositieKhuis = np.array([kraan_lcg, 8, H+1])
     ZwaarteWindmolen = -9025200
-    arrayPositieWindmolen = np.array([kraan_lcg, -2, H+10])
+    arrayPositieWindmolen = np.array([kraan_lcg, 0, H+10])
     Posities.append(arrayPositieKheis)
     Krachten.append(ZwaarteKheis)
     Posities.append(arrayPositieKboom)
@@ -317,4 +317,41 @@ def traagheidsmoment_over_lengte(traagheidsmoment_csa_shell, Lengte_schip_csa_sh
     plt.grid(True)
     plt.show()
     return traagheidsmoment_csa_shell_cm
+
+def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
+    oppervlakte1 = dic_tank[" crossarea_in_m2"]
+    lps1 = dic_tank["x_in_m"]
+    Water_volume1 = []
+    oppervlakte2 = dic_tank_2[" crossarea_in_m2"]
+    lps2 = dic_tank_2["x_in_m"]
+    Water_volume2 = []
+    oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
+    lps3 = dic_tank_3["x_in_m"]
+    Water_volume3 = []
+    for i in range(len(oppervlakte1)-1):
+        dx1 = lps1[i+1]-lps1[i]
+        Water_volume1.append(oppervlakte1[i]*dx1)
+    for i in range(len(oppervlakte2)-1):
+        dx2 = lps2[i+1]-lps2[i]
+        Water_volume2.append(oppervlakte2[i]*dx2)
+    for i in range(len(oppervlakte3)-1):
+        dx3 = lps3[i+1]-lps3[i]
+        Water_volume3.append(oppervlakte3[i]*dx3)
+    Water_volume1.append(0)
+    Water_volume2.append(0)
+    Water_volume3.append(0)
+    Neerwaartse_kracht = (np.array(Water_volume1)+np.array(Water_volume2)+np.array(Water_volume3))*zwaartekracht
+    lps_cm = np.linspace(-9, 141, 15001)
+    interpoleer_opwaarts = ip.interp1d(lps1, Neerwaartse_kracht, kind='quadratic', fill_value="extrapolate")
+    Neerwaartse_kracht_cm = interpoleer_opwaarts(lps_cm)
+    plt.figure(figsize=(8,5))
+    plt.plot(lps_cm, Neerwaartse_kracht_cm, color='r', label='Ballast')
+    plt.fill_between(lps_cm, Neerwaartse_kracht_cm, alpha=0.2, color='r')
+    plt.xlabel("Lengte van het schip (L) in [m]")
+    plt.ylabel("Neerwaartse kracht (Ballast) in [N]")
+    plt.title("De verdeelde belasting van het ballastwater")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    return Neerwaartse_kracht_cm
 
