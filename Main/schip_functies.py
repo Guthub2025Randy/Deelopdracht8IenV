@@ -328,18 +328,15 @@ def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
     Water_volume3 = []
-    for i in range(len(oppervlakte1)-1):
-        dx1 = lps1[i+1]-lps1[i]
+    for i in range(len(oppervlakte1)):
+        dx1 = lps1[2]-lps1[1]
         Water_volume1.append(oppervlakte1[i]*dx1)
-    for i in range(len(oppervlakte2)-1):
-        dx2 = lps2[i+1]-lps2[i]
+    for i in range(len(oppervlakte2)):
+        dx2 = lps2[2]-lps2[1]
         Water_volume2.append(oppervlakte2[i]*dx2)
-    for i in range(len(oppervlakte3)-1):
-        dx3 = lps3[i+1]-lps3[i]
+    for i in range(len(oppervlakte3)):
+        dx3 = lps3[2]-lps3[1]
         Water_volume3.append(oppervlakte3[i]*dx3)
-    Water_volume1.append(0)
-    Water_volume2.append(0)
-    Water_volume3.append(0)
     Neerwaartse_kracht1 = np.array(Water_volume1)*zwaartekracht
     Neerwaartse_kracht2 = np.array(Water_volume2)*zwaartekracht
     Neerwaartse_kracht3 = np.array(Water_volume3)*zwaartekracht
