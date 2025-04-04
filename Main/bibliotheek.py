@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from scipy import interpolate as ip
 from input_code import *
 from openpyxl import load_workbook
+from scipy.integrate import cumulative_trapezoid as cumtrapz
 
 Rtot_14knp = resistance.iloc[8,3] 
 entrance_angle = resistance.iloc[14,1]
@@ -58,7 +59,7 @@ TCG_heisgerei = 8+(32.5*np.cos(np.deg2rad(60)))
 VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
 # Begin deelopdracht 8
 B_CSA2 = dic_csa(df_csa)
-E = 205*10**9
+E = 205*(10**9)
 L_shell = dic_Shell_CSA["X [m]"]
 I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
 dic_csa_tank1 = dic_csa_ballast_tanks(df_tank1_csa)
