@@ -117,3 +117,17 @@ plt.legend()
 plt.grid(True)
 plt.show()
 plt.close()
+
+hoekverdraai_accent = hoekverdraaiing_acc(M, lengte_cm)
+
+doorbuig_acc = doorbuiging_acc(hoekverdraai_accent, lengte_cm)
+
+# hoekverdraaing (phi) = phi_accent + C
+# Doorbuiging (w) = w_acc +C
+# Dus C berekenen:
+
+C = []
+for i in range(len(doorbuig_acc)):
+    C.append(- (doorbuig_acc[i]/Lengte_schip))
+
+doorbuig = doorbuiging(doorbuig_acc, lengte_cm, C)

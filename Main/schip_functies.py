@@ -420,12 +420,6 @@ def doorbuiging_acc(phi_accent, Lengte_schip):
     plt.close()
     return w_acc
 
-# hoekverdraaing (phi) = phi_accent + C
-# Doorbuiging (w) = w_acc +C
-# Dus C berekenen:
-
-C = - (doorbuiging_acc[n-1] / Lengte_schip)
-
 #phi
 def hoekverdraaiing(phi_acc, Lengte_schip):
     phi = phi_acc + C
@@ -443,7 +437,7 @@ def hoekverdraaiing(phi_acc, Lengte_schip):
     return phi
 
 #w
-def doorbuiging(w_acc, Lengte_schip):
+def doorbuiging(w_acc, Lengte_schip, C):
     w = w_acc + C
     w[0]=0
     w[-1]=0

@@ -65,4 +65,4 @@ I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
 dic_csa_tank1 = dic_csa_ballast_tanks(df_tank1_csa)
 dic_csa_tank2 = dic_csa_ballast_tanks(df_tank2_csa)
 dic_csa_tank3 = dic_csa_ballast_tanks(df_tank3_csa)
-
+Lengte_schip = float(msp["Loa  [m]"])
