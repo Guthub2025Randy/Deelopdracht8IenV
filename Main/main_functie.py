@@ -88,7 +88,7 @@ vulperc3 = vulperc3ip(volume_t3)
 # Begin deelopdracht 8
 Opwaartse_kracht = Opwaartse_kracht(B_CSA2, g)
 I = traagheidsmoment_over_lengte(I_x_shell, L_shell)
-I[-1] = 0.0000000000000001 # Anders krijgen we een gedeeld door 0 error bij M/(E*I)
+I[-1] = 0.0000000000000000000000001 # Anders krijgen we een gedeeld door 0 error bij M/(E*I)
 Kracht_Ballast = ballastwater_kracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, g)
 
 q = Kracht_Ballast + Opwaartse_kracht # De netto belasting
@@ -126,8 +126,6 @@ doorbuig_acc = doorbuiging_acc(hoekverdraai_accent, lengte_cm)
 # Doorbuiging (w) = w_acc +C
 # Dus C berekenen:
 
-C = []
-for i in range(len(doorbuig_acc)):
-    C.append(- (doorbuig_acc[i]/Lengte_schip))
+C = doorbuig_acc[-1]/Lengte_schip
 
 doorbuig = doorbuiging(doorbuig_acc, lengte_cm, C)

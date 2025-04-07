@@ -45,7 +45,7 @@ def calculateWeightKraan(Krachten, Posities, H, kraan_lcg, SWLMax):
     ZwaarteKhuis = -SWLMax*0.34
     arrayPositieKhuis = np.array([kraan_lcg, 8, H+1])
     ZwaarteWindmolen = -9025200
-    arrayPositieWindmolen = np.array([kraan_lcg, 0, H+10])
+    arrayPositieWindmolen = np.array([32, 0, H+10])
     Posities.append(arrayPositieKheis)
     Krachten.append(ZwaarteKheis)
     Posities.append(arrayPositieKboom)
@@ -134,7 +134,7 @@ def calculateVullingT1(arr_volume, arr_tcg, moment_som, arr_vulling_pc, watergew
   xnew = np.linspace(arr_vulling_pc[0], arr_vulling_pc[-1], 10000)
   ynew = f2(xnew)
   plt.figure(figsize=(8,5))
-  plt.plot(xnew, ynew, "-", linestyle="-", color = "b", label='Tankvolume vs moment Tank 1')
+  plt.plot(xnew, ynew, "-", linestyle='-', color = "b", label='Tankvolume vs moment Tank 1')
   plt.plot(arr_vulling_pc, arr_volume,'o', color='r')
   plt.xlabel("Vullingspercentage (%)")
   plt.ylabel("Volume (m³)")
@@ -282,17 +282,16 @@ def calculateG_M(onderwatervolume, SIt, KG, KB, It):
     return g_m
 # Begin deelopdracht 8
 def Opwaartse_kracht(dictio_CSA, zwaartekracht):
+    lps_cm = np.linspace(-9, 141, 15000)
     oppervlakte = dictio_CSA[" crossarea_in_m2"]
     lps = dictio_CSA["x_in_m"]
+    oppervlakte_cm = np.interp(lps_cm, lps, oppervlakte, left=0, right=0)
     Onderwater_volume = []
-    for i in range(len(oppervlakte)-1):
-        dx = lps[i+1]-lps[i]
-        Onderwater_volume.append(oppervlakte[i]*dx)
+    for i in range(len(oppervlakte_cm)-1):
+        dx = lps_cm[i+1]-lps_cm[i]
+        Onderwater_volume.append(oppervlakte_cm[i]*dx)
     Onderwater_volume.append(0)
-    opwaartse_kracht = np.array(Onderwater_volume)*zwaartekracht
-    lps_cm = np.linspace(-9, 141, 15000)
-    interpoleer_opwaarts = ip.interp1d(lps, opwaartse_kracht, kind='quadratic', fill_value="extrapolate")
-    opwaartse_kracht_cm = interpoleer_opwaarts(lps_cm)
+    opwaartse_kracht_cm = np.array(Onderwater_volume)*WEIGHT_WATER
     plt.figure(figsize=(8,5))
     plt.plot(lps_cm, -opwaartse_kracht_cm, color='b', label='Opwaartse kracht')
     plt.fill_between(lps_cm, -opwaartse_kracht_cm, alpha=0.2, color='b')
@@ -302,6 +301,7 @@ def Opwaartse_kracht(dictio_CSA, zwaartekracht):
     plt.legend()
     plt.grid(True)
     plt.show()
+    print(np.sum(opwaartse_kracht_cm))
     return opwaartse_kracht_cm
 
 def traagheidsmoment_over_lengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell):
@@ -319,32 +319,37 @@ def traagheidsmoment_over_lengte(traagheidsmoment_csa_shell, Lengte_schip_csa_sh
     return traagheidsmoment_csa_shell_cm
 
 def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
+    lps_cm = np.linspace(-9, 141, 15000)
     oppervlakte1 = dic_tank[" crossarea_in_m2"]
     lps1 = dic_tank["x_in_m"]
+    oppervlakte1_cm = np.interp(lps_cm, lps1, oppervlakte1, left=0, right=0)
     Water_volume1 = []
     oppervlakte2 = dic_tank_2[" crossarea_in_m2"]
     lps2 = dic_tank_2["x_in_m"]
+    oppervlakte2_cm = np.interp(lps_cm, lps2, oppervlakte2, left=0, right=0)
     Water_volume2 = []
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
+    oppervlakte3_cm = np.interp(lps_cm, lps3, oppervlakte3, left=0, right=0)
     Water_volume3 = []
-    for i in range(len(oppervlakte1)):
-        dx1 = lps1[2]-lps1[1]
-        Water_volume1.append(oppervlakte1[i]*dx1)
-    for i in range(len(oppervlakte2)):
-        dx2 = lps2[2]-lps2[1]
-        Water_volume2.append(oppervlakte2[i]*dx2)
-    for i in range(len(oppervlakte3)):
-        dx3 = lps3[2]-lps3[1]
-        Water_volume3.append(oppervlakte3[i]*dx3)
-    Neerwaartse_kracht1 = np.array(Water_volume1)*zwaartekracht
-    Neerwaartse_kracht2 = np.array(Water_volume2)*zwaartekracht
-    Neerwaartse_kracht3 = np.array(Water_volume3)*zwaartekracht
-    lps_cm = np.linspace(-9, 141, 15000)
-    kracht_interp1 = np.interp(lps_cm, lps1, Neerwaartse_kracht1, left=0, right=0)
-    kracht_interp2 = np.interp(lps_cm, lps2, Neerwaartse_kracht2, left=0, right=0)
-    kracht_interp3 = np.interp(lps_cm, lps3, Neerwaartse_kracht3, left=0, right=0)
-    Neerwaartse_kracht_cm = kracht_interp1 + kracht_interp2 + kracht_interp3
+    for i in range(len(oppervlakte1_cm)-1):
+        dx1 = lps_cm[i+1]-lps_cm[i]
+        Water_volume1.append(oppervlakte1_cm[i]*dx1)
+    for i in range(len(oppervlakte2_cm)-1):
+        dx2 = lps_cm[i+1]-lps_cm[i]
+        Water_volume2.append(oppervlakte2_cm[i]*dx2)
+    for i in range(len(oppervlakte3_cm)-1):
+        dx3 = lps_cm[i+1]-lps_cm[i]
+        Water_volume3.append(oppervlakte3_cm[i]*dx3)
+    Water_volume1.append(0)
+    Water_volume2.append(0)
+    Water_volume3.append(0)
+    print(np.sum(Water_volume1))
+    Neerwaartse_kracht1 = np.array(Water_volume1)*WEIGHT_WATER
+    print(np.sum(Neerwaartse_kracht1))
+    Neerwaartse_kracht2 = np.array(Water_volume2)*WEIGHT_WATER
+    Neerwaartse_kracht3 = np.array(Water_volume3)*WEIGHT_WATER
+    Neerwaartse_kracht_cm = Neerwaartse_kracht1 + Neerwaartse_kracht2 +Neerwaartse_kracht3
     plt.figure(figsize=(8,5))
     plt.plot(lps_cm, Neerwaartse_kracht_cm, color='r', label='Ballast')
     plt.fill_between(lps_cm, Neerwaartse_kracht_cm, alpha=0.2, color='r')
@@ -354,6 +359,7 @@ def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
     plt.legend()
     plt.grid(True)
     plt.show()
+    print(np.sum(Neerwaartse_kracht_cm))
     return -Neerwaartse_kracht_cm
 
 def dwarskracht(q_x,Lengte_schip):

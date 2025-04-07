@@ -22,11 +22,11 @@ df_bhd = pd.read_csv("TankBHD_Data_Gr22_V{0}.0.txt".format(versienummer), header
 df_had = pd.read_csv("HullAreaData_Gr22_V{0}.0.txt".format(versienummer))
 mainsp = "MainShipParticulars_Gr22_V{0}.0.txt".format(versienummer)
 # Bestanden voor deelopdracht 8
-df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
+df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
 df_shell_csa = pd.read_csv("Shell_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
-df_tank1_csa = pd.read_csv("Tank1_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
-df_tank2_csa = pd.read_csv("Tank2_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
-df_tank3_csa = pd.read_csv("Tank3_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
+df_tank1_csa = pd.read_csv("Tank1_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
+df_tank2_csa = pd.read_csv("Tank2_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
+df_tank3_csa = pd.read_csv("Tank3_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
 # Einde bestanden voor deelopdracht 8
 resistance =pd.read_csv("ResistanceData_Gr22_V{0}.0.txt".format(versienummer),header=6)
 
@@ -142,12 +142,9 @@ def dic_csa(df):
         DESCRIPTION.
 
     """
-    df2 = np.append(df.iloc[:,0].values, 148.143)
-    df3 = np.append(df.iloc[:,1].values, 0)
-    dic = {
-        "x_in_m": df2,
-        " crossarea_in_m2": df3
-        }
+    dic = {}
+    dic["x_in_m".format(df.iloc[20,0])] = df.iloc[:,0].to_numpy()
+    dic[" crossarea_in_m2".format(df.iloc[20,1])] = df.iloc[:,1].to_numpy()
     return dic
 
 def traagheidsdic(df_I):
@@ -185,10 +182,7 @@ def dic_csa_ballast_tanks(df_tank):
         DESCRIPTION.
 
     """
-    df2 = np.array(df_tank.iloc[:,0].values)
-    df3 = np.array(df_tank.iloc[:,1].values)
-    dic_tank = {
-        "x_in_m": df2,
-        " crossarea_in_m2": df3
-        }
+    dic_tank = {}
+    dic_tank["x_in_m".format(df_tank.iloc[7,0])] = df_tank.iloc[:,0].to_numpy()
+    dic_tank[" crossarea_in_m2".format(df_tank.iloc[7,1])] = df_tank.iloc[:,1].to_numpy()
     return dic_tank
