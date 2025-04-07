@@ -4,13 +4,13 @@ Created on Thu Mar 20 14:24:08 2025
 
 @author: randy
 """
-from bibliotheek import np, sm, plt
+from bibliotheek import np, plt
 
 def Opwaartse_kracht(dic_CSA, zwaartekracht):
     oppervlakte = dic_CSA["crossarea_in_m2"]
     lps = dic_CSA["x_in_m"]
     Onderwater_volume = [0]
-    for i in range(len(oppervlakte)):
+    for i in range(len(oppervlakte)-1):
         dx = lps[i+1]-lps[i]
         Onderwater_volume.append(((oppervlakte[i]*dx)+(oppervlakte[i+1]*dx))/2)
     Opwaartse_kracht = -np.array(Onderwater_volume)*zwaartekracht

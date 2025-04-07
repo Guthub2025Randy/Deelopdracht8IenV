@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from scipy import interpolate as ip
 from input_code import *
 from openpyxl import load_workbook
+from scipy.integrate import cumulative_trapezoid as cumtrapz
 
 Rtot_14knp = resistance.iloc[8,3] 
 entrance_angle = resistance.iloc[14,1]
@@ -37,16 +38,16 @@ COB = msp["COB [m]"]
 buoyant_volume = float(msp["Buoyant Volume [m3]"])
 it = float(msp["Inertia WPA around COF [m4]"][0])
 lcg_tp = kraan_lcg
-tcg_tp = -2
+tcg_tp = 0
 vcg_tp = H+10
 lengte_kraan_fundatie = 1
 Draaihoogte_kraan = 1
 jib_length = 32.5
 Zwenkhoek = 90
 Giekhoek = 60
-LCG_TP = kraan_lcg
-TCG_TP = 8+(32.5*np.cos(np.deg2rad(60)))
-VCG_TP = (H+1+(32.5*np.sin(np.deg2rad(60))))
+LCG_TP = 32
+TCG_TP = 0
+VCG_TP = H+10
 LCG_kraanhuis = kraan_lcg 
 TCG_kraanhuis = 8
 VCG_kraanhuis = H+1
@@ -56,4 +57,12 @@ VCG_kraanboom = (H+1+(0.5*32.5*np.sin(np.deg2rad(60))))
 LCG_heisgerei = kraan_lcg
 TCG_heisgerei = 8+(32.5*np.cos(np.deg2rad(60)))
 VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
+# Begin deelopdracht 8
 B_CSA2 = dic_csa(df_csa)
+E = 205*(10**9)
+L_shell = dic_Shell_CSA["X [m]"]
+I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
+dic_csa_tank1 = dic_csa_ballast_tanks(df_tank1_csa)
+dic_csa_tank2 = dic_csa_ballast_tanks(df_tank2_csa)
+dic_csa_tank3 = dic_csa_ballast_tanks(df_tank3_csa)
+Lengte_schip = float(msp["Loa  [m]"])

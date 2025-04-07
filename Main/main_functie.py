@@ -87,3 +87,45 @@ vulperc3 = vulperc3ip(volume_t3)
 # Eind deelopdracht 7
 # Begin deelopdracht 8
 Opwaartse_kracht = Opwaartse_kracht(B_CSA2, g)
+I = traagheidsmoment_over_lengte(I_x_shell, L_shell)
+I[-1] = 0.0000000000000000000000001 # Anders krijgen we een gedeeld door 0 error bij M/(E*I)
+Kracht_Ballast = ballastwater_kracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, g)
+
+q = Kracht_Ballast + Opwaartse_kracht # De netto belasting
+lengte_cm = np.linspace(-9, 141, 15000)
+plt.plot(lengte_cm, q, color='black', label='Netto load')
+plt.fill_between(lengte_cm, q, alpha=0.2, color='black')
+plt.xlabel("Lengte van het schip (L) in [m]")
+plt.ylabel("Netto verdeelde belasting (q) in [N]")
+plt.title("De netto verdeelde belasting")
+plt.legend()
+plt.grid(True)
+plt.show()
+plt.close()
+V = dwarskracht(q, lengte_cm)
+
+M = Buigend_Moment(V, lengte_cm)
+
+Reduct_M = M/(E*I)
+
+plt.plot(lengte_cm, Reduct_M, color='c', label='Gereduceerde moment')
+plt.fill_between(lengte_cm, Reduct_M, alpha=0.2, color='black')
+plt.xlabel("Lengte van het schip (L) in [m]")
+plt.ylabel("Gereduceerde moment (M/(E*I)) in [Nm]")
+plt.title("De netto verdeelde belasting")
+plt.legend()
+plt.grid(True)
+plt.show()
+plt.close()
+
+hoekverdraai_accent = hoekverdraaiing_acc(M, lengte_cm)
+
+doorbuig_acc = doorbuiging_acc(hoekverdraai_accent, lengte_cm)
+
+# hoekverdraaing (phi) = phi_accent + C
+# Doorbuiging (w) = w_acc +C
+# Dus C berekenen:
+
+C = doorbuig_acc[-1]/Lengte_schip
+
+doorbuig = doorbuiging(doorbuig_acc, lengte_cm, C)

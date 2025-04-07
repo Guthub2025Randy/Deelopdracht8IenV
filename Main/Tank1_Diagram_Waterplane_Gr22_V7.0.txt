@@ -1,4 +1,4 @@
-TANKDIAGRAM TNK 1 WATERPLANE DATA Group 22; Version 6.0
+TANKDIAGRAM TNK 1 WATERPLANE DATA Group 22; Version 7.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], Inertia_x [m4], Inertia_y [m4], Inertia_z [m4]
 0.009,0.06,595.1149,77.8662,7.5896,0.009,2238.5722,395793.3883,398031.9606
