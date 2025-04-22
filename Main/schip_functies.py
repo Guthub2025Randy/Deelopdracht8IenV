@@ -10,6 +10,18 @@ Original file is located at
 from bibliotheek import *
 from input_code import *
 
+def funcPlotFill(x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam, kleur_functie):
+    plt.plot(x_plot, y_plot, label=f"{functie_naam}", color=f'{kleur_functie}')
+    plt.fill_between(x_plot, y_plot, alpha=0.3, color=f'{kleur_functie}')
+    plt.xlabel(f"{x_naam}")
+    plt.ylabel(f"{y_naam}")
+    plt.title(f"{titel_naam}")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    plt.close()
+    return None
+
 def interpolerenLocatie(dictionary_ballasttank, vulling_tank, tanknummer):
     """
     Deze functie bepaalt van het water een ballasttank het zwaartepunt. Als input neemt hij de dictionary waarin de zwaartepunten
@@ -427,33 +439,19 @@ def doorbuiging_acc(phi_accent, Lengte_schip):
     return w_acc
 
 #phi
-def hoekverdraaiing(phi_acc, Lengte_schip):
+def hoekverdraaiing(phi_acc, lengte_schip, C):
     phi = phi_acc + C
     phi[0]=0
     phi[-1]=0
-    plt.plot(Lengte_schip, phi, label="hoekverdraaiing", color='yellow')
-    plt.fill_between(Lengte_schip, phi, alpha=0.3, color='yellow')
-    plt.xlabel("Lengte van het schip L [m]")
-    plt.ylabel(" φ(x) [deg]")
-    plt.title("Hoek in graden")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-    plt.close()
+    funcPlotFill(lengte_schip, phi, "Lengte van het schip L [m]", "φ(x) [deg]", "Relatieve hoek in graden over de lengte van het schip", "Hoekverdraaiing φ(x) [deg]", "y")
     return phi
 
 #w
-def doorbuiging(w_acc, Lengte_schip, C):
+def doorbuiging(w_acc, lengte_schip, C):
     w = w_acc + C
     w[0]=0
     w[-1]=0
-    plt.plot(Lengte_schip, w_acc, label="doorbuiging", color='red')
-    plt.fill_between(Lengte_schip, w, alpha=0.3, color='red')
-    plt.xlabel("Lengte van het schip L [m]")
-    plt.ylabel(" Doorbuiging []")
-    plt.title("Vervorming")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-    plt.close()
+    funcPlotFill(lengte_schip, w_acc, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "Functie van de relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
     return w_acc
+# x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam
+
