@@ -374,68 +374,36 @@ def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
     print(np.sum(Neerwaartse_kracht_cm))
     return -Neerwaartse_kracht_cm
 
-def dwarskracht(q_x,Lengte_schip):
-    dwarskracht = cumtrapz(q_x, Lengte_schip, initial=0)
+def dwarskracht(q_x, lengte_schip):
+    dwarskracht = cumtrapz(q_x, lengte_schip, initial=0)
     dwarskracht[0]=0
     dwarskracht[-1]=0
-    plt.plot(Lengte_schip, dwarskracht, label="Dwarskracht V(x)", color="orange")
-    plt.fill_between(Lengte_schip, dwarskracht, alpha=0.3, color="orange")
-    plt.xlabel("Lengte van het schip L [m]")
-    plt.ylabel("Dwarskracht V(x) [N]")
-    plt.title("Dwarskracht grafiek")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-    plt.close()
+    funcPlotFill(lengte_schip, dwarskracht, "Lengte van het schip L [m]", "Dwarskracht V(x) [N]", "De dwarskracht V(x) [N] over de lengte van het schip L [m]", "Dwarskracht V(x)", 'orange')
     return dwarskracht
 
-def Buigend_Moment(F_x,Lengte_schip):
-    buigend_moment = cumtrapz(F_x, Lengte_schip, initial=0)
+def Buigend_Moment(F_x, lengte_schip):
+    buigend_moment = cumtrapz(F_x, lengte_schip, initial=0)
     buigend_moment[0]=0
     buigend_moment[-1]=0
-    plt.plot(Lengte_schip, buigend_moment, label="Buigend moment M(x)", color="yellow")
-    plt.fill_between(Lengte_schip, buigend_moment, alpha=0.3, color="yellow")
-    plt.xlabel("Lengte van het schip L [m]")
-    plt.ylabel("Buigend moment M(x) [Nm]")
-    plt.title("Buigend moment grafiek")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-    plt.close()
+    funcPlotFill(lengte_schip, buigend_moment, "Lengte van het schip L [m]", "Buigend moment M(x) [Nm]", "Het buigend moment M(x) [Nm] over de lengte van het schip L [m]", "Buigend moment M(x)", 'yellow')
     return buigend_moment
 
 # door het gereduceerde moment de integreren krijg je de verdraaiing accent (phi accent)
-def hoekverdraaiing_acc(Buigend_moment, Lengte_schip):
-    phi_accent = cumtrapz(Lengte_schip, Buigend_moment, initial=0)
+def hoekverdraaiing_acc(buigend_moment_uitkomst, lengte_schip):
+    phi_accent = cumtrapz(lengte_schip, buigend_moment_uitkomst, initial=0)
     phi_accent[0]=0
     phi_accent[-1]=0
-    plt.plot(Lengte_schip, phi_accent, label="hoekverdraaiing accent", color='green')
-    plt.fill_between(Lengte_schip, phi_accent, alpha=0.3, color='green')
-    plt.xlabel("Lengte van het schip L [m]")
-    plt.ylabel(" φ(x)' [deg]")
-    plt.title("Hoek in graden")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-    plt.close()
+    funcPlotFill(lengte_schip, phi_accent, "Lengte van het schip L [m]", "φ(x)' [deg]", "De hoekverdraaiing in graden φ(x)' [deg] over de lengte van het schip L [m]", "De hoekverdraaiing φ(x)' [deg]", 'green')
     return phi_accent
 
 
 # door de verdraaing accent (phi accent) te integreren krijg je de doorbuigin accent (w')
 
-def doorbuiging_acc(phi_accent, Lengte_schip):
-    w_acc = cumtrapz(Lengte_schip, phi_accent, initial =0 )
+def doorbuiging_acc(phi_accent, lengte_schip):
+    w_acc = cumtrapz(lengte_schip, phi_accent, initial =0 )
     w_acc[0]=0
     w_acc[-1]=0
-    plt.plot(Lengte_schip, w_acc, label="doorbuiging accent", color='brown')
-    plt.fill_between(Lengte_schip, w_acc, alpha=0.3, color='brown')
-    plt.xlabel("Lengte van het schip L [m]")
-    plt.ylabel(" Doorbuiging accent []")
-    plt.title("Vervorming")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-    plt.close()
+    funcPlotFill(lengte_schip, w_acc, "Lengte van het schip L [m]", "Doorbuiging w'(x) [m]", "Doorbuiging w'(x) [m] over de lengte van het schip L [m]", "Doorbuiging w'(x) [m]", 'brown')
     return w_acc
 
 #phi
@@ -451,7 +419,7 @@ def doorbuiging(w_acc, lengte_schip, C):
     w = w_acc + C
     w[0]=0
     w[-1]=0
-    funcPlotFill(lengte_schip, w_acc, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "Functie van de relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
+    funcPlotFill(lengte_schip, w_acc, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
     return w_acc
 # x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam
 
