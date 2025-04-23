@@ -297,37 +297,21 @@ def calculateG_M(onderwatervolume, SIt, KG, KB, It):
 def opwaartseKracht(dictio_CSA, lengte_schip):
     oppervlakte = dictio_CSA[" crossarea_in_m2"]
     lps = dictio_CSA["x_in_m"]
-    oppervlakte_cm = np.interp(lengte_schip, lps, oppervlakte, left=0, right=0)
+    oppervlakteInterp = ip.interp1d(lps, oppervlakte, kind='linear', fill_value='extrapolate')
+    oppervlakte_cm = oppervlakteInterp(lengte_schip)
     Onderwater_volume = []
     for i in range(len(oppervlakte_cm)-1):
         dx = lengte_schip[i+1]-lengte_schip[i]
         Onderwater_volume.append(oppervlakte_cm[i]*dx)
     Onderwater_volume.append(0)
     opwaartse_kracht_cm = np.array(Onderwater_volume)*WEIGHT_WATER
-    plt.figure(figsize=(8,5))
-    plt.plot(lengte_schip, -opwaartse_kracht_cm, color='b', label='Opwaartse kracht')
-    plt.fill_between(lengte_schip, -opwaartse_kracht_cm, alpha=0.2, color='b')
-    plt.xlabel("Lengte van het schip (L) in [m]")
-    plt.ylabel("Opwaartse kracht (p) in [N]")
-    plt.title("De verdeelde opwaartse kracht")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-    print(np.sum(opwaartse_kracht_cm))
+    funcPlotFill(lengte_schip, -opwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Opwaartse kracht (p) in [N]", "De opwaartse kracht (p) in [N] over de lengte van het schip (L) [m]", "Opwaartse kracht (p) in [N]", 'b')
     return opwaartse_kracht_cm
 
-def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell):
-    Lengte_schip_csa_shell_cm = np.linspace(-9, 141, 15000)
+def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell, lengte_schip):
     Interpoleer_naar_cm = ip.interp1d(Lengte_schip_csa_shell, traagheidsmoment_csa_shell)
-    traagheidsmoment_csa_shell_cm = Interpoleer_naar_cm(Lengte_schip_csa_shell_cm)
-    plt.plot(Lengte_schip_csa_shell_cm, traagheidsmoment_csa_shell_cm, label="Traagheidsmoment", color='purple')
-    plt.fill_between(Lengte_schip_csa_shell_cm, traagheidsmoment_csa_shell_cm, alpha=0.2, color='purple')
-    plt.xlabel("Lengte van het schip L [m]")
-    plt.ylabel("Traagheidsmoment I [m4]")
-    plt.title("Traagheidsmoment grafiek")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+    traagheidsmoment_csa_shell_cm = Interpoleer_naar_cm(lengte_schip)
+    funcPlotFill(lengte_schip, traagheidsmoment_csa_shell_cm, "Lengte van het schip (L) [m]", "Traagheidsmoment I [m4]", "Het traagheidsmoment I [m4] over de lengte van het schip L [m]", "Traagheidsmoment I [m4]", 'purple')
     return traagheidsmoment_csa_shell_cm
 
 def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
@@ -353,9 +337,7 @@ def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
     Water_volume1.append(0)
     Water_volume2.append(0)
     Water_volume3.append(0)
-    print(np.sum(Water_volume1))
     Neerwaartse_kracht1 = np.array(Water_volume1)*WEIGHT_WATER
-    print(np.sum(Neerwaartse_kracht1))
     Neerwaartse_kracht2 = np.array(Water_volume2)*WEIGHT_WATER
     Neerwaartse_kracht3 = np.array(Water_volume3)*WEIGHT_WATER
     Neerwaartse_kracht_cm = Neerwaartse_kracht1 + Neerwaartse_kracht2 + Neerwaartse_kracht3
@@ -410,4 +392,35 @@ def doorbuiging(w_acc, lengte_schip, C):
     funcPlotFill(lengte_schip, w_acc, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
     return w_acc
 # x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam
+
+def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, straal, start, eind, lengte):
+    begin = max(zwaartepunt_tp - straal, start)
+    eind = min(zwaartepunt_tp + straal, eind)
+    idx_begin = int(begin - start)
+    idx_eind = int(eind - start)
+
+    bereik = np.arange(idx_begin, idx_eind + 1)
+    afstanden = (bereik + start) - zwaartepunt_tp
+    x_norm = afstanden / straal
+
+    profiel = np.clip(1 - x_norm**2, 0, None)
+    profiel /= profiel.sum()
+    profiel *= totaal_kracht
+
+    kracht = np.zeros(lengte)
+    kracht[bereik] = profiel
+    return kracht
+
+def berekenKrachtVerdeling(lading_posities, massa, straal_cm, start_cm, eind_cm, lengte_schip):
+    lengte = eind_cm - start_cm + 1
+    lengte_array = np.arange(start_cm, eind_cm + 1)
+    krachtverdeling = np.zeros(lengte)
+    kracht = massa * GRAVITATION_CONSTANT
+
+    for pos in lading_posities:
+        krachtverdeling += parabolischProfielTP(pos, kracht, straal_cm, start_cm, eind_cm, lengte)
+
+    krachtverdeling_cm = np.interp(lengte_schip, lengte_array, krachtverdeling, left=0, right=0)
+    funcPlotFill(lengte_schip, krachtverdeling_cm, "Lengte van het schip L [m]", "Neerwaartse kracht van de transition pieces [N]", "Neerwaartse kracht van de transition pieces per cm [N]", "Neerwaartse kracht van de transition pieces [N]", 'darkgreen')
+    return -krachtverdeling_cm
 

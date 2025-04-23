@@ -17,6 +17,7 @@ plot staat er nu ook bij, maar die kun je nog aanpassen
 
 import numpy as np
 from Library import *
+import matplotlib.pyplot as plt
 
 def berekenKrachtVerdeling(lading_posities, massa, straal_cm, start_cm, eind_cm):
     lengte = eind_cm - start_cm + 1
@@ -46,15 +47,15 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, straal, start, eind, len
     kracht[bereik] = profiel
     return kracht
 
-import matplotlib.pyplot as plt
-
-def plot_krachtverdeling(x, krachtverdeling, titel="Krachtverdeling over schip"):
+def plot_krachtverdeling(x, krachtverdeling):
     plt.figure(figsize=(14, 4))
     plt.plot(x, krachtverdeling, color='darkgreen')
     plt.xlabel("Positie op schip (cm)")
-    plt.ylabel("Neerwaartse kracht per cm (N)")
-    plt.title(titel)
+    plt.ylabel("Neerwaartse kracht van de transition pieces per cm (N)")
+    plt.title("Krachtverdeling over schip")
     plt.grid(True)
     plt.tight_layout()
     plt.show()
+    plt.close()
+    return None
 

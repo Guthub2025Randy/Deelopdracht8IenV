@@ -88,12 +88,14 @@ vulperc3 = vulperc3ip(volume_t3)
 
 # Begin deelopdracht 8
 lengte_cm = np.linspace(-9, 141, 15000)
-opwaartseKracht = opwaartseKracht(B_CSA2, lengte_cm)
-I = traagheidsmomentOverLengte(I_x_shell, L_shell)
+opwaartse_Kracht = opwaartseKracht(B_CSA2, lengte_cm)
+I = traagheidsmomentOverLengte(I_x_shell, L_shell, lengte_cm)
 I[-1] = 0.0000000000000000000000001 # Anders krijgen we een gedeeld door 0 error bij M/(E*I)
 Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm)
+lcg_TP = np.array([3200,3200,3200,3200])
+kracht_TP = berekenKrachtVerdeling(lcg_TP, WEIGHT_TRANSITION_PIECE, 400, -900, 14100, lengte_cm)
 
-q = Kracht_Ballast + opwaartseKracht # De netto belasting
+q = Kracht_Ballast + opwaartse_Kracht + kracht_TP # De netto belasting
 plt.plot(lengte_cm, q, color='black', label='Netto load')
 plt.fill_between(lengte_cm, q, alpha=0.2, color='black')
 plt.xlabel("Lengte van het schip (L) in [m]")
