@@ -11,6 +11,7 @@ from bibliotheek import *
 from input_code import *
 
 def funcPlotFill(x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam, kleur_functie):
+    plt.figure(figsize=(8,5))
     plt.plot(x_plot, y_plot, label=f"{functie_naam}", color=f'{kleur_functie}')
     plt.fill_between(x_plot, y_plot, alpha=0.3, color=f'{kleur_functie}')
     plt.xlabel(f"{x_naam}")
@@ -215,7 +216,7 @@ def calculateKrachtsom2(krachtsom1, dic, plaatdikte, staalgewicht):
   tweedekrachtsom = krachtsom1 + (oppervlakte_bh_tank2*plaatdikte*staalgewicht)
   return tweedekrachtsom
 
-def lcg_tank2(momentensom2,krachtensom2):
+def lcgTank2(momentensom2,krachtensom2):
     """
     deze functie haalt uit het het resultante moment rond de y-as en de resultante kracht de arm van tank 2. De resultante kracht
     in dit geval is het totale gewicht van tank 2 (dus water+tankschotten), berekend door alle andere gewichten bij elkaar op te
@@ -293,20 +294,19 @@ def calculateG_M(onderwatervolume, SIt, KG, KB, It):
     g_m = gm - gnulg
     return g_m
 # Begin deelopdracht 8
-def Opwaartse_kracht(dictio_CSA, zwaartekracht):
-    lps_cm = np.linspace(-9, 141, 15000)
+def opwaartseKracht(dictio_CSA, lengte_schip):
     oppervlakte = dictio_CSA[" crossarea_in_m2"]
     lps = dictio_CSA["x_in_m"]
-    oppervlakte_cm = np.interp(lps_cm, lps, oppervlakte, left=0, right=0)
+    oppervlakte_cm = np.interp(lengte_schip, lps, oppervlakte, left=0, right=0)
     Onderwater_volume = []
     for i in range(len(oppervlakte_cm)-1):
-        dx = lps_cm[i+1]-lps_cm[i]
+        dx = lengte_schip[i+1]-lengte_schip[i]
         Onderwater_volume.append(oppervlakte_cm[i]*dx)
     Onderwater_volume.append(0)
     opwaartse_kracht_cm = np.array(Onderwater_volume)*WEIGHT_WATER
     plt.figure(figsize=(8,5))
-    plt.plot(lps_cm, -opwaartse_kracht_cm, color='b', label='Opwaartse kracht')
-    plt.fill_between(lps_cm, -opwaartse_kracht_cm, alpha=0.2, color='b')
+    plt.plot(lengte_schip, -opwaartse_kracht_cm, color='b', label='Opwaartse kracht')
+    plt.fill_between(lengte_schip, -opwaartse_kracht_cm, alpha=0.2, color='b')
     plt.xlabel("Lengte van het schip (L) in [m]")
     plt.ylabel("Opwaartse kracht (p) in [N]")
     plt.title("De verdeelde opwaartse kracht")
@@ -316,7 +316,7 @@ def Opwaartse_kracht(dictio_CSA, zwaartekracht):
     print(np.sum(opwaartse_kracht_cm))
     return opwaartse_kracht_cm
 
-def traagheidsmoment_over_lengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell):
+def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell):
     Lengte_schip_csa_shell_cm = np.linspace(-9, 141, 15000)
     Interpoleer_naar_cm = ip.interp1d(Lengte_schip_csa_shell, traagheidsmoment_csa_shell)
     traagheidsmoment_csa_shell_cm = Interpoleer_naar_cm(Lengte_schip_csa_shell_cm)
@@ -330,28 +330,25 @@ def traagheidsmoment_over_lengte(traagheidsmoment_csa_shell, Lengte_schip_csa_sh
     plt.show()
     return traagheidsmoment_csa_shell_cm
 
-def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
-    lps_cm = np.linspace(-9, 141, 15000)
+def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
     oppervlakte1 = dic_tank[" crossarea_in_m2"]
     lps1 = dic_tank["x_in_m"]
-    oppervlakte1_cm = np.interp(lps_cm, lps1, oppervlakte1, left=0, right=0)
+    oppervlakte1_cm = np.interp(lengte_schip, lps1, oppervlakte1, left=0, right=0)
     Water_volume1 = []
     oppervlakte2 = dic_tank_2[" crossarea_in_m2"]
     lps2 = dic_tank_2["x_in_m"]
-    oppervlakte2_cm = np.interp(lps_cm, lps2, oppervlakte2, left=0, right=0)
+    oppervlakte2_cm = np.interp(lengte_schip, lps2, oppervlakte2, left=0, right=0)
     Water_volume2 = []
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
-    oppervlakte3_cm = np.interp(lps_cm, lps3, oppervlakte3, left=0, right=0)
+    oppervlakte3_cm = np.interp(lengte_schip, lps3, oppervlakte3, left=0, right=0)
     Water_volume3 = []
     for i in range(len(oppervlakte1_cm)-1):
-        dx1 = lps_cm[i+1]-lps_cm[i]
+        dx1 = lengte_schip[i+1]-lengte_schip[i]
         Water_volume1.append(oppervlakte1_cm[i]*dx1)
-    for i in range(len(oppervlakte2_cm)-1):
-        dx2 = lps_cm[i+1]-lps_cm[i]
+        dx2 = lengte_schip[i+1]-lengte_schip[i]
         Water_volume2.append(oppervlakte2_cm[i]*dx2)
-    for i in range(len(oppervlakte3_cm)-1):
-        dx3 = lps_cm[i+1]-lps_cm[i]
+        dx3 = lengte_schip[i+1]-lengte_schip[i]
         Water_volume3.append(oppervlakte3_cm[i]*dx3)
     Water_volume1.append(0)
     Water_volume2.append(0)
@@ -361,17 +358,8 @@ def ballastwater_kracht(dic_tank, dic_tank_2, dic_tank_3, zwaartekracht):
     print(np.sum(Neerwaartse_kracht1))
     Neerwaartse_kracht2 = np.array(Water_volume2)*WEIGHT_WATER
     Neerwaartse_kracht3 = np.array(Water_volume3)*WEIGHT_WATER
-    Neerwaartse_kracht_cm = Neerwaartse_kracht1 + Neerwaartse_kracht2 +Neerwaartse_kracht3
-    plt.figure(figsize=(8,5))
-    plt.plot(lps_cm, Neerwaartse_kracht_cm, color='r', label='Ballast')
-    plt.fill_between(lps_cm, Neerwaartse_kracht_cm, alpha=0.2, color='r')
-    plt.xlabel("Lengte van het schip (L) in [m]")
-    plt.ylabel("Neerwaartse kracht (Ballast) in [N]")
-    plt.title("De verdeelde belasting van het ballastwater")
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-    print(np.sum(Neerwaartse_kracht_cm))
+    Neerwaartse_kracht_cm = Neerwaartse_kracht1 + Neerwaartse_kracht2 + Neerwaartse_kracht3
+    funcPlotFill(lengte_schip, Neerwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Neerwaartse kracht (Ballast) [N]", "De verdeelde belasting van het ballastwater over de lengte van het schip", "Ballast belasting [N]", 'r')
     return -Neerwaartse_kracht_cm
 
 def dwarskracht(q_x, lengte_schip):
@@ -381,7 +369,7 @@ def dwarskracht(q_x, lengte_schip):
     funcPlotFill(lengte_schip, dwarskracht, "Lengte van het schip L [m]", "Dwarskracht V(x) [N]", "De dwarskracht V(x) [N] over de lengte van het schip L [m]", "Dwarskracht V(x)", 'orange')
     return dwarskracht
 
-def Buigend_Moment(F_x, lengte_schip):
+def buigendMoment(F_x, lengte_schip):
     buigend_moment = cumtrapz(F_x, lengte_schip, initial=0)
     buigend_moment[0]=0
     buigend_moment[-1]=0
@@ -389,7 +377,7 @@ def Buigend_Moment(F_x, lengte_schip):
     return buigend_moment
 
 # door het gereduceerde moment de integreren krijg je de verdraaiing accent (phi accent)
-def hoekverdraaiing_acc(buigend_moment_uitkomst, lengte_schip):
+def hoekverdraaiingAcc(buigend_moment_uitkomst, lengte_schip):
     phi_accent = cumtrapz(lengte_schip, buigend_moment_uitkomst, initial=0)
     phi_accent[0]=0
     phi_accent[-1]=0
@@ -399,7 +387,7 @@ def hoekverdraaiing_acc(buigend_moment_uitkomst, lengte_schip):
 
 # door de verdraaing accent (phi accent) te integreren krijg je de doorbuigin accent (w')
 
-def doorbuiging_acc(phi_accent, lengte_schip):
+def doorbuigingAcc(phi_accent, lengte_schip):
     w_acc = cumtrapz(lengte_schip, phi_accent, initial =0 )
     w_acc[0]=0
     w_acc[-1]=0

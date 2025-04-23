@@ -19,21 +19,21 @@ entrance_angle = resistance.iloc[14,1]
 """
 Bovenstaande gegevens zijn nodig voor het antwoordblad.
 """
-g = 9.81
+GRAVITATION_CONSTANT = 9.81
 WATERDICHTHEID = 1025
 STAALGEWICHT = 7850
 transom_bhd_thickness = 0.001 # m
 rest_thickness = 0.001 # m
-WEIGHT_STAAL = 2.1*g*STAALGEWICHT
-WEIGHT_WATER = g*WATERDICHTHEID
+WEIGHT_STAAL = 2.1*GRAVITATION_CONSTANT*STAALGEWICHT
+WEIGHT_WATER = GRAVITATION_CONSTANT*WATERDICHTHEID
 kraan_lcg = 10
 gewicht_transition_piece = 230000
-swlmax = (gewicht_transition_piece*g)/0.94
+swlmax = (gewicht_transition_piece*GRAVITATION_CONSTANT)/0.94
 H = float(msp["H [m]"])
 zwaarteKheis = -swlmax
 zwaarteKboom = -swlmax*0.17
 zwaarteKhuis = -swlmax*0.34
-zwaarteWindmolen = -gewicht_transition_piece*g*4
+zwaarteWindmolen = -gewicht_transition_piece*GRAVITATION_CONSTANT*4
 COB = msp["COB [m]"]
 buoyant_volume = float(msp["Buoyant Volume [m3]"])
 it = float(msp["Inertia WPA around COF [m4]"][0])

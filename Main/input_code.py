@@ -46,7 +46,7 @@ df_t2["tanknummer"] = [2]*len(df_t2)
 df_t3["tanknummer"] = [3]*len(df_t3)
 df_bhd = df_bhd.drop(columns=[" x_min [m]", " x_max [m]"], axis=1)
 
-def datatanks (df_t):
+def datatanks(df_t):
     """
     deze functie vraagt een dataframe en plaatst de relevante data in een dictionary en geeft deze vervolgens terug
     """
@@ -63,7 +63,7 @@ def datatanks (df_t):
 """
 Ook zijn de gegevens uit de bulkhead data file nodig. 
 """
-def databh (df):
+def databh(df):
     """
     deze functie vraagt om een dataframe en plaatst de relevante bulkhead gegevens in drie verschillende dictionaries: 
     dic bevat alle bulkheads behalve die van tank 2, dic2 bevat alleen de bulkheads van tank 2 en dic3 bevat alle bulkheads.
@@ -82,7 +82,7 @@ def databh (df):
     return dic, dic2, dic3
 
 
-def file_to_dic (path):
+def file_to_dic(path):
     """
     deze functie heeft als doel uit het bestand MainShipParticulars de data te halen en in een dictionary te zetten. Omdat het 
     bestand ook kopjes bevat, worden alle regels waar geen komma in staat over geslagen. Bevat een regel dat wel, dan worden de
