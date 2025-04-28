@@ -8,6 +8,7 @@ Original file is located at
 """
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import interpolate as ip
 from input_code import *
@@ -65,4 +66,4 @@ I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
 dic_csa_tank1 = dic_csa_ballast_tanks(df_tank1_csa)
 dic_csa_tank2 = dic_csa_ballast_tanks(df_tank2_csa)
 dic_csa_tank3 = dic_csa_ballast_tanks(df_tank3_csa)
-Lengte_schip = float(msp["Loa  [m]"])
+Length_schip = float(msp["Loa  [m]"])

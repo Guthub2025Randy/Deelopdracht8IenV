@@ -12,56 +12,56 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import interpolate
 
-df = pd.read_csv("Shell_CSA_Gr22_V{0}.0.txt".format(2), header=3)
-df_bh = pd.read_csv("TankBHD_Data_Gr22_V{0}.0.txt".format(6), header=1)
+df = pd.read_csv("Shell_CSA_Gr22_V{0}.0.txt".format(8), header=3)
+df_bh = pd.read_csv("TankBHD_Data_Gr22_V{0}.0.txt".format(8), header=1)
 
-def calculateHuid(arr_gewicht, huiddikte):
-  x = df.iloc[:,0].to_numpy()
-  w = np.zeros(len(x))
-  for i in range(len(x)):
-    w[i] = df.iloc[:,2].to_numpy()[i]*7850*9.81*huiddikte
-  f = interpolate.interp1d(x,w)
-  arr_gewicht = f(arr_x)
-  return arr_gewicht
+def calculateHuid(arr_gewicht, huiddikte, dataframe):
+    x = dataframe.iloc[:,0].to_numpy()
+    w = np.zeros(len(x))
+    for i in range(len(x)):
+        w[i] = df.iloc[:,2].to_numpy()[i]*7850*9.81*huiddikte
+        f = interpolate.interp1d(x,w)
+    arr_gewicht = f(arr_x)
+    return arr_gewicht
 
-def calculateTrapezium(arr_gewicht):
-  for i in range(10):
-    xmin = df_bh.iloc[i, 4]
-    xmax = df_bh.iloc[i, 5]
-    ixb = round(xmin*100)+900
-    ixe = round(xmax*100)+900
-    lcg = df_bh.iloc[i, 1]
-    lcg_l = lcg - xmin
-    A = df_bh.iloc[i, 0]*9.81*7850*0.01
-    if lcg == xmin + (xmax-xmin)/2:
-      a = A/(xmax-xmin)
-      b = A/(xmax-xmin)
-    elif lcg == xmin + (xmax-xmin)/3:
-      a = A/(xmax-xmin)*2
-      b = 0
-    elif lcg == xmin + 2*(xmax-xmin)/3:
-      a = 0
-      b = A/(xmax-xmin)*2
-    elif lcg < xmin + (xmax-xmin)/3 or lcg > xmin + 2*(xmax-xmin)/3:
-      print(f"error: object moet opgedeeld worden")
-      exit
-    elif lcg < xmin + (xmax-xmin)/2:
-      a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
-      b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
-    else:
-      a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
-      b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
-    arr = np.linspace(a,b,ixe-ixb)
-    for i in range(len(arr)):
-      arr_gewicht[ixb+i] = arr_gewicht[ixb+i]+arr[i]
-  return arr_gewicht
+def calculateTrapezium(arr_gewicht, dataframe):
+    for i in range(10):
+        xmin = dataframe.iloc[i, 4]
+        xmax = dataframe.iloc[i, 5]
+        ixb = round(xmin*100)+900
+        ixe = round(xmax*100)+900
+        lcg = dataframe.iloc[i, 1]
+        lcg_l = lcg - xmin
+        A = dataframe.iloc[i, 0]*9.81*7850*0.01
+        if lcg == xmin + (xmax-xmin)/2:
+            a = A/(xmax-xmin)
+            b = A/(xmax-xmin)
+        elif lcg == xmin + (xmax-xmin)/3:
+            a = A/(xmax-xmin)*2
+            b = 0
+        elif lcg == xmin + 2*(xmax-xmin)/3:
+            a = 0
+            b = A/(xmax-xmin)*2
+        elif lcg < xmin + (xmax-xmin)/3 or lcg > xmin + 2*(xmax-xmin)/3:
+            print(f"error: object moet opgedeeld worden")
+            exit
+        elif lcg < xmin + (xmax-xmin)/2:
+            a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+            b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+        else:
+            a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+            b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+        arr = np.linspace(a,b,ixe-ixb)
+        for i in range(len(arr)):
+            arr_gewicht[ixb+i] = arr_gewicht[ixb+i]+arr[i]
+        return arr_gewicht
 
 arr_x = np.linspace(-9, 140, 15001)
 arr_w_huid = np.zeros(len(arr_x))
 arr_w_bh = np.zeros(len(arr_x))
 
-arr_wbh = calculateTrapezium(arr_w_bh)
-arr_wh = calculateHuid(arr_w_huid,1)
+arr_wbh = calculateTrapezium(arr_w_bh, df)
+arr_wh = calculateHuid(arr_w_huid,1, df_bh)
 
 plt.plot(arr_x,arr_wh)
 plt.show()

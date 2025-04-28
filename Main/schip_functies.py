@@ -147,7 +147,7 @@ def calculateVullingT1(arr_volume, arr_tcg, moment_som, arr_vulling_pc, watergew
   xnew = np.linspace(arr_vulling_pc[0], arr_vulling_pc[-1], 10000)
   ynew = f2(xnew)
   plt.figure(figsize=(8,5))
-  plt.plot(xnew, ynew, "-", linestyle='-', color = "b", label='Tankvolume vs moment Tank 1')
+  plt.plot(xnew, ynew, linestyle='-', color = "b", label='Tankvolume vs moment Tank 1')
   plt.plot(arr_vulling_pc, arr_volume,'o', color='r')
   plt.xlabel("Vullingspercentage (%)")
   plt.ylabel("Volume (m³)")
@@ -155,6 +155,7 @@ def calculateVullingT1(arr_volume, arr_tcg, moment_som, arr_vulling_pc, watergew
   plt.legend()
   plt.grid(True)
   plt.show()
+  plt.close()
   return volume_acc
 
 def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3, kracht_w_t3, h, COB, staalgewicht, plaatdikte_bh, kraan_lcg, SWLMax, dic_hull, plaatdikte_romp,  opwaartse_kracht):
@@ -330,8 +331,10 @@ def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
     for i in range(len(oppervlakte1_cm)-1):
         dx1 = lengte_schip[i+1]-lengte_schip[i]
         Water_volume1.append(oppervlakte1_cm[i]*dx1)
+    for i in range(len(oppervlakte2_cm)-1):
         dx2 = lengte_schip[i+1]-lengte_schip[i]
         Water_volume2.append(oppervlakte2_cm[i]*dx2)
+    for i in range(len(oppervlakte3_cm)-1):
         dx3 = lengte_schip[i+1]-lengte_schip[i]
         Water_volume3.append(oppervlakte3_cm[i]*dx3)
     Water_volume1.append(0)
@@ -346,15 +349,15 @@ def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
 
 def dwarskracht(q_x, lengte_schip):
     dwarskracht = cumtrapz(q_x, lengte_schip, initial=0)
-    dwarskracht[0]=0
-    dwarskracht[-1]=0
+    dwarskracht[0]= 0
+    dwarskracht[-1]= 0
     funcPlotFill(lengte_schip, dwarskracht, "Lengte van het schip L [m]", "Dwarskracht V(x) [N]", "De dwarskracht V(x) [N] over de lengte van het schip L [m]", "Dwarskracht V(x)", 'orange')
     return dwarskracht
 
 def buigendMoment(F_x, lengte_schip):
     buigend_moment = cumtrapz(F_x, lengte_schip, initial=0)
-    buigend_moment[0]=0
-    buigend_moment[-1]=0
+    buigend_moment[0]= 0
+    buigend_moment[-1]= 0
     funcPlotFill(lengte_schip, buigend_moment, "Lengte van het schip L [m]", "Buigend moment M(x) [Nm]", "Het buigend moment M(x) [Nm] over de lengte van het schip L [m]", "Buigend moment M(x)", 'yellow')
     return buigend_moment
 
@@ -362,25 +365,21 @@ def buigendMoment(F_x, lengte_schip):
 def hoekverdraaiingAcc(buigend_moment_uitkomst, lengte_schip):
     phi_accent = cumtrapz(lengte_schip, buigend_moment_uitkomst, initial=0)
     phi_accent[0]=0
-    phi_accent[-1]=0
     funcPlotFill(lengte_schip, phi_accent, "Lengte van het schip L [m]", "φ(x)' [deg]", "De hoekverdraaiing in graden φ(x)' [deg] over de lengte van het schip L [m]", "De hoekverdraaiing φ(x)' [deg]", 'green')
     return phi_accent
 
 
-# door de verdraaing accent (phi accent) te integreren krijg je de doorbuigin accent (w')
+# door de verdraaing accent (phi accent) te integreren krijg je de doorbuiging accent (w')
 
 def doorbuigingAcc(phi_accent, lengte_schip):
     w_acc = cumtrapz(lengte_schip, phi_accent, initial =0 )
     w_acc[0]=0
-    w_acc[-1]=0
     funcPlotFill(lengte_schip, w_acc, "Lengte van het schip L [m]", "Doorbuiging w'(x) [m]", "Doorbuiging w'(x) [m] over de lengte van het schip L [m]", "Doorbuiging w'(x) [m]", 'brown')
     return w_acc
 
 #phi
 def hoekverdraaiing(phi_acc, lengte_schip, C):
     phi = phi_acc + C
-    phi[0]=0
-    phi[-1]=0
     funcPlotFill(lengte_schip, phi, "Lengte van het schip L [m]", "φ(x) [deg]", "Relatieve hoek in graden over de lengte van het schip", "Hoekverdraaiing φ(x) [deg]", "y")
     return phi
 
@@ -389,8 +388,8 @@ def doorbuiging(w_acc, lengte_schip, C):
     w = w_acc + C
     w[0]=0
     w[-1]=0
-    funcPlotFill(lengte_schip, w_acc, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
-    return w_acc
+    funcPlotFill(lengte_schip, w, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
+    return w
 # x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam
 
 def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, straal, start, eind, lengte):
@@ -423,4 +422,52 @@ def berekenKrachtVerdeling(lading_posities, massa, straal_cm, start_cm, eind_cm,
     krachtverdeling_cm = np.interp(lengte_schip, lengte_array, krachtverdeling, left=0, right=0)
     funcPlotFill(lengte_schip, krachtverdeling_cm, "Lengte van het schip L [m]", "Neerwaartse kracht van de transition pieces [N]", "Neerwaartse kracht van de transition pieces per cm [N]", "Neerwaartse kracht van de transition pieces [N]", 'darkgreen')
     return -krachtverdeling_cm
+
+def calculateSpiegel(arr_gewicht, dataframe, huiddikte, lengte_schip):
+    fg_totaal = dataframe.iloc[0,1]*huiddikte*GRAVITATION_CONSTANT*STAALGEWICHT
+    fg_per_cm = fg_totaal/50
+    for i in range(len(lengte_schip)):
+        arr_gewicht[i] -= fg_per_cm
+    return arr_gewicht
+
+def calculateHuid(arr_gewicht, huiddikte, dataframe):
+    x = dataframe.iloc[:,0].to_numpy()
+    w = np.zeros(len(x))
+    for i in range(len(x)):
+        w[i] = dataframe.iloc[:,2].to_numpy()[i]*7850*9.81*huiddikte
+        f = ip.interp1d(x,w)
+    arr_gewicht = f(x)
+    return arr_gewicht
+
+def calculateTrapezium(arr_gewicht, dataframe):
+    for i in range(10):
+        xmin = dataframe.iloc[i, 4]
+        xmax = dataframe.iloc[i, 5]
+        ixb = round(xmin*100)+900
+        ixe = round(xmax*100)+900
+        lcg = dataframe.iloc[i, 1]
+        lcg_l = lcg - xmin
+        A = dataframe.iloc[i, 0]*9.81*7850*0.001
+        if lcg == xmin + (xmax-xmin)/2:
+            a = A/(xmax-xmin)
+            b = A/(xmax-xmin)
+        elif lcg == xmin + (xmax-xmin)/3:
+            a = A/(xmax-xmin)*2
+            b = 0
+        elif lcg == xmin + 2*(xmax-xmin)/3:
+            a = 0
+            b = A/(xmax-xmin)*2
+        elif lcg < xmin + (xmax-xmin)/3 or lcg > xmin + 2*(xmax-xmin)/3:
+            print(f"error: object moet opgedeeld worden")
+            return None
+        elif lcg < xmin + (xmax-xmin)/2:
+            a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+            b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+        else:
+            a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+            b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+        arr = np.linspace(a,b,ixe - ixb)
+        for i in range(len(arr)):
+            arr_gewicht[ixb + i] = arr_gewicht[ixb + i] + arr[i]
+        return arr_gewicht
 
