@@ -22,34 +22,31 @@ import matplotlib.pyplot as plt
 
 
 
-def berekenKrachtVerdeling(lading_posities, massa, loa, lpp):
-    straal_cm= straal_tp*100 #omzetten naar centimeters
-    start_cm= (lpp-loa)*100
-    eind_cm= lpp* 100
-    lengte = eind_cm - start_cm + 1
-    krachtverdeling = np.zeros(lengte)
+def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm):
+    krachtverdeling = np.zeros(lengte_in_cm)
     kracht = massa * GRAVITATIONAL_CONSTANT
-
     for pos in lading_posities:
-        krachtverdeling += parabolischProfiel(pos, kracht, straal_cm, start_cm, eind_cm, lengte)
+        krachtverdeling += parabolischProfiel(pos, kracht, start_cm, eind_cm)
 
     return np.arange(start_cm, eind_cm + 1), krachtverdeling
 
-def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, straal, start, eind, lengte):
-    begin = max(zwaartepunt_tp - straal, start)
-    eind = min(zwaartepunt_tp + straal, eind)
+def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm):
+    start=lengte_in_cm[0]
+    eind=lengte_in_cm[-1]
+    begin = max(zwaartepunt_tp - straal_tp, start)
+    eind = min(zwaartepunt_tp + straal_tp, eind)
     idx_begin = int(begin - start)
     idx_eind = int(eind - start)
 
     bereik = np.arange(idx_begin, idx_eind + 1)
     afstanden = (bereik + start) - zwaartepunt_tp
-    x_norm = afstanden / straal
+    x_norm = afstanden / straal_tp
 
     profiel = np.clip(1 - x_norm**2, 0, None)
     profiel /= profiel.sum()
     profiel *= totaal_kracht
 
-    kracht = np.zeros(lengte)
+    kracht = np.zeros(lengte_cm)
     kracht[bereik] = profiel
     return kracht
 
