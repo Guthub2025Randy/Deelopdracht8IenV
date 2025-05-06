@@ -10,8 +10,8 @@ Original file is located at
 from bibliotheek import *
 import matplotlib.pyplot as plt
 from schip_functies import *
-from output_1 import output_1
-from output_kraan import output_kraan
+#from output_1 import output_1
+#from output_kraan import output_kraan
 # Begin Deelopdracht 7
 #Tank 3: er wordt een waarde gekozen voor het volume van tank 3. Vervolgens wordt hiervan het gewicht en
 #het zwaartepunt bepaald
@@ -24,7 +24,7 @@ locatie_t3 = interpolerenLocatie(d3, volume_t3, 3)
 #"momentensom1". Voor meer informatie over deze functies, zie de docstrings in de functiebestanden.
 krachten, posities = positiesmetkrachtenlijst1(dbh1, locatie_t3, kracht_t3, H, COB, WEIGHT_STAAL,
                                                transom_bhd_thickness, kraan_lcg, swlmax, dha, rest_thickness,
-                                               calculateOpdrijvendeKracht(WEIGHT_WATER, buoyant_volume))
+                                               calculateOpdrijvendeKracht(WEIGHT_WATER, BOUYANT_VOLUME))
 momentensom1_ = calculateMomentensom(posities, krachten)
 
 #Tank 1: op basis van het berekende transversale moment wordt de vulling en gewicht van de vulling van het water
@@ -39,7 +39,7 @@ locatie_t1 = interpolerenLocatie(d1, volume_t1, 1)
 #het gewicht van tank 2 bepaald.
 krachten2, posities2 = positiesmetkrachtenlijst2(dbh, locatie_t1, kracht_t1, locatie_t3, kracht_t3, H, COB,
                                                  WEIGHT_STAAL, transom_bhd_thickness, kraan_lcg, swlmax, dha,
-                                                 rest_thickness, calculateOpdrijvendeKracht(WEIGHT_WATER, buoyant_volume))
+                                                 rest_thickness, calculateOpdrijvendeKracht(WEIGHT_WATER, BOUYANT_VOLUME))
 krachtensom = calculateKrachtensom1(krachten2)
 volume_t2 = calculateVullingT2(krachtensom, WEIGHT_WATER)[0]
 kracht_t2 = volume_t2*WEIGHT_WATER
@@ -49,11 +49,11 @@ kracht_t2 = volume_t2*WEIGHT_WATER
 #van tank 2 bepaald.
 krachten_bh1, posities_bh1 = positiesmetkrachtenlijst2(dbh1, locatie_t1, kracht_t1, locatie_t3, kracht_t3, H, COB,
                                                  WEIGHT_STAAL, transom_bhd_thickness, kraan_lcg, swlmax, dha,
-                                                 rest_thickness, calculateOpdrijvendeKracht(WEIGHT_WATER, buoyant_volume))
+                                                 rest_thickness, calculateOpdrijvendeKracht(WEIGHT_WATER, BOUYANT_VOLUME))
 TweedeMomentensom = calculateMomentensom(posities_bh1, krachten_bh1)
 TweedeKrachtensom = calculateKrachtsom2(krachtensom, dbh2, transom_bhd_thickness, WEIGHT_STAAL)
 vcgt2 = interpolerenLocatie(d2, volume_t2, 2)[2]
-positie_t2 = np.array([lcg_tank2(TweedeMomentensom,TweedeKrachtensom)[0], 0, vcgt2])
+positie_t2 = np.array([lcgTank2(TweedeMomentensom,TweedeKrachtensom)[0], 0, vcgt2])
 #Stabiliteit: met de functie "traagheidsmomenten_ballasttanks" wordt de som van de traagheidsmomenten van de
 #vrije vloeistofoppervlakten van de tanks berekend. Voor meer informatie over deze functie, zie de docstring
 #in het functiebestand.
@@ -64,18 +64,18 @@ SIt = calculateIttanks(d1["inertia_1"], d2["inertia_2"], d3["inertia_3"], d1["vo
 #aangrijpingspunt daarvan juist verwijderd. Vervolgens wordt met de G_M functie het GM bepaald.
 krachten2.append(-kracht_t2)
 posities2.append(positie_t2)
-posities3, krachten3 = removeBuoyantForce(posities2, krachten2, COB, calculateOpdrijvendeKracht(WEIGHT_WATER, buoyant_volume))
+posities3, krachten3 = removeBuoyantForce(posities2, krachten2, COB, calculateOpdrijvendeKracht(WEIGHT_WATER, BOUYANT_VOLUME))
 lcg_schip, tcg_schip, vcg_schip = calculateZwaartepuntschip(posities3, krachten3)
-G_M = calculateG_M(buoyant_volume, SIt, vcg_schip, COB[2], it)
-output_1(4, str(entrance_angle), Rtot_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], H, msp["T moulded [m]"], 
+G_M = calculateG_M(BOUYANT_VOLUME, SIt, vcg_schip, COB[2], it)
+"""output_1(4, str(entrance_angle), Rtot_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], H, msp["T moulded [m]"], 
          0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
-         buoyant_volume*WEIGHT_WATER, COB[0], COB[1], COB[2], 
-         calculateKrachtensom1(krachten3)[0]+(buoyant_volume*WEIGHT_WATER), (calculateKrachtensom1(krachten3)[0]*(lcg_schip - COB[0])), 
-         (calculateKrachtensom1(krachten3)[0]*(tcg_schip - COB[1])), 4, -gewicht_transition_piece*g, lcg_tp, tcg_tp, vcg_tp)
-output_kraan(swlmax, -gewicht_transition_piece*g, lengte_kraan_fundatie, Draaihoogte_kraan, jib_length, Zwenkhoek, 
+         BOUYANT_VOLUME*WEIGHT_WATER, COB[0], COB[1], COB[2], 
+         calculateKrachtensom1(krachten3)[0]+(BOUYANT_VOLUME*WEIGHT_WATER), (calculateKrachtensom1(krachten3)[0]*(lcg_schip - COB[0])), 
+         (calculateKrachtensom1(krachten3)[0]*(tcg_schip - COB[1])), 4, -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT, lcg_tp, tcg_tp, vcg_tp)
+output_kraan(swlmax, -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT, lengte_kraan_fundatie, Draaihoogte_kraan, jib_length, Zwenkhoek, 
              Giekhoek, LCG_TP, TCG_TP, VCG_TP, LCG_kraanhuis, TCG_kraanhuis, VCG_kraanhuis, LCG_kraanboom, TCG_kraanboom, 
              VCG_kraanboom, LCG_heisgerei, TCG_heisgerei, VCG_heisgerei)
-
+"""
 momentdic = d1['vol_1'] * d1['tcg_1'] * WEIGHT_WATER
 vulperc1dic = d1['vulling_%_1'][:7]
 vulperc1ip = ip.interp1d(momentdic,vulperc1dic, kind = "cubic")
@@ -85,16 +85,32 @@ vulperc2 = vulperc2ip(volume_t2)
 vulperc3ip = ip.interp1d(d3['vol_3'], d3['vulling_%_3'][:7], kind = "cubic")
 vulperc3 = vulperc3ip(volume_t3)
 # Eind deelopdracht 7
-# Begin deelopdracht 8
-Opwaartse_kracht = Opwaartse_kracht(B_CSA2, g)
-I = traagheidsmoment_over_lengte(I_x_shell, L_shell)
-I[-1] = 0.0000000000000001 # Anders krijgen we een gedeeld door 0 error bij M/(E*I)
-Kracht_Ballast = ballastwater_kracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, g)
 
-q = Kracht_Ballast + Opwaartse_kracht # De netto belasting
-lengte_cm = np.linspace(-9, 141, 15000)
+# Begin deelopdracht 8
+lengte_cm = np.linspace(-9, 141, 15001)
+opwaartse_Kracht = opwaartseKracht(B_CSA2, lengte_cm)
+I_traag = traagheidsmomentOverLengte(I_x_shell, L_shell, lengte_cm)
+asymptootwaarde = 0.1
+for idx, val in enumerate(I_traag):
+    if val < 0.1:
+        I_traag[idx] = asymptootwaarde # Anders krijgen we een asymptoot bij M/(E*I)
+Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm)
+lcg_TP = np.array([3200,3200,3200,3200])
+#kracht_TP = berekenKrachtVerdeling(lcg_TP, WEIGHT_TRANSITION_PIECE, 400, -900, 14100, lengte_cm)
+neerwaartse_kracht_1 = calculateSpiegel(Kracht_Ballast, df_had, rest_thickness, lengte_cm)
+
+arr_x = np.linspace(-9, 140, 15001)
+arr_w_huid = np.zeros(len(arr_x))
+arr_w_bh = np.zeros(len(arr_x))
+
+neerwaartse_kracht_2 = calculateTrapezium(arr_w_bh, df_shell_csa)
+neerwaartse_kracht_3 = calculateHuid(arr_w_huid, 1, df_bhd)
+
+
+q = neerwaartse_kracht_1 + opwaartse_Kracht + neerwaartse_kracht_3 # + spiegel_g De netto belasting kracht_TP + + neerwaartse_kracht_2
+
 plt.plot(lengte_cm, q, color='black', label='Netto load')
-plt.fill_between(lengte_cm, q, alpha=0.2, color='black')
+plt.fill_between(lengte_cm, q, alpha=0.3, color='black')
 plt.xlabel("Lengte van het schip (L) in [m]")
 plt.ylabel("Netto verdeelde belasting (q) in [N]")
 plt.title("De netto verdeelde belasting")
@@ -104,30 +120,30 @@ plt.show()
 plt.close()
 V = dwarskracht(q, lengte_cm)
 
-M = Buigend_Moment(V, lengte_cm)
+M = buigendMoment(V, lengte_cm)
 
-Reduct_M = M/(E*I)
+Reduct_M = M/(E*I_traag)
 
 plt.plot(lengte_cm, Reduct_M, color='c', label='Gereduceerde moment')
 plt.fill_between(lengte_cm, Reduct_M, alpha=0.2, color='black')
 plt.xlabel("Lengte van het schip (L) in [m]")
 plt.ylabel("Gereduceerde moment (M/(E*I)) in [Nm]")
-plt.title("De netto verdeelde belasting")
+plt.title("Het gereduceerde moment")
 plt.legend()
 plt.grid(True)
 plt.show()
 plt.close()
 
-hoekverdraai_accent = hoekverdraaiing_acc(M, lengte_cm)
+hoekverdraai_accent = hoekverdraaiingAcc(M, lengte_cm)
 
-doorbuig_acc = doorbuiging_acc(hoekverdraai_accent, lengte_cm)
+doorbuig_acc = doorbuigingAcc(hoekverdraai_accent, lengte_cm)
 
 # hoekverdraaing (phi) = phi_accent + C
 # Doorbuiging (w) = w_acc +C
 # Dus C berekenen:
 
-C = []
-for i in range(len(doorbuig_acc)):
-    C.append(- (doorbuig_acc[i]/Lengte_schip))
+C = doorbuig_acc[-1]/Length_schip
+
+hoekverdraai = hoekverdraaiing(hoekverdraai_accent, lengte_cm, C)
 
 doorbuig = doorbuiging(doorbuig_acc, lengte_cm, C)

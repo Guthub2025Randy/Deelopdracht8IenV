@@ -8,6 +8,7 @@ Original file is located at
 """
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import interpolate as ip
 from input_code import *
@@ -19,23 +20,23 @@ entrance_angle = resistance.iloc[14,1]
 """
 Bovenstaande gegevens zijn nodig voor het antwoordblad.
 """
-g = 9.81
+GRAVITATION_CONSTANT = 9.81
 WATERDICHTHEID = 1025
 STAALGEWICHT = 7850
 transom_bhd_thickness = 0.001 # m
 rest_thickness = 0.001 # m
-WEIGHT_STAAL = 2.1*g*STAALGEWICHT
-WEIGHT_WATER = g*WATERDICHTHEID
+WEIGHT_STAAL = 2.1*GRAVITATION_CONSTANT*STAALGEWICHT
+WEIGHT_WATER = GRAVITATION_CONSTANT*WATERDICHTHEID
 kraan_lcg = 10
-gewicht_transition_piece = 230000
-swlmax = (gewicht_transition_piece*g)/0.94
+WEIGHT_TRANSITION_PIECE = 230000
+swlmax = (WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT)/0.94
 H = float(msp["H [m]"])
-zwaarteKheis = -swlmax
-zwaarteKboom = -swlmax*0.17
-zwaarteKhuis = -swlmax*0.34
-zwaarteWindmolen = -gewicht_transition_piece*g*4
+WEIGHT_KRAAN_HEISGEREI = -swlmax
+WEIGHT_KRAAN_BOOM = -swlmax*0.17
+WEIGHT_KRAAN_HUIS = -swlmax*0.34
+WEIGHT_TRANSITION_PIECES = -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT*4
 COB = msp["COB [m]"]
-buoyant_volume = float(msp["Buoyant Volume [m3]"])
+BOUYANT_VOLUME = float(msp["Buoyant Volume [m3]"])
 it = float(msp["Inertia WPA around COF [m4]"][0])
 lcg_tp = kraan_lcg
 tcg_tp = 0
@@ -45,9 +46,9 @@ Draaihoogte_kraan = 1
 jib_length = 32.5
 Zwenkhoek = 90
 Giekhoek = 60
-LCG_TP = kraan_lcg
-TCG_TP = 8+(32.5*np.cos(np.deg2rad(60)))
-VCG_TP = (H+1+(32.5*np.sin(np.deg2rad(60))))
+LCG_TP = 32
+TCG_TP = 0
+VCG_TP = H+10
 LCG_kraanhuis = kraan_lcg 
 TCG_kraanhuis = 8
 VCG_kraanhuis = H+1
@@ -65,4 +66,4 @@ I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
 dic_csa_tank1 = dic_csa_ballast_tanks(df_tank1_csa)
 dic_csa_tank2 = dic_csa_ballast_tanks(df_tank2_csa)
 dic_csa_tank3 = dic_csa_ballast_tanks(df_tank3_csa)
-Lengte_schip = float(msp["Loa  [m]"])
+Length_schip = float(msp["Loa  [m]"])
