@@ -19,7 +19,13 @@ import numpy as np
 from Library import *
 import matplotlib.pyplot as plt
 
-def berekenKrachtVerdeling(lading_posities, massa, straal_cm, start_cm, eind_cm):
+
+
+
+def berekenKrachtVerdeling(lading_posities, massa, loa, lpp):
+    straal_cm= straal_tp*100 #omzetten naar centimeters
+    start_cm= (lpp-loa)*100
+    eind_cm= lpp* 100
     lengte = eind_cm - start_cm + 1
     krachtverdeling = np.zeros(lengte)
     kracht = massa * GRAVITATIONAL_CONSTANT
