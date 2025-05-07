@@ -23,6 +23,18 @@ def funcPlotFill(x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam, kleur
     plt.close()
     return None
 
+def funcPlot(x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam, kleur_functie):
+    plt.figure(figsize=(8,5))
+    plt.plot(x_plot, y_plot, label=f"{functie_naam}", color=f'{kleur_functie}')
+    plt.xlabel(f"{x_naam}")
+    plt.ylabel(f"{y_naam}")
+    plt.title(f"{titel_naam}")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    plt.close()
+    return None
+
 def interpolerenLocatie(dictionary_ballasttank, vulling_tank, tanknummer):
     """
     Deze functie bepaalt van het water een ballasttank het zwaartepunt. Als input neemt hij de dictionary waarin de zwaartepunten

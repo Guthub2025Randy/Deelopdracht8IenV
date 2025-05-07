@@ -102,7 +102,7 @@ neerwaartse_kracht_2 = calculateTrapezium(lengte_cm, df_bhd, 0.001)
 neerwaartse_kracht_3 = calculateHuid(lengte_cm, 0.001, df_shell_csa)
 
 q = neerwaartse_kracht_1 + opwaartse_Kracht + neerwaartse_kracht_2 + Kracht_Ballast+neerwaartse_kracht_3# + spiegel_g De netto belasting kracht_TP + 
-
+"""
 plt.plot(lengte_cm, q, color='black', label='Netto load')
 plt.fill_between(lengte_cm, q, alpha=0.3, color='black')
 plt.xlabel("Lengte van het schip (L) in [m]")
@@ -112,12 +112,16 @@ plt.legend()
 plt.grid(True)
 plt.show()
 plt.close()
+""""
+#plotten van q
+funcPlotFill(lengte_cm, q, "Lengte van het schip (L) in [m]", "Netto verdeelde belasting (q) in [N]", "De netto verdeelde belasting", 'Netto load',"black")
+
 V = dwarskracht(q, lengte_cm)
 
 M = buigendMoment(V, lengte_cm)
 
 Reduct_M = M/(E*I_traag)
-
+"""""
 plt.plot(lengte_cm, Reduct_M, color='c', label='Gereduceerde moment')
 plt.fill_between(lengte_cm, Reduct_M, alpha=0.2, color='black')
 plt.xlabel("Lengte van het schip (L) in [m]")
@@ -127,6 +131,9 @@ plt.legend()
 plt.grid(True)
 plt.show()
 plt.close()
+"""""
+#plotten van het gereduceerde moment.
+funcPlotFill(lengte_cm,Reduct_M, "Lengte van het schip (L) in [m]", "Gereduceerde moment (M/(E*I)) in [Nm]", "Het gereduceerde moment", 'Gereduceerde moment', 'black')
 
 hoekverdraai_accent = hoekverdraaiingAcc(M, lengte_cm)
 
