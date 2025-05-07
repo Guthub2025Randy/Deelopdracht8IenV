@@ -16,8 +16,6 @@ from openpyxl import load_workbook
 from scipy.integrate import cumulative_trapezoid as cumtrapz
 from importGrasshopperFiles import *
 
-d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3 = importGrasshopperFiles(8)
-
 Rtot_14knp = resistance.iloc[8,3] 
 entrance_angle = resistance.iloc[14,1]
 """
@@ -37,13 +35,6 @@ WEIGHT_KRAAN_HEISGEREI = -swlmax
 WEIGHT_KRAAN_BOOM = -swlmax*0.17
 WEIGHT_KRAAN_HUIS = -swlmax*0.34
 WEIGHT_TRANSITION_PIECES = -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT*4
-COB = msp["COB [m]"]
-H = float(msp["H [m]"])
-BOUYANT_VOLUME = float(msp["Buoyant Volume [m3]"])
-Length_schip = float(msp["Loa  [m]"])
-it = float(msp["Inertia WPA around COF [m4]"][0])
-L_shell = dic_Shell_CSA["X [m]"]
-I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
 lcg_tp = kraan_lcg
 tcg_tp = 0
 vcg_tp = H+10
@@ -65,9 +56,8 @@ LCG_heisgerei = kraan_lcg
 TCG_heisgerei = 8+(32.5*np.cos(np.deg2rad(60)))
 VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
 # Begin deelopdracht 8
-B_CSA2 = dic_csa(df_csa)
 E = 205*(10**9)
-straal_tp= 5
+STRAAL_TP = 5
 
 
 
