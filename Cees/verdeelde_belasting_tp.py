@@ -5,12 +5,6 @@ Created on Tue Apr 22 15:18:03 2025
 @author: CWMaz
 
 
-straal is de straal van een transition piece(TP)
-start_cm staat voor het begin van het schip (-900)
-eind_cm voor het einde (14100)
-lengte =  eind_cm - start_cm + 1
-
-plot staat er nu ook bij, maar die kun je nog aanpassen
 
 
 """
@@ -21,16 +15,12 @@ import matplotlib.pyplot as plt
 
 
 
-
-def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm):
-    krachtverdeling = np.zeros(lengte_in_cm)
-    kracht = massa * GRAVITATIONAL_CONSTANT
-    for pos in lading_posities:
-        krachtverdeling += parabolischProfiel(pos, kracht, start_cm, eind_cm)
-
-    return np.arange(start_cm, eind_cm + 1), krachtverdeling
-
 def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm):
+    """de input van deze functie is het zwaartepunt van één Transition Piece, de totale kracht van alle transition pieces
+    en een array over de lengte van het schip die te vinden is in de main. dan maakt hij eerst het bereik waar het parabolisch profiel van de TP's
+    te vinden is. dan maakt hij van de fysieke positie een index in een array. in het 2de deel van de functie bereidt hij parabool waarden voor.
+    x_norm zijn dan de genormaliseerde afstanden tov het zwaartepunt. in het laatste deel maakt hij het parabolisch profiel en alle negatieve waardes op 0. 
+    en dan zorgt hij ervoor dat de som gelijk is aan de totale kracht."""
     start = lengte_in_cm[0]
     eind = lengte_in_cm[-1]
     begin = max(zwaartepunt_tp - straal_tp, start)
@@ -45,20 +35,22 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm):
     profiel = np.clip(1 - x_norm**2, 0, None)
     profiel /= profiel.sum()
     profiel *= totaal_kracht
-
-    kracht = np.zeros(lengte_cm)
+    kracht = np.zeros(lengte_in_cm)
     kracht[bereik] = profiel
     return kracht
 
-def plot_krachtverdeling(x, krachtverdeling):
-    plt.figure(figsize=(14, 4))
-    plt.plot(x, krachtverdeling, color='darkgreen')
-    plt.xlabel("Positie op schip (cm)")
-    plt.ylabel("Neerwaartse kracht van de transition pieces per cm (N)")
-    plt.title("Krachtverdeling over schip")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
-    plt.close()
-    return None
+def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm):
+    """hier maakt hij eerst een krachten verdeling van 0 over de lengte. dan maakt hij van de massa van de TPs het gewicht van de TPs.
+    doormiddel van de functie parabolischProfielTP voegt hij deze kracht verdeling toe op de eerst  zero-array over de lengte."""
+    krachtverdeling = np.zeros(lengte_in_cm)
+    kracht = massa * GRAVITATIONAL_CONSTANT
+    for pos in lading_posities:
+        krachtverdeling += parabolischProfielTP(pos, kracht, lengte_in_cm)
+
+    return np.arange(start_cm, eind_cm + 1), krachtverdeling
+
+# deze functie moeten nog geplot worden. met lengte op de x-as en krachtverdeling op de y-as. met als title: "Krachtverdeling over het Schip"
+
+
+
 
