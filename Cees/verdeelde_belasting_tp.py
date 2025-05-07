@@ -31,8 +31,8 @@ def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm):
     return np.arange(start_cm, eind_cm + 1), krachtverdeling
 
 def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm):
-    start=lengte_in_cm[0]
-    eind=lengte_in_cm[-1]
+    start = lengte_in_cm[0]
+    eind = lengte_in_cm[-1]
     begin = max(zwaartepunt_tp - straal_tp, start)
     eind = min(zwaartepunt_tp + straal_tp, eind)
     idx_begin = int(begin - start)
