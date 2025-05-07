@@ -44,7 +44,6 @@ df_t3 = pd.concat([df_tv3, df_twp3])
 df_t1["tanknummer"] = [1]*len(df_t1)
 df_t2["tanknummer"] = [2]*len(df_t2)
 df_t3["tanknummer"] = [3]*len(df_t3)
-df_bhd = df_bhd.drop(columns=[" x_min [m]", " x_max [m]"], axis=1)
 
 def datatanks(df_t):
     """

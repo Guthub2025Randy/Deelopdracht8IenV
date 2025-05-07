@@ -97,17 +97,11 @@ for idx, val in enumerate(I_traag):
 Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm)
 lcg_TP = np.array([3200,3200,3200,3200])
 #kracht_TP = berekenKrachtVerdeling(lcg_TP, WEIGHT_TRANSITION_PIECE, 400, -900, 14100, lengte_cm)
-neerwaartse_kracht_1 = calculateSpiegel(Kracht_Ballast, df_had, rest_thickness, lengte_cm)
+neerwaartse_kracht_1 = calculateSpiegel(lengte_cm, df_had, rest_thickness, lengte_cm)
+neerwaartse_kracht_2 = calculateTrapezium(lengte_cm, df_bhd, 0.001)
+neerwaartse_kracht_3 = calculateHuid(lengte_cm, 0.001, df_shell_csa)
 
-arr_x = np.linspace(-9, 140, 15001)
-arr_w_huid = np.zeros(len(arr_x))
-arr_w_bh = np.zeros(len(arr_x))
-
-neerwaartse_kracht_2 = calculateTrapezium(arr_w_bh, df_shell_csa)
-neerwaartse_kracht_3 = calculateHuid(arr_w_huid, 1, df_bhd)
-
-
-q = neerwaartse_kracht_1 + opwaartse_Kracht + neerwaartse_kracht_3 # + spiegel_g De netto belasting kracht_TP + + neerwaartse_kracht_2
+q = neerwaartse_kracht_1 + opwaartse_Kracht + neerwaartse_kracht_2 + Kracht_Ballast+neerwaartse_kracht_3# + spiegel_g De netto belasting kracht_TP + 
 
 plt.plot(lengte_cm, q, color='black', label='Netto load')
 plt.fill_between(lengte_cm, q, alpha=0.3, color='black')

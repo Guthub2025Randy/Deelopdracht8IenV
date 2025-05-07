@@ -14,6 +14,9 @@ from scipy import interpolate as ip
 from input_code import *
 from openpyxl import load_workbook
 from scipy.integrate import cumulative_trapezoid as cumtrapz
+from importGrasshopperFiles import *
+
+d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3 = importGrasshopperFiles(8)
 
 Rtot_14knp = resistance.iloc[8,3] 
 entrance_angle = resistance.iloc[14,1]
@@ -30,14 +33,17 @@ WEIGHT_WATER = GRAVITATION_CONSTANT*WATERDICHTHEID
 kraan_lcg = 10
 WEIGHT_TRANSITION_PIECE = 230000
 swlmax = (WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT)/0.94
-H = float(msp["H [m]"])
 WEIGHT_KRAAN_HEISGEREI = -swlmax
 WEIGHT_KRAAN_BOOM = -swlmax*0.17
 WEIGHT_KRAAN_HUIS = -swlmax*0.34
 WEIGHT_TRANSITION_PIECES = -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT*4
 COB = msp["COB [m]"]
+H = float(msp["H [m]"])
 BOUYANT_VOLUME = float(msp["Buoyant Volume [m3]"])
+Length_schip = float(msp["Loa  [m]"])
 it = float(msp["Inertia WPA around COF [m4]"][0])
+L_shell = dic_Shell_CSA["X [m]"]
+I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
 lcg_tp = kraan_lcg
 tcg_tp = 0
 vcg_tp = H+10
@@ -61,9 +67,5 @@ VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
 # Begin deelopdracht 8
 B_CSA2 = dic_csa(df_csa)
 E = 205*(10**9)
-L_shell = dic_Shell_CSA["X [m]"]
-I_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
-dic_csa_tank1 = dic_csa_ballast_tanks(df_tank1_csa)
-dic_csa_tank2 = dic_csa_ballast_tanks(df_tank2_csa)
-dic_csa_tank3 = dic_csa_ballast_tanks(df_tank3_csa)
-Length_schip = float(msp["Loa  [m]"])
+
+

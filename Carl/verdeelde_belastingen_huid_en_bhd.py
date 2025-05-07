@@ -60,8 +60,8 @@ arr_x = np.linspace(-9, 140, 15001)
 arr_w_huid = np.zeros(len(arr_x))
 arr_w_bh = np.zeros(len(arr_x))
 
-arr_wbh = calculateTrapezium(arr_w_bh, df)
-arr_wh = calculateHuid(arr_w_huid,1, df_bh)
+arr_wbh = calculateTrapezium(arr_w_bh, df_bh)
+arr_wh = calculateHuid(arr_w_huid,1, df)
 
 plt.plot(arr_x,arr_wh)
 plt.show()

@@ -426,20 +426,23 @@ def berekenKrachtVerdeling(lading_posities, massa, straal_cm, start_cm, eind_cm,
 def calculateSpiegel(arr_gewicht, dataframe, huiddikte, lengte_schip):
     fg_totaal = dataframe.iloc[0,1]*huiddikte*GRAVITATION_CONSTANT*STAALGEWICHT
     fg_per_cm = fg_totaal/50
+    arr_lengte = np.zeros(len(arr_gewicht))
     for i in range(len(lengte_schip)):
-        arr_gewicht[i] -= fg_per_cm
-    return arr_gewicht
+        arr_lengte[i] += fg_per_cm
+    return -arr_lengte
 
 def calculateHuid(arr_gewicht, huiddikte, dataframe):
     x = dataframe.iloc[:,0].to_numpy()
     w = np.zeros(len(x))
     for i in range(len(x)):
-        w[i] = dataframe.iloc[:,2].to_numpy()[i]*7850*9.81*huiddikte
+        w[i] = dataframe.iloc[:,2].to_numpy()[i]*STAALGEWICHT*GRAVITATION_CONSTANT*huiddikte 
         f = ip.interp1d(x,w)
-    arr_gewicht = f(x)
-    return arr_gewicht
+    arr_lengte = np.zeros(len(arr_gewicht))
+    arr_Huid = f(arr_lengte)
+    return -arr_Huid
 
-def calculateTrapezium(arr_gewicht, dataframe):
+def calculateTrapezium(arr_gewicht, dataframe, huiddikte):
+    arr_Trap = np.zeros(len(arr_gewicht))
     for i in range(10):
         xmin = dataframe.iloc[i, 4]
         xmax = dataframe.iloc[i, 5]
@@ -447,7 +450,7 @@ def calculateTrapezium(arr_gewicht, dataframe):
         ixe = round(xmax*100)+900
         lcg = dataframe.iloc[i, 1]
         lcg_l = lcg - xmin
-        A = dataframe.iloc[i, 0]*9.81*7850*0.001
+        A = dataframe.iloc[i, 0]*STAALGEWICHT*GRAVITATION_CONSTANT*huiddikte
         if lcg == xmin + (xmax-xmin)/2:
             a = A/(xmax-xmin)
             b = A/(xmax-xmin)
@@ -468,6 +471,6 @@ def calculateTrapezium(arr_gewicht, dataframe):
             b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
         arr = np.linspace(a,b,ixe - ixb)
         for i in range(len(arr)):
-            arr_gewicht[ixb + i] = arr_gewicht[ixb + i] + arr[i]
-        return arr_gewicht
+            arr_Trap[ixb + i] = arr_Trap[ixb + i] + arr[i]
+    return -arr_Trap
 
