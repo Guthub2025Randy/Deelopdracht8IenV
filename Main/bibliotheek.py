@@ -67,5 +67,9 @@ VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
 # Begin deelopdracht 8
 B_CSA2 = dic_csa(df_csa)
 E = 205*(10**9)
+straal_tp= 5
+
+
+
 
 
