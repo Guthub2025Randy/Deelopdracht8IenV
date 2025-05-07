@@ -67,3 +67,9 @@ dic_csa_tank1 = dic_csa_ballast_tanks(df_tank1_csa)
 dic_csa_tank2 = dic_csa_ballast_tanks(df_tank2_csa)
 dic_csa_tank3 = dic_csa_ballast_tanks(df_tank3_csa)
 Length_schip = float(msp["Loa  [m]"])
+straal_tp= 5
+
+
+
+
+
