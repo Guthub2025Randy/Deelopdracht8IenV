@@ -1,0 +1,62 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy import interpolate
+
+def calculateHuid(arr_x, huiddikte, dic_shell):
+  """
+  functie berekent de verdeelde belasting van de huid. 
+  Inputs:
+  arr_x: array met de lengtewaardes van het schip per centimeter
+  huiddikte: in m (float)
+  dic_csa: dictionary met de waarden uit het shell_csa bestand
+  Returns:
+  arr_gewicht: een array met de waarden van de verdeelde belasting in N/m op elke centimeter van de lengte. 
+  """
+  x = dic_shell["X [m]"]
+  w = np.zeros(len(arr_x))
+  w = dic_shell["CROSS SECTION AREA OF SHELL PLATING [m2]"]*7850*9.81*huiddikte
+  f = interpolate.interp1d(x,w)
+  arr_gewicht = f(arr_x)
+  return arr_gewicht
+
+def calculateTrapezium(arr_lengte, dic_schot):
+  """
+  functie bepaalt de verdeelde belasting van de tankschotten.
+  Inputs: 
+  arr_lengte: array met de lengtewaardes van het schip per centimeter
+  dic_schot: de dictionary met de waarden uit het BHData bestand
+  Returns:
+  arr_gewicht: array met de verdeelde belasting van de tankschotten op elke centimeter lengte
+  """
+  arr_gewicht = np.zeros(len(arr_lengte))
+  for x in dic_bh:
+    xmin = dic_bh[x][4]
+    xmax = dic_bh[x][5]
+    lcg = dic_bh[x][1]
+    A = dic_bh[x][0]*9.81*7850*0.01
+    ixb = int(round(xmin*100)-100*arr_lengte[0])
+    ixe = int(round(xmax*100)-100*arr_lengte[0])
+    lcg_l = lcg - xmin
+    if lcg == xmin + (xmax-xmin)/2:
+      a = A/(xmax-xmin)
+      b = A/(xmax-xmin)
+    elif lcg == xmin + (xmax-xmin)/3:
+      a = A/(xmax-xmin)*2
+      b = 0
+    elif lcg == xmin + 2*(xmax-xmin)/3:
+      a = 0
+      b = A/(xmax-xmin)*2
+    elif lcg < xmin + (xmax-xmin)/3 or lcg > xmin + 2*(xmax-xmin)/3:
+      print(f"error: object moet opgedeeld worden")
+      exit
+    elif lcg < xmin + (xmax-xmin)/2:
+      a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+      b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+    else:
+      a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+      b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+    arr = np.linspace(a,b,ixe-ixb)
+    for i in range(len(arr)):
+      arr_gewicht[ixb+i] = arr_gewicht[ixb+i]+arr[i]
+  return arr_gewicht
