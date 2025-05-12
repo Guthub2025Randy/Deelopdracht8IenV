@@ -404,36 +404,41 @@ def doorbuiging(w_acc, lengte_schip, C):
     return w
 # x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam
 
-def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, straal, start, eind, lengte):
-    begin = max(zwaartepunt_tp - straal, start)
-    eind = min(zwaartepunt_tp + straal, eind)
+def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, STRAAL_TP):
+    """de input van deze functie is het zwaartepunt van één Transition Piece, de totale kracht van alle transition pieces
+    en een array over de lengte van het schip die te vinden is in de main. dan maakt hij eerst het bereik waar het parabolisch profiel van de TP's
+    te vinden is. dan maakt hij van de fysieke positie een index in een array. in het 2de deel van de functie bereidt hij parabool waarden voor.
+    x_norm zijn dan de genormaliseerde afstanden tov het zwaartepunt. in het laatste deel maakt hij het parabolisch profiel en alle negatieve waardes op 0. 
+    en dan zorgt hij ervoor dat de som gelijk is aan de totale kracht."""
+    start = lengte_in_cm[0]
+    eind = lengte_in_cm[-1]
+    begin = max(zwaartepunt_tp - STRAAL_TP, start)
+    eind = min(zwaartepunt_tp + STRAAL_TP, eind)
     idx_begin = int(begin - start)
     idx_eind = int(eind - start)
 
     bereik = np.arange(idx_begin, idx_eind + 1)
     afstanden = (bereik + start) - zwaartepunt_tp
-    x_norm = afstanden / straal
+    x_norm = afstanden / STRAAL_TP
 
     profiel = np.clip(1 - x_norm**2, 0, None)
     profiel /= profiel.sum()
     profiel *= totaal_kracht
-
-    kracht = np.zeros(lengte)
+    kracht = np.zeros(len(lengte_in_cm))
     kracht[bereik] = profiel
     return kracht
 
-def berekenKrachtVerdeling(lading_posities, massa, straal_cm, start_cm, eind_cm, lengte_schip):
-    lengte = eind_cm - start_cm + 1
-    lengte_array = np.arange(start_cm, eind_cm + 1)
-    krachtverdeling = np.zeros(lengte)
+def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm, STRAAL_TP):
+    """hier maakt hij eerst een krachten verdeling van 0 over de lengte. dan maakt hij van de massa van de TPs het gewicht van de TPs.
+    doormiddel van de functie parabolischProfielTP voegt hij deze kracht verdeling toe op de eerst  zero-array over de lengte."""
+    krachtverdeling = np.zeros(len(lengte_in_cm))
     kracht = massa * GRAVITATION_CONSTANT
-
     for pos in lading_posities:
-        krachtverdeling += parabolischProfielTP(pos, kracht, straal_cm, start_cm, eind_cm, lengte)
+        krachtverdeling += parabolischProfielTP(pos, kracht, lengte_in_cm, STRAAL_TP)
+    return krachtverdeling
 
-    krachtverdeling_cm = np.interp(lengte_schip, lengte_array, krachtverdeling, left=0, right=0)
-    funcPlotFill(lengte_schip, krachtverdeling_cm, "Lengte van het schip L [m]", "Neerwaartse kracht van de transition pieces [N]", "Neerwaartse kracht van de transition pieces per cm [N]", "Neerwaartse kracht van de transition pieces [N]", 'darkgreen')
-    return -krachtverdeling_cm
+# deze functie moeten nog geplot worden. met lengte op de x-as en krachtverdeling op de y-as. met als title: "Krachtverdeling over het Schip"
+
 
 def calculateSpiegel(arr_gewicht, dataframe, huiddikte, lengte_schip):
     fg_totaal = dataframe.iloc[0,1]*huiddikte*GRAVITATION_CONSTANT*STAALGEWICHT

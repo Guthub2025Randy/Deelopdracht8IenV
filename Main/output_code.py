@@ -85,8 +85,5 @@ def output_globale_sterkte(Maximaal_moment, LMmilvda, Maximale_afschuiving, LMai
     ws["D95"]=LMailvda #Locatie Maximale afschuiving in lengte vanaf de achterloodlijn
     ws["D96"]=Maximale_doorbuiging
     ws["D97"]=LMdilvda #Locatie Maximale doorbuiging in lengte vanaf de achterloodlijn
-
-    
-    
-    
+    return None
 

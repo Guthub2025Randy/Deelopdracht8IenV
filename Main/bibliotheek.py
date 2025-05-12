@@ -24,8 +24,6 @@ Bovenstaande gegevens zijn nodig voor het antwoordblad.
 GRAVITATION_CONSTANT = 9.81
 WATERDICHTHEID = 1025
 STAALGEWICHT = 7850
-transom_bhd_thickness = 0.001 # m
-rest_thickness = 0.001 # m
 WEIGHT_STAAL = 2.1*GRAVITATION_CONSTANT*STAALGEWICHT
 WEIGHT_WATER = GRAVITATION_CONSTANT*WATERDICHTHEID
 kraan_lcg = 10
@@ -35,6 +33,7 @@ WEIGHT_KRAAN_HEISGEREI = -swlmax
 WEIGHT_KRAAN_BOOM = -swlmax*0.17
 WEIGHT_KRAAN_HUIS = -swlmax*0.34
 WEIGHT_TRANSITION_PIECES = -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT*4
+"""
 lcg_tp = kraan_lcg
 tcg_tp = 0
 vcg_tp = H+10
@@ -55,9 +54,10 @@ VCG_kraanboom = (H+1+(0.5*32.5*np.sin(np.deg2rad(60))))
 LCG_heisgerei = kraan_lcg
 TCG_heisgerei = 8+(32.5*np.cos(np.deg2rad(60)))
 VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
+"""
 # Begin deelopdracht 8
 E = 205*(10**9)
-STRAAL_TP = 5
+STRAAL_TP = 4
 
 
 
