@@ -8,9 +8,9 @@ Created on Wed May  7 11:08:35 2025
 from openpyxl import load_workbook
 from bibliotheek import *
 
-def output_kraan(SWLmax,gewichttransitionpiece,lengte_kraan_fundatie,Draaihoogte_kraan,jib_length,Zwenkhoek,Giekhoek,LCG_TP,TCG_TP,VCG_TP,LCG_kraanhuis,TCG_kraanhuis,VCG_kraanhuis,LCG_kraanboom,TCG_kraanboom,VCG_kraanboom,LCG_heisgerei,TCG_heisgerei,VCG_heisgerei):
+def output_kraan(SWLmax,gewichttransitionpiece,lengte_kraan_fundatie,Draaihoogte_kraan,jib_length,Zwenkhoek,Giekhoek,LCG_TP,TCG_TP,VCG_TP,LCG_kraanhuis,TCG_kraanhuis,VCG_kraanhuis,LCG_kraanboom,TCG_kraanboom,VCG_kraanboom,LCG_heisgerei,TCG_heisgerei,VCG_heisgerei, versienummer):
    
-    bestandspad= "Antwoordenblad_MT1463_1466_V{0}.xlsx".format(versienummers)
+    bestandspad= "Antwoordenblad_MT1463_1466_V0{0}.xlsx".format(versienummer)
 
     wb= load_workbook(bestandspad)
 
@@ -23,9 +23,9 @@ def output_kraan(SWLmax,gewichttransitionpiece,lengte_kraan_fundatie,Draaihoogte
     ws["D71"] = jib_length# kraanboom lengte
     ws["D72"] = Zwenkhoek #zwenkhoek
     ws["D73"] = Giekhoek #giekhoek
-    ws["D75"] = LCG_TP #lcg van de kraanlast
-    ws["D76"] = TCG_TP #tcg van de kraanlast
-    ws["D77"] = VCG_TP #vcg van de kraanlast
+    ws["D75"] = LCG_heisgerei #lcg van de kraanlast
+    ws["D76"] = TCG_heisgerei #tcg van de kraanlast
+    ws["D77"] = VCG_heisgerei #vcg van de kraanlast
     ws["D79"] = LCG_kraanhuis #LCG_kraanhuis
     ws["D80"] = TCG_kraanhuis #TCG_kraanhuis
     ws["D81"] = VCG_kraanhuis #VCG_kraanhuis
@@ -39,11 +39,8 @@ def output_kraan(SWLmax,gewichttransitionpiece,lengte_kraan_fundatie,Draaihoogte
     wb.save(bestandspad)
     return None
 
-output_kraan(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19)
-
-
-def output_1(version,entrance_angle_location,R_14knp,gm,dikte_huid_en_dek,loa,B,H,T,trim,heel,dichtheid_staal,dichtheid_water,Deplacement,L_C_G,T_C_G,V_C_G,opdrijvendekracht,L_C_B,T_C_B,V_C_B,DVF,DLM,DTM,aantal_transition_pieces,massa_transition_pieces,lcg_tp,tcg_tp,vcg_tp):
-    bestandspad= "Antwoordenblad_MT1463_1466_V{0}.xlsx".format(versienummers)
+def output_1(version,entrance_angle_location,R_14knp,gm,dikte_huid_en_dek,loa,B,H,T,trim,heel,dichtheid_staal,dichtheid_water,Deplacement,L_C_G,T_C_G,V_C_G,opdrijvendekracht,L_C_B,T_C_B,V_C_B,DVF,DLM,DTM,aantal_transition_pieces,massa_transition_pieces,lcg_tp,tcg_tp,vcg_tp, versienummer):
+    bestandspad= "Antwoordenblad_MT1463_1466_V0{0}.xlsx".format(versienummer)
     wb= load_workbook(bestandspad)
     ws=wb.active 
     ws["D8"]  = version  #versie 
