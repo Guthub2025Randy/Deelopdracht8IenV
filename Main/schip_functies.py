@@ -311,7 +311,7 @@ def opwaartseKracht(dictio_CSA, lengte_schip):
     oppervlakte = dictio_CSA[" crossarea_in_m2"]
     lps = dictio_CSA["x_in_m"]
     oppervlakteInterp = ip.interp1d(lps, oppervlakte, kind='linear', fill_value='extrapolate')
-    oppervlakte_cm = oppervlakteInterp(lengte_schip)
+    oppervlakte_cm = oppervlakteInterp(lengte_schip)*100
     Onderwater_volume = []
     for i in range(len(oppervlakte_cm)-1):
         dx = lengte_schip[i+1]-lengte_schip[i]
@@ -330,15 +330,15 @@ def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shel
 def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
     oppervlakte1 = dic_tank[" crossarea_in_m2"]
     lps1 = dic_tank["x_in_m"]
-    oppervlakte1_cm = np.interp(lengte_schip, lps1, oppervlakte1, left=0, right=0)
+    oppervlakte1_cm = np.interp(lengte_schip, lps1, oppervlakte1, left=0, right=0)*10
     Water_volume1 = []
     oppervlakte2 = dic_tank_2[" crossarea_in_m2"]
     lps2 = dic_tank_2["x_in_m"]
-    oppervlakte2_cm = np.interp(lengte_schip, lps2, oppervlakte2, left=0, right=0)
+    oppervlakte2_cm = np.interp(lengte_schip, lps2, oppervlakte2, left=0, right=0)*10
     Water_volume2 = []
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
-    oppervlakte3_cm = np.interp(lengte_schip, lps3, oppervlakte3, left=0, right=0)
+    oppervlakte3_cm = np.interp(lengte_schip, lps3, oppervlakte3, left=0, right=0)*10
     Water_volume3 = []
     for i in range(len(oppervlakte1_cm)-1):
         dx1 = lengte_schip[i+1]-lengte_schip[i]

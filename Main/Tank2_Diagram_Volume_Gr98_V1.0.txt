@@ -1,4 +1,4 @@
-TANKDIAGRAM TNK 2 VOLUME DATA Group 22; Version 8.0
+TANKDIAGRAM TNK 2 VOLUME DATA Group 98; Version 1.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], vcg [m]
 0.01,0.0667,5.3919,99.02,0,0.005

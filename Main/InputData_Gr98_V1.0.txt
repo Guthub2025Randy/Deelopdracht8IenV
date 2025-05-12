@@ -1,4 +1,4 @@
-INPUT DATA Group 22; Version 8.0
+INPUT DATA Group 98; Version 1.0
 Loa [m],150
 Boa [m],24
 Doa [m],15
@@ -20,7 +20,7 @@ number of buttocks [-],4
 Entrance angle factor [% of Bwl],30
 X division method [-],1
 Flip loft surface [-],0
-Filling Tank 1 [%h1],64.8476
-Filling Tank 2 [%h2],58.4987
-Filling Tank 3 [%h3],71.4998
+Filling Tank 1 [%h1],50
+Filling Tank 2 [%h2],44.8906
+Filling Tank 3 [%h3],61.9134
 

@@ -1,4 +1,4 @@
-TANK BULKHEAD DATA Group 22; Version 8.0
+TANK BULKHEAD DATA Group 98; Version 1.0
 BHD Area [m2], lcg [m], tcg [m], vcg [m], x_min [m], x_max [m]
 934.9137,99.2011, 4.35, 7.4941,68.0122,130.391
 777.1858,41.9818, 4.35, 7.6451,14.997,68.0122

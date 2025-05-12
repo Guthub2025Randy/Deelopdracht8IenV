@@ -1,4 +1,4 @@
-BUOYANT CROSS SECTION AREAS Group 22; Version 8.0
+BUOYANT CROSS SECTION AREAS Group 98; Version 1.0
 Number of rows, 22
 x_in_m, crossarea_in_m2
 -9,1.9488
