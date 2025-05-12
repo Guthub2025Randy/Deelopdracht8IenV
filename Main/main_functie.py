@@ -112,7 +112,7 @@ plt.legend()
 plt.grid(True)
 plt.show()
 plt.close()
-""""
+"""
 #plotten van q
 funcPlotFill(lengte_cm, q, "Lengte van het schip (L) in [m]", "Netto verdeelde belasting (q) in [N]", "De netto verdeelde belasting", 'Netto load',"black")
 
@@ -121,7 +121,7 @@ V = dwarskracht(q, lengte_cm)
 M = buigendMoment(V, lengte_cm)
 
 Reduct_M = M/(E*I_traag)
-"""""
+"""
 plt.plot(lengte_cm, Reduct_M, color='c', label='Gereduceerde moment')
 plt.fill_between(lengte_cm, Reduct_M, alpha=0.2, color='black')
 plt.xlabel("Lengte van het schip (L) in [m]")
@@ -131,7 +131,7 @@ plt.legend()
 plt.grid(True)
 plt.show()
 plt.close()
-"""""
+"""
 #plotten van het gereduceerde moment.
 funcPlotFill(lengte_cm,Reduct_M, "Lengte van het schip (L) in [m]", "Gereduceerde moment (M/(E*I)) in [Nm]", "Het gereduceerde moment", 'Gereduceerde moment', 'black')
 
