@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from schip_functies import *
 from output_code import *
 
-versienummer = 8
+versienummer = 1
 
 d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3 = importGrasshopperFiles(versienummer)
 cob = msp["COB [m]"]
@@ -22,11 +22,31 @@ it = float(msp["Inertia WPA around COF [m4]"][0])
 l_shell = dic_Shell_CSA["X [m]"]
 i_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
 B_CSA2 = dic_csa(df_csa)
+lcg_tp = 32
+tcg_tp = -2
+vcg_tp = 25
+lengte_kraan_fundatie = 4
+Draaihoogte_kraan = 1
+jib_length = 32.5
+Zwenkhoek = 90
+Giekhoek = 60
+LCG_TP = 32
+TCG_TP = -2
+VCG_TP = 25
+LCG_kraanhuis = kraan_lcg
+TCG_kraanhuis = 8
+VCG_kraanhuis = 16
+LCG_kraanboom = kraan_lcg
+TCG_kraanboom = 16.13
+VCG_kraanboom = 30.073
+LCG_heisgerei = kraan_lcg
+TCG_heisgerei = 24.25
+VCG_heisgerei = 44.146
 
 def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob):
     #Tank 3: er wordt een waarde gekozen voor het volume van tank 3. Vervolgens wordt hiervan het gewicht en
     #het zwaartepunt bepaald
-    volume_t3 = d3["vol_3"][4]+643
+    volume_t3 = d3["vol_3"][3]
     kracht_t3 = volume_t3*WEIGHT_WATER
     locatie_t3 = interpolerenLocatie(d3, volume_t3, 3)
     #Tank 1: om de vulling van tank 1 te bepalen worden alle momenten bij elkaar opgeteld. Eerst worden er lijsten

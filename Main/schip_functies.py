@@ -69,8 +69,8 @@ def calculateWeightKraan(Krachten, Posities, H, kraan_lcg, SWLMax):
     arrayPositieKboom = np.array([kraan_lcg, 8+(0.5*32.5*np.cos(np.deg2rad(60))), (H+1+(0.5*32.5*np.sin(np.deg2rad(60))))])
     ZwaarteKhuis = -SWLMax*0.34
     arrayPositieKhuis = np.array([kraan_lcg, 8, H+1])
-    ZwaarteWindmolen = -9025200
-    arrayPositieWindmolen = np.array([32, 0, H+10])
+    ZwaarteWindmolen = -WEIGHT_TRANSITION_PIECES
+    arrayPositieWindmolen = np.array([32, -2, H+10])
     Posities.append(arrayPositieKheis)
     Krachten.append(ZwaarteKheis)
     Posities.append(arrayPositieKboom)
@@ -425,17 +425,9 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, STRAAL_TP)
     profiel /= profiel.sum()
     profiel *= totaal_kracht
     kracht = np.zeros(len(lengte_in_cm))
-    kracht[bereik] = profiel
+    for i in range(len(bereik)):
+      kracht[int(bereik[0]*100)+i] = profiel[i]
     return kracht
-
-def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm, STRAAL_TP):
-    """hier maakt hij eerst een krachten verdeling van 0 over de lengte. dan maakt hij van de massa van de TPs het gewicht van de TPs.
-    doormiddel van de functie parabolischProfielTP voegt hij deze kracht verdeling toe op de eerst  zero-array over de lengte."""
-    krachtverdeling = np.zeros(len(lengte_in_cm))
-    kracht = massa * GRAVITATION_CONSTANT
-    for pos in lading_posities:
-        krachtverdeling += parabolischProfielTP(pos, kracht, lengte_in_cm, STRAAL_TP)
-    return krachtverdeling
 
 # deze functie moeten nog geplot worden. met lengte op de x-as en krachtverdeling op de y-as. met als title: "Krachtverdeling over het Schip"
 
@@ -491,3 +483,41 @@ def calculateTrapezium(arr_gewicht, dataframe, huiddikte):
             arr_Trap[ixb + i] = arr_Trap[ixb + i] + arr[i]
     return -arr_Trap
 
+def parabolischProfielKraan(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_kraanhuis):
+    """
+    Nog te bepalen: straal kraanhuis als argument, lokale variabele bepaald binnen de functie of global variable.
+
+    De functie bepaalt de verdeelde belasting van de kraan op het dek tijdens de hijsoperatie (dus inclusief een tussenstuk in de kraan)
+    Imputs:
+    zwaartepunt_tp: x-coördinaat van het aangrijpingspunt van het gewicht van het kraanhuis op het dek (float)
+    totaal_kracht: het totale gewicht van de kraan en kraanlast samen (float)
+    lengte_in_cm: een array van x-coördinaten voor elke centimeter van het schip. Deze array heeft dus 14901 elementen en loopt van -9 tot 140.
+    Returns:
+    kracht: een array met de verdeelde belasting op het dek ten gevolge van de kraan op elke centimeter van het schip. Deze array heeft dus 14901 elementen.
+    """
+    start = lengte_in_cm[0]
+    eind_len = lengte_in_cm[-1]
+    begin = max(zwaartepunt_tp - straal_kraanhuis, start)
+    eind = min(zwaartepunt_tp + straal_kraanhuis, eind_len)
+    #conversion to distance from stern instead of from achterloodlijn
+    idx_begin = int((begin - start))
+    idx_eind = int((eind - start))
+
+    bereik = np.arange(idx_begin, idx_eind + 0.01, 0.01)
+    afstanden = (bereik + start) - zwaartepunt_tp
+    x_norm = afstanden / straal_kraanhuis
+    profiel = np.clip(1 - x_norm**2, 0, None)
+    profiel /= profiel.sum()
+    profiel *= totaal_kracht
+    kracht = np.zeros(len(lengte_in_cm))
+    for i in range(len(bereik)):
+      kracht[int(bereik[0]*100)+i] = profiel[i]
+    return kracht
+
+def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm, straal):
+    """hier maakt hij eerst een krachten verdeling van 0 over de lengte. dan maakt hij van de massa van de TPs het gewicht van de TPs.
+    doormiddel van de functie parabolischProfielTP voegt hij deze kracht verdeling toe op de eerst  zero-array over de lengte."""
+    krachtverdeling = np.zeros(len(lengte_in_cm))
+    for pos in lading_posities:
+        krachtverdeling += parabolischProfielKraan(pos, massa, lengte_in_cm, straal)
+    return krachtverdeling

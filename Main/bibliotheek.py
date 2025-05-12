@@ -11,13 +11,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import interpolate as ip
-from input_code import *
 from openpyxl import load_workbook
 from scipy.integrate import cumulative_trapezoid as cumtrapz
 from importGrasshopperFiles import *
 
-Rtot_14knp = resistance.iloc[8,3] 
-entrance_angle = resistance.iloc[14,1]
+#Rtot_14knp = resistance.iloc[8,3] 
+#entrance_angle = resistance.iloc[14,1]
 """
 Bovenstaande gegevens zijn nodig voor het antwoordblad.
 """
@@ -27,12 +26,13 @@ STAALGEWICHT = 7850
 WEIGHT_STAAL = 2.1*GRAVITATION_CONSTANT*STAALGEWICHT
 WEIGHT_WATER = GRAVITATION_CONSTANT*WATERDICHTHEID
 kraan_lcg = 10
-WEIGHT_TRANSITION_PIECE = 230000
+WEIGHT_TRANSITION_PIECE = 5395500
 swlmax = (WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT)/0.94
 WEIGHT_KRAAN_HEISGEREI = -swlmax
 WEIGHT_KRAAN_BOOM = -swlmax*0.17
 WEIGHT_KRAAN_HUIS = -swlmax*0.34
-WEIGHT_TRANSITION_PIECES = -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT*4
+WEIGHT_TRANSITION_PIECES = WEIGHT_TRANSITION_PIECE*4
+WEIGHT_KRAAN_TOTAAL = WEIGHT_KRAAN_HEISGEREI + WEIGHT_KRAAN_BOOM + WEIGHT_KRAAN_HUIS
 """
 lcg_tp = kraan_lcg
 tcg_tp = 0
