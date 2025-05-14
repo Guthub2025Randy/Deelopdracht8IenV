@@ -39,15 +39,15 @@ def traagheidsmomentAsymptoot(traag_shell, l_shell, lengte_in_cm):
 
 def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, B_CSA2, lcg_TP, lengte_cm, STRAAL_TP, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, WEIGHT_KRAAN_TOTAAL, weights_TP):
     # Begin deelopdracht 8
-    opwaartse_Kracht = opwaartseKracht(B_CSA2, lengte_cm)
+    opwaartse_Kracht = opwaartseKracht(B_CSA2, lengte_cm) * ((len(lengte_cm))/(lengte_cm[-1] - lengte_cm[0]))
     I_traag = traagheidsmomentAsymptoot(i_x_shell, l_shell, lengte_cm)
     Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm) * ((len(lengte_cm))/(lengte_cm[-1] - lengte_cm[0]))
-    kracht_TP = berekenKrachtVerdeling(lcg_TP, -weights_TP, lengte_cm, STRAAL_TP)
+    kracht_TP = berekenKrachtVerdeling(lcg_TP, -weights_TP * ((len(lengte_cm))/(lengte_cm[-1] - lengte_cm[0])), lengte_cm, STRAAL_TP)
     funcPlotFill(lengte_cm, kracht_TP, "lengte", "gezeik", "transitionpieces", "meer gezeik", "black")
-    kracht_kraan = parabolischProfielKraan(kraan_lcg, WEIGHT_KRAAN_TOTAAL, lengte_cm, straal_kraanhuis)
+    kracht_kraan = parabolischProfielKraan(kraan_lcg, WEIGHT_KRAAN_TOTAAL * ((len(lengte_cm))/(lengte_cm[-1] - lengte_cm[0])), lengte_cm, straal_kraanhuis)
     funcPlotFill(lengte_cm, kracht_kraan, "lengte", "gezeik", "kraan", "meer gezeik", "black")
-    #neerwaartse_kracht_1 = calculateSpiegel(lengte_cm, dic_Shell_CSA, rest_thickness, lengte_cm)
-    #funcPlotFill(lengte_cm, neerwaartse_kracht_1, "lengte", "gezeik", "spiegel", "meer gezeik", "black")
+    neerwaartse_kracht_1 = calculateSpiegel(lengte_cm, dha, transom_bhd_thickness)
+    funcPlotFill(lengte_cm, neerwaartse_kracht_1, "lengte", "gezeik", "spiegel", "meer gezeik", "black")
     neerwaartse_kracht_2 = calculateTrapezium(lengte_cm, dbh, transom_bhd_thickness)
     funcPlotFill(lengte_cm, neerwaartse_kracht_2, "lengte", "gezeik", "bulkheads", "meer gezeik", "black")
     neerwaartse_kracht_3 = calculateHuid(lengte_cm, rest_thickness, dic_Shell_CSA)

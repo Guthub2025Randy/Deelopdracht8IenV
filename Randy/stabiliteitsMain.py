@@ -134,7 +134,7 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     lcg_schip, tcg_schip, vcg_schip = calculateZwaartepuntschip(posities3, krachten3)
     G_M = calculateG_M(bouyant_volume, SIt, vcg_schip, cob[2], it)
     print(G_M)
-    output_1(3, str(entrance_angle), Rtot_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 
+    output_1(versienummer, str(entrance_angle), Rtot_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 
              0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
              bouyant_volume*WEIGHT_WATER, cob[0], cob[1], cob[2], 
              calculateKrachtensom1(krachten3)[0]+(bouyant_volume*WEIGHT_WATER), (calculateKrachtensom1(krachten3)[0]*(lcg_schip - cob[0])), 

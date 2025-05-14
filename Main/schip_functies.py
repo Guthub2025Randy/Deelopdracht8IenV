@@ -311,7 +311,7 @@ def opwaartseKracht(dictio_CSA, lengte_schip):
     oppervlakte = dictio_CSA[" crossarea_in_m2"]
     lps = dictio_CSA["x_in_m"]
     oppervlakteInterp = ip.interp1d(lps, oppervlakte, kind='cubic', fill_value='extrapolate')
-    oppervlakte_cm = oppervlakteInterp(lengte_schip)*100
+    oppervlakte_cm = oppervlakteInterp(lengte_schip)
     Onderwater_volume = []
     for i in range(len(oppervlakte_cm)-1):
         dx = lengte_schip[i+1]-lengte_schip[i]
@@ -328,17 +328,21 @@ def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shel
     return traagheidsmoment_csa_shell_cm
 
 def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
+    donnot = np.array([0.0])
     oppervlakte1 = dic_tank[" crossarea_in_m2"]
     lps1 = dic_tank["x_in_m"]
-    oppervlakte1_cm = np.interp(lengte_schip, lps1, oppervlakte1, left=0, right=0)
+    oppervlakteInterp1 = ip.interp1d(lps1, oppervlakte1, kind='cubic', fill_value=donnot)
+    oppervlakte1_cm = oppervlakteInterp1(lengte_schip)
     Water_volume1 = []
     oppervlakte2 = dic_tank_2[" crossarea_in_m2"]
     lps2 = dic_tank_2["x_in_m"]
-    oppervlakte2_cm = np.interp(lengte_schip, lps2, oppervlakte2, left=0, right=0)
+    oppervlakteInterp2 = ip.interp1d(lps2, oppervlakte2, kind='cubic', fill_value=donnot)
+    oppervlakte2_cm = oppervlakteInterp2(lengte_schip)
     Water_volume2 = []
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
-    oppervlakte3_cm = np.interp(lengte_schip, lps3, oppervlakte3, left=0, right=0)
+    oppervlakteInterp3 = ip.interp1d(lps3, oppervlakte3, kind='cubic', fill_value=donnot)
+    oppervlakte3_cm = oppervlakteInterp3(lengte_schip)
     Water_volume3 = []
     for i in range(len(oppervlakte1_cm)-1):
         dx1 = lengte_schip[i+1]-lengte_schip[i]
@@ -432,13 +436,13 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, STRAAL_TP)
 # deze functie moeten nog geplot worden. met lengte op de x-as en krachtverdeling op de y-as. met als title: "Krachtverdeling over het Schip"
 
 
-def calculateSpiegel(arr_gewicht, dataframe, huiddikte, lengte_schip):
-    fg_totaal = dataframe.iloc[0,1]*huiddikte*GRAVITATION_CONSTANT*STAALGEWICHT
-    fg_per_cm = fg_totaal/50
-    arr_lengte = np.zeros(len(arr_gewicht))
-    for i in range(len(lengte_schip)):
-        arr_lengte[i] += fg_per_cm
-    return -arr_lengte
+def calculateSpiegel(arr_lengte, dic, huiddikte):
+  fg_totaal = dic["Transom Area "][0]*huiddikte*WEIGHT_STAAL
+  fg_per_cm = fg_totaal/50
+  arr_gewicht = np.zeros(len(arr_lengte))
+  for i in range(50):
+    arr_gewicht[i] += fg_per_cm
+  return -arr_gewicht
 
 def calculateHuid(arr_x, huiddikte, dic_shell):
   """
@@ -455,7 +459,7 @@ def calculateHuid(arr_x, huiddikte, dic_shell):
   w = dic_shell["CROSS SECTION AREA OF SHELL PLATING [m2]"]*WEIGHT_STAAL*huiddikte
   f = ip.interp1d(x,w)
   arr_gewicht = f(arr_x)
-  return arr_gewicht
+  return -arr_gewicht
 
 def calculateTrapezium(arr_lengte, dic_bh, huiddikte):
   """
@@ -496,7 +500,7 @@ def calculateTrapezium(arr_lengte, dic_bh, huiddikte):
     arr = np.linspace(a,b,ixe-ixb)
     for i in range(len(arr)):
       arr_gewicht[ixb+i] = arr_gewicht[ixb+i]+arr[i]
-  return arr_gewicht
+  return -arr_gewicht
 
 def parabolischProfielKraan(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_kraanhuis):
     """
