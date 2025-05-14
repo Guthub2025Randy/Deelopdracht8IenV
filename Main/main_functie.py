@@ -95,7 +95,13 @@ for idx, val in enumerate(I_traag):
     if val < 0.1:
         I_traag[idx] = asymptootwaarde # Anders krijgen we een asymptoot bij M/(E*I)
 Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm)
+
+"""\/deze kunnen we nog vervangen doormiddel van een ouput uit rhino"""
+
 lcg_TP = np.array([3200,3200,3200,3200])
+
+
+
 #kracht_TP = berekenKrachtVerdeling(lcg_TP, WEIGHT_TRANSITION_PIECE, 400, -900, 14100, lengte_cm)
 neerwaartse_kracht_1 = calculateSpiegel(lengte_cm, df_had, rest_thickness, lengte_cm)
 neerwaartse_kracht_2 = calculateTrapezium(lengte_cm, df_bhd, 0.001)
@@ -119,9 +125,10 @@ funcPlotFill(lengte_cm, q, "Lengte van het schip (L) in [m]", "Netto verdeelde b
 V = dwarskracht(q, lengte_cm)
 
 M = buigendMoment(V, lengte_cm)
-
+reduct_M(M,I_traag,lengte_cm)
+"""""
 Reduct_M = M/(E*I_traag)
-"""
+
 plt.plot(lengte_cm, Reduct_M, color='c', label='Gereduceerde moment')
 plt.fill_between(lengte_cm, Reduct_M, alpha=0.2, color='black')
 plt.xlabel("Lengte van het schip (L) in [m]")
@@ -131,10 +138,10 @@ plt.legend()
 plt.grid(True)
 plt.show()
 plt.close()
-"""
+
 #plotten van het gereduceerde moment.
 funcPlotFill(lengte_cm,Reduct_M, "Lengte van het schip (L) in [m]", "Gereduceerde moment (M/(E*I)) in [Nm]", "Het gereduceerde moment", 'Gereduceerde moment', 'black')
-
+"""
 hoekverdraai_accent = hoekverdraaiingAcc(M, lengte_cm)
 
 doorbuig_acc = doorbuigingAcc(hoekverdraai_accent, lengte_cm)
