@@ -186,7 +186,7 @@ X [m],OUTLINE LENGTH [m],CROSS SECTION AREA OF SHELL PLATING [m2],CENTROID_X[m],
 TANKDIAGRAM TNK 1 VOLUME DATA Group 22; Version 4.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], vcg [m]
-0.001,0.0111,0.0331,39.5908,5.4451,0.0005
+0.001,0.0111,0.0331,39.5909,5.4451,0.0005
 1.5007,16.6741,268.6236,43.7244,6.5108,0.8701
 3.0003,33.337,696.1125,43.4947,6.9341,1.7362
 4.5,50,1221.4192,43.4217,7.2616,2.6121
@@ -196,7 +196,7 @@ Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], v
 TANKDIAGRAM TNK 1 WATERPLANE DATA Group 22; Version 4.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], Inertia_x [m4], Inertia_y [m4], Inertia_z [m4]
-0.001,0.0111,36.7863,40.2492,5.4645,0.001,2.7287,4657.0427,4659.7714
+0.001,0.0111,36.7686,40.2397,5.4645,0.001,2.7282,4650.1471,4652.8752
 1.5007,16.6741,248.258,43.4169,6.9102,1.5007,306.9701,83642.1842,83949.1542
 3.0003,33.337,318.1948,43.3241,7.4428,3.0003,639.027,108872.9533,109511.9803
 4.5,50,380.9666,43.3383,7.9227,4.5,1092.8359,131127.759,132220.5949
@@ -226,7 +226,7 @@ Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], 
 TANKDIAGRAM TNK 3 VOLUME DATA Group 22; Version 4.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], vcg [m]
-0.001,0.0111,0.0332,39.5766,-5.4449,0.0005
+0.001,0.0111,0.0331,39.5908,-5.4451,0.0005
 1.5007,16.6741,268.6236,43.7244,-6.5108,0.8701
 3.0003,33.337,696.1125,43.4947,-6.9341,1.7362
 4.5,50,1221.4192,43.4217,-7.2616,2.6121
@@ -236,7 +236,7 @@ Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], v
 TANKDIAGRAM TNK 3 WATERPLANE DATA Group 22; Version 4.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], Inertia_x [m4], Inertia_y [m4], Inertia_z [m4]
-0.001,0.0111,36.7863,40.2492,-5.4645,0.001,2.7287,4657.0427,4659.7714
+0.001,0.0111,36.7686,40.2397,-5.4645,0.001,2.7282,4650.1471,4652.8752
 1.5007,16.6741,248.258,43.4169,-6.9102,1.5007,306.9701,83642.1842,83949.1542
 3.0003,33.337,318.1948,43.3241,-7.4428,3.0003,639.027,108872.9533,109511.9803
 4.5,50,380.9666,43.3383,-7.9227,4.5,1092.8359,131127.759,132220.5949
