@@ -45,7 +45,7 @@ def importGrasshopperFiles(versienummer):
     df_t1["tanknummer"] = [1]*len(df_t1)
     df_t2["tanknummer"] = [2]*len(df_t2)
     df_t3["tanknummer"] = [3]*len(df_t3)
-    df_bhd = df_bhd.drop(columns=[" x_min [m]", " x_max [m]"], axis=1)
+    #df_bhd = df_bhd.drop(columns=[" x_min [m]", " x_max [m]"], axis=1)
 
     def datatanks(df_t):
         """
@@ -190,4 +190,4 @@ def importGrasshopperFiles(versienummer):
     dic_csa_tank_1 = dic_csa_ballast_tanks(df_tank1_csa)
     dic_csa_tank_2 = dic_csa_ballast_tanks(df_tank2_csa)
     dic_csa_tank_3 = dic_csa_ballast_tanks(df_tank3_csa)
-    return data_Tank_1, data_Tank_2, data_Tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_HA, dic_Shell_CrossSA, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3
+    return data_Tank_1, data_Tank_2, data_Tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_HA, dic_Shell_CrossSA, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance

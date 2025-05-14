@@ -440,48 +440,63 @@ def calculateSpiegel(arr_gewicht, dataframe, huiddikte, lengte_schip):
         arr_lengte[i] += fg_per_cm
     return -arr_lengte
 
-def calculateHuid(arr_gewicht, huiddikte, dataframe):
-    x = dataframe.iloc[:,0].to_numpy()
-    w = np.zeros(len(x))
-    for i in range(len(x)):
-        w[i] = dataframe.iloc[:,2].to_numpy()[i]*STAALGEWICHT*GRAVITATION_CONSTANT*huiddikte 
-        f = ip.interp1d(x,w)
-    arr_lengte = np.zeros(len(arr_gewicht))
-    arr_Huid = f(arr_lengte)
-    return -arr_Huid
+def calculateHuid(arr_x, huiddikte, dic_shell):
+  """
+  functie berekent de verdeelde belasting van de huid. 
+  Inputs:
+  arr_x: array met de lengtewaardes van het schip per centimeter
+  huiddikte: in m (float)
+  dic_csa: dictionary met de waarden uit het shell_csa bestand
+  Returns:
+  arr_gewicht: een array met de waarden van de verdeelde belasting in N/m op elke centimeter van de lengte. 
+  """
+  x = dic_shell["X [m]"]
+  w = np.zeros(len(arr_x))
+  w = dic_shell["CROSS SECTION AREA OF SHELL PLATING [m2]"]*WEIGHT_STAAL*huiddikte
+  f = ip.interp1d(x,w)
+  arr_gewicht = f(arr_x)
+  return arr_gewicht
 
-def calculateTrapezium(arr_gewicht, dataframe, huiddikte):
-    arr_Trap = np.zeros(len(arr_gewicht))
-    for i in range(10):
-        xmin = dataframe.iloc[i, 4]
-        xmax = dataframe.iloc[i, 5]
-        ixb = round(xmin*100)+900
-        ixe = round(xmax*100)+900
-        lcg = dataframe.iloc[i, 1]
-        lcg_l = lcg - xmin
-        A = dataframe.iloc[i, 0]*STAALGEWICHT*GRAVITATION_CONSTANT*huiddikte
-        if lcg == xmin + (xmax-xmin)/2:
-            a = A/(xmax-xmin)
-            b = A/(xmax-xmin)
-        elif lcg == xmin + (xmax-xmin)/3:
-            a = A/(xmax-xmin)*2
-            b = 0
-        elif lcg == xmin + 2*(xmax-xmin)/3:
-            a = 0
-            b = A/(xmax-xmin)*2
-        elif lcg < xmin + (xmax-xmin)/3 or lcg > xmin + 2*(xmax-xmin)/3:
-            print(f"error: object moet opgedeeld worden")
-            return None
-        elif lcg < xmin + (xmax-xmin)/2:
-            a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
-            b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
-        else:
-            a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
-            b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
-        arr = np.linspace(a,b,ixe - ixb)
-        for i in range(len(arr)):
-            arr_Trap[ixb + i] = arr_Trap[ixb + i] + arr[i]
-    return -arr_Trap
+def calculateTrapezium(arr_lengte, dic_bh, huiddikte):
+  """
+  functie bepaalt de verdeelde belasting van de tankschotten.
+  Inputs: 
+  arr_lengte: array met de lengtewaardes van het schip per centimeter
+  dic_schot: de dictionary met de waarden uit het BHData bestand
+  Returns:
+  arr_gewicht: array met de verdeelde belasting van de tankschotten op elke centimeter lengte
+  """
+  arr_gewicht = np.zeros(len(arr_lengte))
+  for x in dic_bh:
+    xmin = dic_bh[x][4]
+    xmax = dic_bh[x][5]
+    lcg = dic_bh[x][1]
+    A = dic_bh[x][0]*WEIGHT_STAAL*huiddikte
+    ixb = int(round(xmin*100)-100*arr_lengte[0])
+    ixe = int(round(xmax*100)-100*arr_lengte[0])
+    lcg_l = lcg - xmin
+    if lcg == xmin + (xmax-xmin)/2:
+      a = A/(xmax-xmin)
+      b = A/(xmax-xmin)
+    elif lcg == xmin + (xmax-xmin)/3:
+      a = A/(xmax-xmin)*2
+      b = 0
+    elif lcg == xmin + 2*(xmax-xmin)/3:
+      a = 0
+      b = A/(xmax-xmin)*2
+    elif lcg < xmin + (xmax-xmin)/3 or lcg > xmin + 2*(xmax-xmin)/3:
+      print(f"error: object moet opgedeeld worden")
+      exit
+    elif lcg < xmin + (xmax-xmin)/2:
+      a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+      b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+    else:
+      a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+      b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+    arr = np.linspace(a,b,ixe-ixb)
+    for i in range(len(arr)):
+      arr_gewicht[ixb+i] = arr_gewicht[ixb+i]+arr[i]
+  return arr_gewicht
 
 def parabolischProfielKraan(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_kraanhuis):
     """
@@ -514,10 +529,10 @@ def parabolischProfielKraan(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_
       kracht[int(bereik[0]*100)+i] = profiel[i]
     return kracht
 
-def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm, straal):
+def berekenKrachtVerdeling(lading_posities, massas, lengte_in_cm, straal):
     """hier maakt hij eerst een krachten verdeling van 0 over de lengte. dan maakt hij van de massa van de TPs het gewicht van de TPs.
     doormiddel van de functie parabolischProfielTP voegt hij deze kracht verdeling toe op de eerst  zero-array over de lengte."""
     krachtverdeling = np.zeros(len(lengte_in_cm))
     for pos in lading_posities:
-        krachtverdeling += parabolischProfielKraan(pos, massa, lengte_in_cm, straal)
+        krachtverdeling += parabolischProfielKraan(pos, massas[0], lengte_in_cm, straal)
     return krachtverdeling

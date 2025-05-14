@@ -13,7 +13,9 @@ from output_code import *
 
 versienummer = 1
 
-d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3 = importGrasshopperFiles(versienummer)
+d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance = importGrasshopperFiles(versienummer)
+print("De weerstand op 14 knopen is:")
+print(resistance.loc[8, '  Rtot [N]'])
 cob = msp["COB [m]"]
 h = float(msp["H [m]"])
 bouyant_volume = float(msp["Buoyant Volume [m3]"])
@@ -98,10 +100,12 @@ def tankTwee(krachten2, dbh1, locatie_t1, kracht_t1, locatie_t3, kracht_t3, h, c
     TweedeKrachtensom = calculateKrachtsom2(krachtensom, dbh2, transom_bhd_thickness, WEIGHT_STAAL)
     vcgt2 = interpolerenLocatie(d2, volume_t2, 2)[2]
     positie_t2 = np.array([lcgTank2(TweedeMomentensom,TweedeKrachtensom)[0], 0, vcgt2])
+    print("De langscheepse positie van tank 2 moet zijn:")
+    print(positie_t2[0])
     return volume_t2, kracht_t2, positie_t2
 
 def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume):
-    # De eerste momentensom voor het dwarsscheepse momentenevenwicht
+    # De eerste momentensom voor het dwarsscheepse momentenevenwicht    
     momentensom1_, kracht_t3, locatie_t3, volume_t3 = eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, 
                                                                    rest_thickness, kraan_lcg, cob)
     #Tank 1: op basis van het berekende transversale moment wordt de vulling en gewicht van de vulling van het water
@@ -129,6 +133,7 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     posities3, krachten3 = removeBuoyantForce(posities2, krachten2, cob, calculateOpdrijvendeKracht(WEIGHT_WATER, bouyant_volume))
     lcg_schip, tcg_schip, vcg_schip = calculateZwaartepuntschip(posities3, krachten3)
     G_M = calculateG_M(bouyant_volume, SIt, vcg_schip, cob[2], it)
+    print(G_M)
     output_1(3, str(entrance_angle), Rtot_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 
              0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
              bouyant_volume*WEIGHT_WATER, cob[0], cob[1], cob[2], 
