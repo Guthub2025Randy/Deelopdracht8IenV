@@ -44,5 +44,4 @@ plt.title("Traagheidsmomenten als functie van de plaatdiktes")
 plt.legend()
 plt.grid(True)
 
-for i in range(len(Lenge_schip)):
-    
+for i in range(len(Lenge_schip)):    
