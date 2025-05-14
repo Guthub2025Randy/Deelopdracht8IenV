@@ -13,6 +13,9 @@ import numpy as np
 from Library import *
 import matplotlib.pyplot as plt
 
+straal_kraanhuis = 1
+
+
 
 
 def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm):
@@ -23,14 +26,14 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm):
     en dan zorgt hij ervoor dat de som gelijk is aan de totale kracht."""
     start = lengte_in_cm[0]
     eind = lengte_in_cm[-1]
-    begin = max(zwaartepunt_tp - straal_tp, start)
-    eind = min(zwaartepunt_tp + straal_tp, eind)
+    begin = max(zwaartepunt_tp - straal_kraanhuis, start)
+    eind = min(zwaartepunt_tp + straal_kraanhuis, eind)
     idx_begin = int(begin - start)
     idx_eind = int(eind - start)
 
     bereik = np.arange(idx_begin, idx_eind + 1)
     afstanden = (bereik + start) - zwaartepunt_tp
-    x_norm = afstanden / straal_tp
+    x_norm = afstanden / straal_kraanhuis
 
     profiel = np.clip(1 - x_norm**2, 0, None)
     profiel /= profiel.sum()
@@ -51,6 +54,8 @@ def berekenKrachtVerdeling(lading_posities, massa, lengte_in_cm):
 
 # deze functie moeten nog geplot worden. met lengte op de x-as en krachtverdeling op de y-as. met als title: "Krachtverdeling over het Schip"
 
+array = parabolischProfielTP(40, 200000, np.linspace(-9, 140, 14901))
 
+plt.plot(np.linspace(-9 ,140, 14901), array)
 
 
