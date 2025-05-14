@@ -25,9 +25,9 @@ def importGrasshopperFiles(versienummer):
     # Bestanden voor deelopdracht 8
     df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
     df_shell_csa = pd.read_csv("Shell_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
-    df_tank1_csa = pd.read_csv("Tank1_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
-    df_tank2_csa = pd.read_csv("Tank2_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
-    df_tank3_csa = pd.read_csv("Tank3_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
+    df_tank1_csa = pd.read_csv("Tank1_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
+    df_tank2_csa = pd.read_csv("Tank2_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
+    df_tank3_csa = pd.read_csv("Tank3_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
     # Einde bestanden voor deelopdracht 8
     resistance =pd.read_csv("ResistanceData_Gr22_V{0}.0.txt".format(versienummer),header=6)
 
