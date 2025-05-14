@@ -190,4 +190,4 @@ def importGrasshopperFiles(versienummer):
     dic_csa_tank_1 = dic_csa_ballast_tanks(df_tank1_csa)
     dic_csa_tank_2 = dic_csa_ballast_tanks(df_tank2_csa)
     dic_csa_tank_3 = dic_csa_ballast_tanks(df_tank3_csa)
-    return data_Tank_1, data_Tank_2, data_Tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_HA, dic_Shell_CrossSA, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance
+    return data_Tank_1, data_Tank_2, data_Tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_HA, dic_Shell_CrossSA, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance, df_csa

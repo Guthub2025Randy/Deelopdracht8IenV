@@ -63,11 +63,10 @@ def calculateWeightKraan(Krachten, Posities, H, kraan_lcg, SWLMax):
     elk een positie in het xyz vlak representeren, respectievelijk de zwaartekrachten en hun aangrijpingspunten toe te voegen.
     Ook het gewicht van de deklading (ZwaarteWindmolen) wordt toegevoegd. De aangevulde lijsten worden teruggegeven.
     """
-    for i in kraan_lcg:
-        ZwaarteWindmolen = -WEIGHT_TRANSITION_PIECES
-        arrayPositieWindmolen = np.array([kraan_lcg[i], SWLMax[i], H+10])
-        Posities.append(arrayPositieWindmolen)
-        Krachten.append(ZwaarteWindmolen)
+    ZwaarteWindmolen = -WEIGHT_TRANSITION_PIECES
+    arrayPositieWindmolen = np.array([40, -2, H+10])
+    Posities.append(arrayPositieWindmolen)
+    Krachten.append(ZwaarteWindmolen)
     return Krachten, Posities
 
 def calculateOpdrijvendeKracht(gewicht_water, onderwater_volume):
@@ -531,7 +530,7 @@ def berekenKrachtVerdeling(lading_posities, massas, lengte_in_cm, straal):
     return krachtverdeling
 
 
-def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob):
+def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob, h):
     #Tank 3: er wordt een waarde gekozen voor het volume van tank 3. Vervolgens wordt hiervan het gewicht en
     #het zwaartepunt bepaald
     volume_t3 = d3["vol_3"][3]
@@ -593,7 +592,7 @@ def tankTwee(krachten2, dbh1, locatie_t1, kracht_t1, locatie_t3, kracht_t3, h, c
 def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume):
     # De eerste momentensom voor het dwarsscheepse momentenevenwicht    
     momentensom1_, kracht_t3, locatie_t3, volume_t3 = eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, 
-                                                                   rest_thickness, kraan_lcg, cob)
+                                                                   rest_thickness, kraan_lcg, cob, h)
     #Tank 1: op basis van het berekende transversale moment wordt de vulling en gewicht van de vulling van het water
     #in tank 1 bepaald.
     volume_t1, kracht_t1, locatie_t1 = tankEen(d1, momentensom1_)
@@ -628,13 +627,34 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     vul1, vul2, vul3 = vullingPercFunc(d1, d2, d3, momentensom1_, volume_t2, volume_t3)
     return
 
+def dic_csa(df):
+        """
+        Deze functie zet de df van de bouyant_csa om in een dictionary.
+        
+        Parameters
+        ----------
+        df : TYPE: dataframe
+            DESCRIPTION.
+            
+        Returns
+        -------
+        dic : TYPE: dictionary
+        DESCRIPTION.
+
+        """
+        dic = {}
+        dic["x_in_m".format(df.iloc[20,0])] = df.iloc[:,0].to_numpy()
+        dic[" crossarea_in_m2".format(df.iloc[20,1])] = df.iloc[:,1].to_numpy()
+        return dic
 
 def itereren(versienummers):
     for i in versienummers:
+        if i == 9:
+            return None
         versienummer = versienummers[i]
         print("Dit is versie:")
         print(versienummer)
-        d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance = importGrasshopperFiles(versienummer)
+        d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, df_csa = importGrasshopperFiles(versienummer)
         print("De weerstand op 14 knopen is:")
         print(resistance.loc[8, '  Rtot [N]'])
         cob = msp["COB [m]"]
@@ -651,3 +671,5 @@ def itereren(versienummers):
     return None
 
 dingen = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+itereren(dingen)
