@@ -10,19 +10,19 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 #w
-def doorbuiging(w_acc, Lengte_schip):
-    w = w_acc + C
+def doorbuiging(phi, Lengte_schip):
+    w = cumtrapz(phi, Lengte_schip)
     w[0]=0
     w[-1]=0
-    plt.plot(Lengte_schip, w_acc, label="doorbuiging", color='red')
+    plt.plot(Lengte_schip, w, label="doorbuiging", color='red')
     plt.fill_between(Lengte_schip, w, alpha=0.3, color='red')
     plt.set_xlabel("Lengte van het schip L [m]")
     plt.set_ylabel(" Doorbuiging []")
     plt.set_title("Vervorming")
     plt.legend()
-    plt.grid()
+    plt.grid()  
     plt.show()
-    return w_acc
+    return w
 
 
 
