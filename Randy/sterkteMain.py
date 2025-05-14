@@ -26,7 +26,7 @@ lengte_cm = np.linspace(-9, 141, 15001)
 transom_bhd_thickness = 0.01 # m
 rest_thickness = 0.012 # m
 kraan_lcg = 10
-straal_kraanhuis = 1
+straal_kraanhuis = 2
 
 def traagheidsmomentAsymptoot(traag_shell, l_shell, lengte_in_cm):
     traag1 = traagheidsmomentOverLengte(traag_shell, l_shell, lengte_in_cm)
@@ -41,7 +41,7 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_ta
     opwaartse_Kracht = opwaartseKracht(B_CSA2, lengte_cm)
     I_traag = traagheidsmomentAsymptoot(i_x_shell, l_shell, lengte_cm)
     Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm)
-    kracht_TP = berekenKrachtVerdeling(lcg_TP, -WEIGHT_TRANSITION_PIECE*2000, lengte_cm, STRAAL_TP)
+    kracht_TP = berekenKrachtVerdeling(lcg_TP, -WEIGHT_TRANSITION_PIECE, lengte_cm, STRAAL_TP)
     funcPlotFill(lengte_cm, kracht_TP, "lengte", "gezeik", "transitionpieces", "meer gezeik", "black")
     kracht_kraan = parabolischProfielKraan(kraan_lcg, WEIGHT_KRAAN_TOTAAL, lengte_cm, straal_kraanhuis)
     funcPlotFill(lengte_cm, kracht_kraan, "lengte", "gezeik", "kraan", "meer gezeik", "black")
@@ -51,7 +51,7 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_ta
     #funcPlotFill(lengte_cm, neerwaartse_kracht_2, "lengte", "gezeik", "bulkheads", "meer gezeik", "black")
     #neerwaartse_kracht_3 = calculateHuid(lengte_cm, rest_thickness, df_shell_csa)
     #funcPlotFill(lengte_cm, neerwaartse_kracht_3, "lengte", "gezeik", "huid", "meer gezeik", "black")
-    q = opwaartse_Kracht + Kracht_Ballast + kracht_kraan*4 + kracht_TP #+ neerwaartse_kracht_1*100 + neerwaartse_kracht_2* + neerwaartse_kracht_3 
+    q = opwaartse_Kracht + Kracht_Ballast + kracht_kraan + kracht_TP #+ neerwaartse_kracht_1*100 + neerwaartse_kracht_2* + neerwaartse_kracht_3 
     #plotten van q
     funcPlotFill(lengte_cm, -q, "Lengte van het schip (L) in [m]", "Netto verdeelde belasting (q) in [N]", "De netto verdeelde belasting", 'Netto load',"black")
     V = dwarskracht(q, lengte_cm)
