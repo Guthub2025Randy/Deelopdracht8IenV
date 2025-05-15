@@ -10,7 +10,6 @@ import numpy as np
 deze code heeft als doel de data uit de textbestanden te halen en in een vorm te zetten die later bruikbaar is. De meeste
 data zal worden geplaatst in dictionaries.
 """
-versienummers = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
 
 def importGrasshopperFiles(versienummer):
     df_tv1 = pd.read_csv("Tank1_Diagram_Volume_Gr22_V{0}.0.txt".format(versienummer), header=2)
@@ -23,7 +22,7 @@ def importGrasshopperFiles(versienummer):
     df_had = pd.read_csv("HullAreaData_Gr22_V{0}.0.txt".format(versienummer))
     mainsp = "MainShipParticulars_Gr22_V{0}.0.txt".format(versienummer)
     # Bestanden voor deelopdracht 8
-    df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
+    df_csa = pd.read_csv("Buoyant_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
     df_shell_csa = pd.read_csv("Shell_CSA_Gr22_V{0}.0.txt".format(versienummer), header=3)
     df_tank1_csa = pd.read_csv("Tank1_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
     df_tank2_csa = pd.read_csv("Tank2_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
@@ -189,5 +188,6 @@ def importGrasshopperFiles(versienummer):
     dic_Shell_CrossSA = traagheidsdic(df_shell_csa)
     dic_csa_tank_1 = dic_csa_ballast_tanks(df_tank1_csa)
     dic_csa_tank_2 = dic_csa_ballast_tanks(df_tank2_csa)
-    dic_csa_tank_3 = dic_csa_ballast_tanks(df_tank3_csa)
-    return data_Tank_1, data_Tank_2, data_Tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_HA, dic_Shell_CrossSA, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance
+    dic_csa_tank_3 = dic_csa_ballast_tanks(df_tank3_csa)    
+    B_CSA2 = dic_csa(df_csa)
+    return data_Tank_1, data_Tank_2, data_Tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_HA, dic_Shell_CrossSA, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance, B_CSA2

@@ -6,27 +6,27 @@ Lpp [m],93.3643
 Lwl [m],98.4604
 X midship aft [m],29.9699
 X midship fwd [m],42.8542
-Bilge Radius [m],2.1
+Bilge Radius [m],3.2
 LOADING CONDITION
 T moulded [m],6
 T aft at app [m],6
 T fwd at fpp [m],6
 heel [deg],0
 WATERLINE ENTRANCE ANGLE
-Waterline Entrace angle (WEA) [deg],32.7254
+Waterline Entrace angle (WEA) [deg],28.8866
 Location of WEA [%Bwl],30
-XYZ location of WEA [m],87.7643, -3.6, 6
+XYZ location of WEA [m],87.0193, -3.6, 6
 VOLUME RELATED DATA (MOULDED)
-Buoyant Volume [m3],9287.3889
-Total Volume [m3],7756.7947
-COB [m],42.7858, 0, 3.353
-COV Total [m],41.9345, 0, 5.0243
-Cb_pp [-],0.7191
-Cb_wl  [-],0.6819
+Buoyant Volume [m3],8980.2931
+Total Volume [m3],7512.6565
+COB [m],42.7408, 0, 3.386
+COV Total [m],41.7304, 0, 5.0485
+Cb_pp [-],0.6987
+Cb_wl  [-],0.6626
 DATA OF UNDERWATER AREAS
-Water Plane Area [m2],1989.875
-COF [m],40.568, 0, 6
-Inertia WPA around COF [m4],78015.4078, 1.3007e+6, 1.3788e+6
-Wetted Shell Area [m2],2563.6695
+Water Plane Area [m2],1936.4607
+COF [m],40.1128, 0, 6
+Inertia WPA around COF [m4],73444.6829, 1.2329e+6, 1.3064e+6
+Wetted Shell Area [m2],2504.479
 Wetted Transom Area [m2],12.4151
-Am [m2],117.4509
+Am [m2],117.6024

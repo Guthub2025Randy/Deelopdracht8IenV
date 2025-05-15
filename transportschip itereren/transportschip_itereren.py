@@ -530,7 +530,7 @@ def berekenKrachtVerdeling(lading_posities, massas, lengte_in_cm, straal):
     return krachtverdeling
 
 
-def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob, h):
+def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob, h, dbh1):
     #Tank 3: er wordt een waarde gekozen voor het volume van tank 3. Vervolgens wordt hiervan het gewicht en
     #het zwaartepunt bepaald
     volume_t3 = d3["vol_3"][3]
@@ -589,10 +589,10 @@ def tankTwee(krachten2, dbh1, locatie_t1, kracht_t1, locatie_t3, kracht_t3, h, c
     print(positie_t2[0])
     return volume_t2, kracht_t2, positie_t2
 
-def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume):
+def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, B_CSA2, resistance):
     # De eerste momentensom voor het dwarsscheepse momentenevenwicht    
     momentensom1_, kracht_t3, locatie_t3, volume_t3 = eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, 
-                                                                   rest_thickness, kraan_lcg, cob, h)
+                                                                   rest_thickness, kraan_lcg, cob, h, dbh1)
     #Tank 1: op basis van het berekende transversale moment wordt de vulling en gewicht van de vulling van het water
     #in tank 1 bepaald.
     volume_t1, kracht_t1, locatie_t1 = tankEen(d1, momentensom1_)
@@ -618,12 +618,15 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     posities3, krachten3 = removeBuoyantForce(posities2, krachten2, cob, calculateOpdrijvendeKracht(WEIGHT_WATER, bouyant_volume))
     lcg_schip, tcg_schip, vcg_schip = calculateZwaartepuntschip(posities3, krachten3)
     G_M = calculateG_M(bouyant_volume, SIt, vcg_schip, cob[2], it)
+    print("De G_M is:")
     print(G_M)
+    Rtot_14knp = str(resistance.loc[8, '  Rtot [N]'])
+    entrance_angle = 30
     output_1(versienummer, str(entrance_angle), Rtot_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 
              0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
              bouyant_volume*WEIGHT_WATER, cob[0], cob[1], cob[2], 
              calculateKrachtensom1(krachten3)[0]+(bouyant_volume*WEIGHT_WATER), (calculateKrachtensom1(krachten3)[0]*(lcg_schip - cob[0])), 
-             (calculateKrachtensom1(krachten3)[0]*(tcg_schip - cob[1])), 4, -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT, lcg_tp, tcg_tp, vcg_tp, versienummer)
+             (calculateKrachtensom1(krachten3)[0]*(tcg_schip - cob[1])), 16, -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT, 40, -2, h + 10, versienummer)
     vul1, vul2, vul3 = vullingPercFunc(d1, d2, d3, momentensom1_, volume_t2, volume_t3)
     return
 
@@ -649,9 +652,7 @@ def dic_csa(df):
 
 def itereren(versienummers):
     for i in versienummers:
-        if i == 9:
-            return None
-        versienummer = versienummers[i]
+        versienummer = i
         print("Dit is versie:")
         print(versienummer)
         d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, df_csa = importGrasshopperFiles(versienummer)
@@ -667,7 +668,7 @@ def itereren(versienummers):
         l_shell = dic_Shell_CSA["X [m]"]
         i_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
         B_CSA2 = dic_csa(df_csa)
-        stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume)
+        stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, B_CSA2, resistance)
     return None
 
 dingen = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])

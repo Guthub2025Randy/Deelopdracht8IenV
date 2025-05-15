@@ -8,7 +8,6 @@ Original file is located at
 """
 
 from bibliotheek import *
-from input_code import *
 
 def funcPlotFill(x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam, kleur_functie):
     plt.figure(figsize=(8,5))
@@ -331,34 +330,43 @@ def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
     donnot = np.array([0.0])
     oppervlakte1 = dic_tank[" crossarea_in_m2"]
     lps1 = dic_tank["x_in_m"]
+    leng_1 = int(((lps1[-1] - lps1[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
+    rescaling_length1 = np.linspace(lps1[0], lps1[-1], leng_1)
     oppervlakteInterp1 = ip.interp1d(lps1, oppervlakte1, kind='cubic', fill_value=donnot)
-    oppervlakte1_cm = oppervlakteInterp1(lengte_schip)
+    oppervlakte1_cm = oppervlakteInterp1(rescaling_length1)
     Water_volume1 = []
     oppervlakte2 = dic_tank_2[" crossarea_in_m2"]
     lps2 = dic_tank_2["x_in_m"]
+    leng_2 = int(((lps2[-1] - lps2[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
+    rescaling_length2 = np.linspace(lps2[0], lps2[-1], leng_2)
     oppervlakteInterp2 = ip.interp1d(lps2, oppervlakte2, kind='cubic', fill_value=donnot)
-    oppervlakte2_cm = oppervlakteInterp2(lengte_schip)
+    oppervlakte2_cm = oppervlakteInterp2(rescaling_length2)
     Water_volume2 = []
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
+    leng_3 = int(((lps3[-1] - lps3[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
+    rescaling_length3 = np.linspace(lps3[0], lps3[-1], leng_3)
     oppervlakteInterp3 = ip.interp1d(lps3, oppervlakte3, kind='cubic', fill_value=donnot)
-    oppervlakte3_cm = oppervlakteInterp3(lengte_schip)
+    oppervlakte3_cm = oppervlakteInterp3(rescaling_length3)
     Water_volume3 = []
     for i in range(len(oppervlakte1_cm)-1):
-        dx1 = lengte_schip[i+1]-lengte_schip[i]
+        dx1 = rescaling_length1[i+1]-rescaling_length1[i]
         Water_volume1.append(oppervlakte1_cm[i]*dx1)
     for i in range(len(oppervlakte2_cm)-1):
-        dx2 = lengte_schip[i+1]-lengte_schip[i]
+        dx2 = rescaling_length2[i+1]-rescaling_length2[i]
         Water_volume2.append(oppervlakte2_cm[i]*dx2)
     for i in range(len(oppervlakte3_cm)-1):
-        dx3 = lengte_schip[i+1]-lengte_schip[i]
+        dx3 = rescaling_length3[i+1]-rescaling_length3[i]
         Water_volume3.append(oppervlakte3_cm[i]*dx3)
     Water_volume1.append(0)
     Water_volume2.append(0)
     Water_volume3.append(0)
-    Neerwaartse_kracht1 = np.array(Water_volume1)*WEIGHT_WATER
-    Neerwaartse_kracht2 = np.array(Water_volume2)*WEIGHT_WATER
-    Neerwaartse_kracht3 = np.array(Water_volume3)*WEIGHT_WATER
+    Neerwaartse_kracht1_pre = np.array(Water_volume1)*WEIGHT_WATER
+    Neerwaartse_kracht2_pre = np.array(Water_volume2)*WEIGHT_WATER
+    Neerwaartse_kracht3_pre = np.array(Water_volume3)*WEIGHT_WATER
+    Neerwaartse_kracht1 = np.interp(lengte_schip, rescaling_length1, Neerwaartse_kracht1_pre, left=0, right=0)
+    Neerwaartse_kracht2 = np.interp(lengte_schip, rescaling_length2, Neerwaartse_kracht2_pre, left=0, right=0)
+    Neerwaartse_kracht3 = np.interp(lengte_schip, rescaling_length3, Neerwaartse_kracht3_pre, left=0, right=0)
     Neerwaartse_kracht_cm = Neerwaartse_kracht1 + Neerwaartse_kracht2 + Neerwaartse_kracht3
     funcPlotFill(lengte_schip, Neerwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Neerwaartse kracht (Ballast) [N]", "De verdeelde belasting van het ballastwater over de lengte van het schip", "Ballast belasting [N]", 'r')
     return -Neerwaartse_kracht_cm
@@ -400,8 +408,8 @@ def hoekverdraaiing(phi_acc, lengte_schip, C):
     return phi
 
 #w
-def doorbuiging(w_acc, lengte_schip, C):
-    w = w_acc + C
+def doorbuiging(phi, lengte_schip):
+    w = cumtrapz(lengte_schip, phi, initial =0 )
     w[0]=0
     w[-1]=0
     funcPlotFill(lengte_schip, w, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
@@ -438,9 +446,10 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, STRAAL_TP)
 
 def calculateSpiegel(arr_lengte, dic, huiddikte):
   fg_totaal = dic["Transom Area "][0]*huiddikte*WEIGHT_STAAL
-  fg_per_cm = fg_totaal/50
+  scaling = int(((len(arr_lengte)-1)/(arr_lengte[-1] - arr_lengte[0]))/10)
+  fg_per_cm = fg_totaal/(scaling)
   arr_gewicht = np.zeros(len(arr_lengte))
-  for i in range(50):
+  for i in range(5*scaling):
     arr_gewicht[i] += fg_per_cm
   return -arr_gewicht
 
