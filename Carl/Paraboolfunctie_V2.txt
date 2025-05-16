@@ -1,0 +1,29 @@
+import numpy as np
+def calcParaboolFunctie(locatie, totaal_gewicht, arr_lengte, straal):
+  """
+  Functie stelt een paraboolvormige verdeelde belasting op voor een belasting dat een cirkelvormig contactoppervlak heeft met het dek en 
+  een homogene masseverdeling heeft.
+  Inputs:
+  locatie: de x-coördinaat van het zwaartepunt van de last in m (float/int)
+  totaal_gewicht: het gewicht van de last in N (float)
+  straal: straal van het contactoppervlak in m (float)
+  arr_lengte: array met de x-coördinaat met van elke centimeter lengte van het schip (np.array)
+  """
+  n_points = 2*straal*100+1
+  x = np.linspace(-straal, straal, n_points)
+
+  #Hertzian pressure distribution: q(x) = q0 * sqrt(1 - (2x/L)^2)
+  #Totale last = (π/4) * q0 * L → solve for q0
+  q0 = (4 / np.pi) * totaal_gewicht / (2*straal)
+  q = q0 * np.sqrt(1 - (2 * x / (2*straal))**2)
+
+  #Kleine negatieve waarden corrigeren
+  q = np.where(q >= 0, q, 0)
+
+  #Op de juiste plaats in array zetten
+  i_start = int((locatie-arr_lengte[0])*100)
+  q_out = np.zeros(len(arr_lengte))
+  for i in range(len(q)):
+    q_out[i_start+i] = q[i]
+
+  return q_out
