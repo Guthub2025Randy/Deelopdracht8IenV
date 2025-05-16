@@ -321,7 +321,7 @@ def opwaartseKracht(dictio_CSA, lengte_schip):
     return opwaartse_kracht_cm
 
 def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell, lengte_schip):
-    Interpoleer_naar_cm = ip.interp1d(Lengte_schip_csa_shell, traagheidsmoment_csa_shell)
+    Interpoleer_naar_cm = ip.interp1d(Lengte_schip_csa_shell, traagheidsmoment_csa_shell, kind='cubic')
     traagheidsmoment_csa_shell_cm = Interpoleer_naar_cm(lengte_schip)
     funcPlotFill(lengte_schip, traagheidsmoment_csa_shell_cm, "Lengte van het schip (L) [m]", "Traagheidsmoment I [m4]", "Het traagheidsmoment I [m4] over de lengte van het schip L [m]", "Traagheidsmoment I [m4]", 'purple')
     return traagheidsmoment_csa_shell_cm

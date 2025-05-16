@@ -29,7 +29,7 @@ kraan_lcg = 10
 straal_kraanhuis = 2
 
 def traagheidsmomentAsymptoot(traag_shell, l_shell, lengte_in_cm):
-    traag1 = traagheidsmomentOverLengte(traag_shell, l_shell, lengte_in_cm)
+    traag1 = traagheidsmomentOverLengte(traag_shell, l_shell, lengte_in_cm)/10
     asymptootwaarde = 0.01
     for idx, val in enumerate(traag1):
         if val < 0.01:
