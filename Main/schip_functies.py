@@ -10,9 +10,9 @@ Original file is located at
 from bibliotheek import *
 
 def funcPlotFill(x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam, kleur_functie):
-    plt.figure(figsize=(8,5))
+    plt.figure(figsize=(30,20))
     plt.plot(x_plot, y_plot, label=f"{functie_naam}", color=f'{kleur_functie}')
-    plt.fill_between(x_plot, y_plot, alpha=0.3, color=f'{kleur_functie}')
+    plt.fill_between(x_plot, y_plot, alpha=0.1, color=f'{kleur_functie}')
     plt.xlabel(f"{x_naam}")
     plt.ylabel(f"{y_naam}")
     plt.title(f"{titel_naam}")
@@ -309,7 +309,7 @@ def calculateG_M(onderwatervolume, SIt, KG, KB, It):
 def opwaartseKracht(dictio_CSA, lengte_schip):
     oppervlakte = dictio_CSA[" crossarea_in_m2"]
     lps = dictio_CSA["x_in_m"]
-    oppervlakteInterp = ip.interp1d(lps, oppervlakte, kind='cubic', fill_value='extrapolate')
+    oppervlakteInterp = ip.interp1d(lps, oppervlakte, kind='quadratic', fill_value='extrapolate')
     oppervlakte_cm = oppervlakteInterp(lengte_schip)
     Onderwater_volume = []
     for i in range(len(oppervlakte_cm)-1):
@@ -323,27 +323,41 @@ def opwaartseKracht(dictio_CSA, lengte_schip):
 def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell, lengte_schip):
     Interpoleer_naar_cm = ip.interp1d(Lengte_schip_csa_shell, traagheidsmoment_csa_shell, kind='cubic')
     traagheidsmoment_csa_shell_cm = Interpoleer_naar_cm(lengte_schip)
-    funcPlotFill(lengte_schip, traagheidsmoment_csa_shell_cm, "Lengte van het schip (L) [m]", "Traagheidsmoment I [m4]", "Het traagheidsmoment I [m4] over de lengte van het schip L [m]", "Traagheidsmoment I [m4]", 'purple')
     return traagheidsmoment_csa_shell_cm
 
-def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
+def ballastLoop(x_in_m, opp, lengte_schip):
+    leng_scale = int(((x_in_m[-1] - x_in_m[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
     donnot = np.array([0.0])
+    rescaling_length = np.linspace(x_in_m[0], x_in_m[-1], leng_scale)
+    oppervlakteInterp = ip.interp1d(x_in_m, opp, kind='quadratic', fill_value=donnot)
+    oppervlakte_cm = oppervlakteInterp(rescaling_length)
+    Water_volume = []
+    for i in range(len(oppervlakte_cm)-1):
+        dx = rescaling_length[i+1] - rescaling_length[i]
+        Water_volume.append(oppervlakte_cm[i]*dx)
+    Water_volume.append(0)
+    Neerwaartse_kracht_pre = np.array(Water_volume)*WEIGHT_WATER
+    Neerwaartse_kracht = np.interp(lengte_schip, rescaling_length, Neerwaartse_kracht_pre, left=0, right=0)
+    return Neerwaartse_kracht
+
+def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip, scaling):
     oppervlakte1 = dic_tank[" crossarea_in_m2"]
     lps1 = dic_tank["x_in_m"]
-    leng_1 = int(((lps1[-1] - lps1[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
-    rescaling_length1 = np.linspace(lps1[0], lps1[-1], leng_1)
-    oppervlakteInterp1 = ip.interp1d(lps1, oppervlakte1, kind='cubic', fill_value=donnot)
-    oppervlakte1_cm = oppervlakteInterp1(rescaling_length1)
-    Water_volume1 = []
+    #leng_1 = int(((lps1[-1] - lps1[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
+    #rescaling_length1 = np.linspace(lps1[0], lps1[-1], leng_1)
+    #oppervlakteInterp1 = ip.interp1d(lps1, oppervlakte1, kind='cubic', fill_value=donnot)
+    #oppervlakte1_cm = oppervlakteInterp1(rescaling_length1)
+    #Water_volume1 = []
     oppervlakte2 = dic_tank_2[" crossarea_in_m2"]
     lps2 = dic_tank_2["x_in_m"]
-    leng_2 = int(((lps2[-1] - lps2[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
-    rescaling_length2 = np.linspace(lps2[0], lps2[-1], leng_2)
-    oppervlakteInterp2 = ip.interp1d(lps2, oppervlakte2, kind='cubic', fill_value=donnot)
-    oppervlakte2_cm = oppervlakteInterp2(rescaling_length2)
-    Water_volume2 = []
+    #leng_2 = int(((lps2[-1] - lps2[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
+    #rescaling_length2 = np.linspace(lps2[0], lps2[-1], leng_2)
+    #oppervlakteInterp2 = ip.interp1d(lps2, oppervlakte2, kind='cubic', fill_value=donnot)
+    #oppervlakte2_cm = oppervlakteInterp2(rescaling_length2)
+    #Water_volume2 = []
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
+    """
     leng_3 = int(((lps3[-1] - lps3[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
     rescaling_length3 = np.linspace(lps3[0], lps3[-1], leng_3)
     oppervlakteInterp3 = ip.interp1d(lps3, oppervlakte3, kind='cubic', fill_value=donnot)
@@ -364,10 +378,11 @@ def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip):
     Neerwaartse_kracht1_pre = np.array(Water_volume1)*WEIGHT_WATER
     Neerwaartse_kracht2_pre = np.array(Water_volume2)*WEIGHT_WATER
     Neerwaartse_kracht3_pre = np.array(Water_volume3)*WEIGHT_WATER
-    Neerwaartse_kracht1 = np.interp(lengte_schip, rescaling_length1, Neerwaartse_kracht1_pre, left=0, right=0)
-    Neerwaartse_kracht2 = np.interp(lengte_schip, rescaling_length2, Neerwaartse_kracht2_pre, left=0, right=0)
-    Neerwaartse_kracht3 = np.interp(lengte_schip, rescaling_length3, Neerwaartse_kracht3_pre, left=0, right=0)
-    Neerwaartse_kracht_cm = Neerwaartse_kracht1 + Neerwaartse_kracht2 + Neerwaartse_kracht3
+    """
+    Neerwaartse_kracht1 = ballastLoop(lps1, oppervlakte1, lengte_schip)
+    Neerwaartse_kracht2 = ballastLoop(lps2, oppervlakte2, lengte_schip)
+    Neerwaartse_kracht3 = ballastLoop(lps3, oppervlakte3, lengte_schip)
+    Neerwaartse_kracht_cm = (Neerwaartse_kracht1 + Neerwaartse_kracht2 + Neerwaartse_kracht3) * scaling
     funcPlotFill(lengte_schip, Neerwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Neerwaartse kracht (Ballast) [N]", "De verdeelde belasting van het ballastwater over de lengte van het schip", "Ballast belasting [N]", 'r')
     return -Neerwaartse_kracht_cm
 
@@ -408,8 +423,8 @@ def hoekverdraaiing(phi_acc, lengte_schip, C):
     return phi
 
 #w
-def doorbuiging(phi, lengte_schip):
-    w = cumtrapz(lengte_schip, phi, initial =0 )
+def doorbuiging(w_acc, lengte_schip, C):
+    w = w_acc + C*lengte_schip
     w[0]=0
     w[-1]=0
     funcPlotFill(lengte_schip, w, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
@@ -446,10 +461,10 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, STRAAL_TP)
 
 def calculateSpiegel(arr_lengte, dic, huiddikte):
   fg_totaal = dic["Transom Area "][0]*huiddikte*WEIGHT_STAAL
-  scaling = int(((len(arr_lengte)-1)/(arr_lengte[-1] - arr_lengte[0]))/10)
-  fg_per_cm = fg_totaal/(scaling)
+  scaling = int(((len(arr_lengte)-1)/(arr_lengte[-1] - arr_lengte[0])))
+  fg_per_cm = fg_totaal/(scaling/10)
   arr_gewicht = np.zeros(len(arr_lengte))
-  for i in range(5*scaling):
+  for i in range(int(scaling)):
     arr_gewicht[i] += fg_per_cm
   return -arr_gewicht
 
@@ -466,7 +481,7 @@ def calculateHuid(arr_x, huiddikte, dic_shell):
   x = dic_shell["X [m]"]
   w = np.zeros(len(arr_x))
   w = dic_shell["CROSS SECTION AREA OF SHELL PLATING [m2]"]*WEIGHT_STAAL*huiddikte
-  f = ip.interp1d(x,w)
+  f = ip.interp1d(x,w, kind='cubic')
   arr_gewicht = f(arr_x)
   return -arr_gewicht
 
@@ -547,5 +562,33 @@ def berekenKrachtVerdeling(lading_posities, massas, lengte_in_cm, straal):
     doormiddel van de functie parabolischProfielTP voegt hij deze kracht verdeling toe op de eerst  zero-array over de lengte."""
     krachtverdeling = np.zeros(len(lengte_in_cm))
     for pos in lading_posities:
-        krachtverdeling += parabolischProfielKraan(pos, massas[0], lengte_in_cm, straal)
+        krachtverdeling += calcParaboolFunctie(pos, massas[0], lengte_in_cm, straal)
     return krachtverdeling
+
+def calcParaboolFunctie(locatie, totaal_gewicht, arr_lengte, straal):
+  """
+  Functie stelt een paraboolvormige verdeelde belasting op voor een belasting dat een cirkelvormig contactoppervlak heeft met het dek en 
+  een homogene masseverdeling heeft.
+  Inputs:
+  locatie: de x-coördinaat van het zwaartepunt van de last in m (float/int)
+  totaal_gewicht: het gewicht van de last in N (float)
+  straal: straal van het contactoppervlak in m (float)
+  arr_lengte: array met de x-coördinaat met van elke centimeter lengte van het schip (np.array)
+  """
+  n_points = 2 * straal * 100 + 1
+  x = np.linspace(-straal, straal, n_points)
+
+  #Hertzian pressure distribution: q(x) = q0 * sqrt(1 - (2x/L)^2)
+  #Totale last = (π/4) * q0 * L → solve for q0
+  q0 = (4 / np.pi) * totaal_gewicht / (2*straal)
+  q = q0 * np.sqrt(1 - (2 * x / (2*straal))**2)
+
+  #Kleine negatieve waarden corrigeren
+  q = np.where(q <= 0, q, 0)
+
+  #Op de juiste plaats in array zetten
+  i_start = int((locatie - straal - arr_lengte[0])*100)
+  q_out = np.zeros(len(arr_lengte))
+  for i in range(len(q)):
+    q_out[i_start+i] = q[i]
+  return q_out
