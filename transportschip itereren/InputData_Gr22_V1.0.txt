@@ -1,0 +1,27 @@
+INPUT DATA Group 22; Version 1.0
+Loa [m],100
+Boa [m],24
+Doa [m],9
+Tmoulded [m],6
+Lpp/L0.85H [-],0.94
+% Length aft Shoulder [%],60
+Midship Length [m],12.8843
+Location of midship [% of Lpp],39
+Bilge Radius [m],3.2
+% Length fwd shoulder [%],62
+Location of bow intermediate curve [%],37
+Bow tangency shear angle [deg],7
+heel [deg],0
+trim [deg],0
+mean shell thickness [mm],0
+Number of ordinates [-],21
+number of waterlines [-],5
+number of buttocks [-],5
+Entrance angle factor [% of Bwl],30
+X division method [-],1
+Flip loft surface [-],0
+Filling Tank 1 [%h1],66.83
+Filling Tank 2 [%h2],49.043
+Filling Tank 3 [%h3],83.15
+WARNING: an endpoint of a curve is inside the rectangle BH
+
