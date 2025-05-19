@@ -51,7 +51,7 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_ta
     funcPlotFill(lengte_cm, neerwaartse_kracht_1, "lengte", "gezeik", "spiegel", "meer gezeik", "black")
     neerwaartse_kracht_2 = calculateTrapezium(lengte_cm, dbh, transom_bhd_thickness)
     funcPlotFill(lengte_cm, neerwaartse_kracht_2, "lengte", "gezeik", "bulkheads", "meer gezeik", "black")
-    neerwaartse_kracht_3 = calculateHuid(lengte_cm, rest_thickness, dic_Shell_CSA) * scaling
+    neerwaartse_kracht_3 = calculateHuid(lengte_cm, 1, dic_Shell_CSA)
     funcPlotFill(lengte_cm, neerwaartse_kracht_3, "lengte", "gezeik", "huid", "meer gezeik", "black")
     q = opwaartse_Kracht + Kracht_Ballast + kracht_kraan + kracht_TP + neerwaartse_kracht_2 + neerwaartse_kracht_3 + neerwaartse_kracht_1
     #plotten van q
