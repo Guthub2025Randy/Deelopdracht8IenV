@@ -12,7 +12,7 @@ from bibliotheek import *
 def funcPlotFill(x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam, kleur_functie):
     plt.figure(figsize=(30,20))
     plt.plot(x_plot, y_plot, label=f"{functie_naam}", color=f'{kleur_functie}')
-    plt.fill_between(x_plot, y_plot, alpha=0.1, color=f'{kleur_functie}')
+    plt.fill_between(x_plot, y_plot, alpha=0.3, color=f'{kleur_functie}')
     plt.xlabel(f"{x_naam}")
     plt.ylabel(f"{y_naam}")
     plt.title(f"{titel_naam}")
@@ -400,9 +400,14 @@ def buigendMoment(F_x, lengte_schip):
     funcPlotFill(lengte_schip, buigend_moment, "Lengte van het schip L [m]", "Buigend moment M(x) [Nm]", "Het buigend moment M(x) [Nm] over de lengte van het schip L [m]", "Buigend moment M(x)", 'yellow')
     return buigend_moment
 
+def reducMoment(M, I_traag):
+    gereduceerd_moment = M/(E*I_traag)
+    return gereduceerd_moment
+
+
 # door het gereduceerde moment de integreren krijg je de verdraaiing accent (phi accent)
-def hoekverdraaiingAcc(buigend_moment_uitkomst, lengte_schip):
-    phi_accent = cumtrapz(lengte_schip, buigend_moment_uitkomst, initial=0)
+def hoekverdraaiingAcc(gereduceerd_moment_uitkomst, lengte_schip):
+    phi_accent = cumtrapz(lengte_schip, gereduceerd_moment_uitkomst, initial=0)
     phi_accent[0]=0
     funcPlotFill(lengte_schip, phi_accent, "Lengte van het schip L [m]", "φ(x)' [deg]", "De hoekverdraaiing in graden φ(x)' [deg] over de lengte van het schip L [m]", "De hoekverdraaiing φ(x)' [deg]", 'green')
     return phi_accent
@@ -424,7 +429,7 @@ def hoekverdraaiing(phi_acc, lengte_schip, C):
 
 #w
 def doorbuiging(w_acc, lengte_schip, C):
-    w = w_acc + C*lengte_schip
+    w = w_acc + C*(lengte_schip+9)
     w[0]=0
     w[-1]=0
     funcPlotFill(lengte_schip, w, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
@@ -466,7 +471,7 @@ def calculateSpiegel(arr_lengte, dic, huiddikte):
   arr_gewicht = np.zeros(len(arr_lengte))
   for i in range(int(scaling)):
     arr_gewicht[i] += fg_per_cm
-  return -arr_gewicht
+  return -arr_gewicht*(scaling/10)
 
 def calculateHuid(arr_x, huiddikte, dic_shell):
   """
