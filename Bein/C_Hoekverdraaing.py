@@ -17,7 +17,7 @@ import numpy as np
 C = - (doorbuiging_acc(Lengte_schip) / Lengte_schip)
 
 #phi
-def hoekverdraaiing(phi_acc, Lengte_schip):
+def hoekverdraaiing(phi_acc, Lengte_schip, C):
     phi = phi_acc + C
     phi[0]=0
     phi[-1]=0
