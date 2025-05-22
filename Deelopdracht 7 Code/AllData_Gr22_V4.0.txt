@@ -18,154 +18,132 @@ Location of WEA [%Bwl],30
 XYZ location of WEA [m],87.766, 3.6, 6
 VOLUME RELATED DATA (MOULDED)
 Buoyant Volume [m3],9300.3813
-Total Volume [m3],7767.2056
+Total Volume [m3],0
 COB [m],42.7782, 0, 3.3543
-COV Total [m],41.929, 0, 5.0247
+COV Total [m],0
 Cb_pp [-],0.7181
 Cb_wl  [-],0.6809
 DATA OF UNDERWATER AREAS
-Water Plane Area [m2],1995.045
-COF [m],40.5654, 0, 6
-Inertia WPA around COF [m4],78660.9109, 1.3035e+6, 1.3822e+6
-Wetted Shell Area [m2],2567.4471
-Wetted Transom Area [m2],12.4151
-Am [m2],117.645
+Water Plane Area [m2],0
+COF [m],0
+Inertia WPA around COF [m4],0
+Wetted Shell Area [m2],0
+Wetted Transom Area [m2],0
+Am [m2],0
 Name of HULL AREA, area [m2], lca [m], tca [m], vca [m] Group 22; Version 4.0
-Transom Area , 60.94, -5.9594, 0, 7.1457
-Shell Area , 3206.6218, 42.7288, 0, 2.9593
-Deck Area , 2136.5322, 40.8476, 0, 9
+Transom Area , 0, 0, 0, 0
+Shell Area , 0, 0
+Deck Area , 0, 0, 0, 0
 WB TANK 1 Group 22; Version 4.0
-Volume water ballast [m3],1832.8645
-COV WB [m],43.4085, 7.5406, 3.4988
+Volume water ballast [m3],0
+COV WB [m],0
 Height of WB [% of h_tank],66.83
-h_tank [m],9
-Area WB plane [m2],422.0212
-COA WB plane [m],43.4263, 8.2345, 6.0147
-Inertia WB plane [m4],1477.865, 146595.4124, 148073.2774
+h_tank [m],0
+Area WB plane [m2],0
+COA WB plane [m],0
+Inertia WB plane [m4],0
 WB TANK 2 Group 22; Version 4.0
-Volume water ballast [m3],1705.5194
-COV WB [m],44.143, 0, 2.4379
+Volume water ballast [m3],0
+COV WB [m],0
 Height of WB [% of h_tank],49.043
-h_tank [m],8.694
-Area WB plane [m2],400
-COA WB plane [m],44.143, 0, 4.5698
-Inertia WB plane [m4],3333.3333, 53333.3333, 56666.6667
+h_tank [m],0
+Area WB plane [m2],0
+COA WB plane [m],0
+Inertia WB plane [m4],0
 WB TANK 3 Group 22; Version 4.0
-Volume water ballast [m3],2469.518
-COV WB [m],43.4231, -7.742, 4.3382
+Volume water ballast [m3],0
+COV WB [m],0
 Height of WB [% of h_tank],83.15
-h_tank [m],9
-Area WB plane [m2],442.5336
-COA WB plane [m],43.5003, -8.3899, 7.4835
-Inertia WB plane [m4],1699.2909, 154606.1398, 156305.4307
+h_tank [m],0
+Area WB plane [m2],0
+COA WB plane [m],0
+Inertia WB plane [m4],0
 TANK BULKHEAD DATA Group 22; Version 4.0
 BHD Area [m2], lcg [m], tcg [m], vcg [m], x_min [m], x_max [m]
-41.9843,11, 7.7346, 5.4964,10.5,11.5
-347.76,44.143, 5, 4.653,24.143,64.143
-237.4911,43.1842, 5, 4.3229,11,76.3152
-36.9169,76.3152, 7.3469, 5.4563,75.8152,76.8152
-400,44.143, 0, 0.306,24.143,64.143
-347.76,44.143, -5, 4.653,24.143,64.143
-86.94,64.143, 0, 4.653,63.643,64.643
-86.94,24.143, 0, 4.653,23.643,24.643
-41.9843,11, -7.7346, 5.4964,10.5,11.5
-237.4911,43.1842, -5, 4.3229,11,76.3152
-36.9169,76.3152, -7.3469, 5.4563,75.8152,76.8152
+0,0,-0.5,0.5
 BUOYANT CROSS SECTION AREAS Group 22; Version 4.0
-Number of rows, 22
+Number of rows, 1
 x_in_m, crossarea_in_m2
--5.9594,12.4151
--1.2708,36.7167
-3.4178,62.5269
-8.1064,86.3909
-12.7949,105.0588
-17.4835,115.6148
-22.1721,117.645
-26.8607,117.645
-31.5493,117.645
-36.2379,117.645
-40.9265,117.645
-45.6151,117.645
-50.3037,117.645
-54.9923,117.6369
-59.6809,117.4048
-64.3695,116.5566
-69.0581,114.4313
-73.7466,108.251
-78.4352,88.1143
-83.1238,57.9316
-87.8124,25.0917
-92.501,0
+,0
 TOTAL CROSS SECTION AREAS Group 22; Version 4.0
-Number of rows, 22
+Number of rows, 1
 x_in_m, crossarea_in_m2
--5.9594,60.94
--1.1975,93.7932
-3.5644,125.7566
-8.3263,153.99
-13.0882,175.3432
-17.8501,186.8027
-22.612,188.621
-27.3739,188.621
-32.1358,188.621
-36.8977,188.621
-41.6596,188.621
-46.4215,188.621
-51.1834,188.621
-55.9453,188.5897
-60.7072,188.1621
-65.4691,186.7843
-70.2311,183.3009
-74.993,171.2272
-79.7549,134.3949
-84.5168,86.1715
-89.2787,33.9064
-94.0406,0
+,0
 TANK 1 FILLING CROSS SECTION AREAS Group 22; Version 4.0
-Number of rows, 9
+Number of rows, 1
 x_in_m, crossarea_in_m2
-11,22.9189
-19.1644,28.7513
-27.3288,28.919
-35.4932,28.919
-43.6576,28.919
-51.822,28.919
-59.9864,28.7831
-68.1508,27.6018
-76.3152,19.918
+0,0
 TANK 2 FILLING CROSS SECTION AREAS Group 22; Version 4.0
-Number of rows, 9
+Number of rows, 1
 x_in_m, crossarea_in_m2
-24.143,42.638
-29.143,42.638
-34.143,42.638
-39.143,42.638
-44.143,42.638
-49.143,42.638
-54.143,42.638
-59.143,42.638
-64.143,42.638
+0,0
 TANK 3 FILLING CROSS SECTION AREAS Group 22; Version 4.0
-Number of rows, 9
+Number of rows, 1
 x_in_m, crossarea_in_m2
-11,32.105
-19.1644,38.6141
-27.3288,38.8
-35.4932,38.8
-43.6576,38.8
-51.822,38.8
-59.9864,38.6425
-68.1508,37.2697
-76.3152,27.9432
+0,0
 DATA OF SHELL PLATING WITH RESPECT TO GLOBAL STRENGTH (INERTIA AROUND CENTROID) Group 22; Version 4.0
 Mean shell thickness [mm],0
-Number of rows, 22
+Number of rows, 1
 X [m],OUTLINE LENGTH [m],CROSS SECTION AREA OF SHELL PLATING [m2],CENTROID_X[m],CENTROID_Y[m],CENTROID_Z[m],INERTIA_X[m4],INERTIA_Y[m4],INERTIA_Z[m4],Z_Keel[m],Z_DECK[m],
-0,0,0,0, 0, 0,0, 0, 0,4.8045,9
-0,0,0,0, 0, 0,0, 0, 0,3.3643,9
-0,0,0,0, 0, 0,0, 0, 0,2.126,9
-0,0,0,0, 0, 0,0, 0, 0,1.1287,9
-0,0,0,0, 0, 0,0, 0, 0,0.4219,9
+0,0,0,0, 0, 0,0, 0, 0,0,9
+TANKDIAGRAM TNK 1 VOLUME DATA Group 22; Version 4.0
+Number of rows, 2
+Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], vcg [m]
+0,100,0,0,0,0
+0,100,0,0,0,0
+TANKDIAGRAM TNK 1 WATERPLANE DATA Group 22; Version 4.0
+Number of rows, 1
+Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], Inertia_x [m4], Inertia_y [m4], Inertia_z [m4]
+0
+TANKDIAGRAM TNK 2 VOLUME DATA Group 22; Version 4.0
+Number of rows, 2
+Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], vcg [m]
+0,100,0,0,0,0
+0,100,0,0,0,0
+TANKDIAGRAM TNK 2 WATERPLANE DATA Group 22; Version 4.0
+Number of rows, 1
+Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], Inertia_x [m4], Inertia_y [m4], Inertia_z [m4]
+0
+TANKDIAGRAM TNK 3 VOLUME DATA Group 22; Version 4.0
+Number of rows, 2
+Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], vcg [m]
+0,100,0,0,0,0
+0,100,0,0,0,0
+TANKDIAGRAM TNK 3 WATERPLANE DATA Group 22; Version 4.0
+Number of rows, 1
+Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], Inertia_x [m4], Inertia_y [m4], Inertia_z [m4]
+0
+INPUT DATA Group 22; Version 4.0
+Loa [m],100
+Boa [m],24
+Doa [m],9
+Tmoulded [m],6
+Lpp/L0.85H [-],0.94
+% Length aft Shoulder [%],70
+Midship Length [m],12.8843
+Location of midship [% of Lpp],39
+Bilge Radius [m],2
+% Length fwd shoulder [%],70
+Location of bow intermediate curve [%],37
+Bow tangency shear angle [deg],7
+heel [deg],0
+trim [deg],0
+mean shell thickness [mm],0
+Number of ordinates [-],21
+number of waterlines [-],5
+number of buttocks [-],5
+Entrance angle factor [% of Bwl],30
+X division method [-],1
+Flip loft surface [-],0
+Filling Tank 1 [%h1],66.83
+Filling Tank 2 [%h2],49.043
+Filling Tank 3 [%h3],83.15
+WARNING: an endpoint of a curve is inside the rectangle BH
+
+RESISTANCE ESTIMATION BY METHOD HOLTROP & MENNEN 1982 & 1984
+DESIGN SPEED DATA
+V [kn], V [m/s], Fn,  Rtot [N], R_visc [N], R_app [N], R_w [N], R_TR [N], R_b [N], R_A [N], R_BTO [N], w[-], t[-]
+, 0,0, 0, 0,0.4219,9
 0,0,0,0, 0, 0,0, 0, 0,0.057,9
 0,0,0,0, 0, 0,0, 0, 0,0,9
 0,0,0,0, 0, 0,0, 0, 0,0,9
@@ -186,7 +164,7 @@ X [m],OUTLINE LENGTH [m],CROSS SECTION AREA OF SHELL PLATING [m2],CENTROID_X[m],
 TANKDIAGRAM TNK 1 VOLUME DATA Group 22; Version 4.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], vcg [m]
-0.001,0.0111,0.0331,39.5909,5.4451,0.0005
+0.001,0.0111,0.0331,39.5908,5.4451,0.0005
 1.5007,16.6741,268.6236,43.7244,6.5108,0.8701
 3.0003,33.337,696.1125,43.4947,6.9341,1.7362
 4.5,50,1221.4192,43.4217,7.2616,2.6121
@@ -196,7 +174,7 @@ Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], v
 TANKDIAGRAM TNK 1 WATERPLANE DATA Group 22; Version 4.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], Inertia_x [m4], Inertia_y [m4], Inertia_z [m4]
-0.001,0.0111,36.7686,40.2397,5.4645,0.001,2.7282,4650.1471,4652.8752
+0.001,0.0111,36.7863,40.2492,5.4645,0.001,2.7287,4657.0427,4659.7714
 1.5007,16.6741,248.258,43.4169,6.9102,1.5007,306.9701,83642.1842,83949.1542
 3.0003,33.337,318.1948,43.3241,7.4428,3.0003,639.027,108872.9533,109511.9803
 4.5,50,380.9666,43.3383,7.9227,4.5,1092.8359,131127.759,132220.5949
@@ -226,7 +204,7 @@ Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], 
 TANKDIAGRAM TNK 3 VOLUME DATA Group 22; Version 4.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], vcg [m]
-0.001,0.0111,0.0331,39.5908,-5.4451,0.0005
+0.001,0.0111,0.0332,39.5766,-5.4449,0.0005
 1.5007,16.6741,268.6236,43.7244,-6.5108,0.8701
 3.0003,33.337,696.1125,43.4947,-6.9341,1.7362
 4.5,50,1221.4192,43.4217,-7.2616,2.6121
@@ -236,7 +214,7 @@ Tankfilling [m], Tankfilling [% of h_tank], Tankvolume [m3], lcg [m], tcg [m], v
 TANKDIAGRAM TNK 3 WATERPLANE DATA Group 22; Version 4.0
 Number of rows, 7
 Tankfilling [m], Tankfilling [% of h_tank], Area [m2], lca [m],tca [m],vca [m], Inertia_x [m4], Inertia_y [m4], Inertia_z [m4]
-0.001,0.0111,36.7686,40.2397,-5.4645,0.001,2.7282,4650.1471,4652.8752
+0.001,0.0111,36.7863,40.2492,-5.4645,0.001,2.7287,4657.0427,4659.7714
 1.5007,16.6741,248.258,43.4169,-6.9102,1.5007,306.9701,83642.1842,83949.1542
 3.0003,33.337,318.1948,43.3241,-7.4428,3.0003,639.027,108872.9533,109511.9803
 4.5,50,380.9666,43.3383,-7.9227,4.5,1092.8359,131127.759,132220.5949
