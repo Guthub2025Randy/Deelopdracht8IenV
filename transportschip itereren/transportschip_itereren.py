@@ -63,8 +63,8 @@ def calculateWeightKraan(Krachten, Posities, H, kraan_lcg, SWLMax):
     elk een positie in het xyz vlak representeren, respectievelijk de zwaartekrachten en hun aangrijpingspunten toe te voegen.
     Ook het gewicht van de deklading (ZwaarteWindmolen) wordt toegevoegd. De aangevulde lijsten worden teruggegeven.
     """
-    ZwaarteWindmolen = -WEIGHT_TRANSITION_PIECES
-    arrayPositieWindmolen = np.array([40, -2, H+10])
+    ZwaarteWindmolen = -5395500*8
+    arrayPositieWindmolen = np.array([35, -2, H+10])
     Posities.append(arrayPositieWindmolen)
     Krachten.append(ZwaarteWindmolen)
     return Krachten, Posities
@@ -533,7 +533,7 @@ def berekenKrachtVerdeling(lading_posities, massas, lengte_in_cm, straal):
 def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob, h, dbh1):
     #Tank 3: er wordt een waarde gekozen voor het volume van tank 3. Vervolgens wordt hiervan het gewicht en
     #het zwaartepunt bepaald
-    volume_t3 = d3["vol_3"][3]
+    volume_t3 = d3["vol_3"][2]
     kracht_t3 = volume_t3*WEIGHT_WATER
     locatie_t3 = interpolerenLocatie(d3, volume_t3, 3)
     #Tank 1: om de vulling van tank 1 te bepalen worden alle momenten bij elkaar opgeteld. Eerst worden er lijsten
@@ -667,10 +667,10 @@ def itereren(versienummers):
         it = float(msp["Inertia WPA around COF [m4]"][0])
         l_shell = dic_Shell_CSA["X [m]"]
         i_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
-        B_CSA2 = dic_csa(df_csa)
+        B_CSA2 = df_csa
         stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, B_CSA2, resistance)
     return None
 
-dingen = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9])
+dingen = np.array([1, 2])
 
 itereren(dingen)
