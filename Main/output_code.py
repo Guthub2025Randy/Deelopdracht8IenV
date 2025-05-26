@@ -9,6 +9,8 @@ from openpyxl import load_workbook
 from bibliotheek import *
 
 def output_kraan(SWLmax,gewichttransitionpiece,lengte_kraan_fundatie,Draaihoogte_kraan,jib_length,Zwenkhoek,Giekhoek,LCG_TP,TCG_TP,VCG_TP,LCG_kraanhuis,TCG_kraanhuis,VCG_kraanhuis,LCG_kraanboom,TCG_kraanboom,VCG_kraanboom,LCG_heisgerei,TCG_heisgerei,VCG_heisgerei, versienummer):
+
+    """Deze functie regelt de output voor alles wat met de kraan te maken heeft en zet het op de juiste plek in het antwoordenblad"""
    
     bestandspad= "Antwoordenblad_MT1463_1466_V0{0}.xlsx".format(versienummer)
 
@@ -40,6 +42,9 @@ def output_kraan(SWLmax,gewichttransitionpiece,lengte_kraan_fundatie,Draaihoogte
     return None
 
 def output_1(version,entrance_angle_location,R_14knp,gm,dikte_huid_en_dek,loa,B,H,T,trim,heel,dichtheid_staal,dichtheid_water,Deplacement,L_C_G,T_C_G,V_C_G,opdrijvendekracht,L_C_B,T_C_B,V_C_B,DVF,DLM,DTM,aantal_transition_pieces,massa_transition_pieces,lcg_tp,tcg_tp,vcg_tp, versienummer):
+    
+    """deze functie regelt een deel van de output en zorgt er voor dat het op de juiste plek in het excel document komt te staan."""
+    
     bestandspad= "Antwoordenblad_MT1463_1466_V0{0}.xlsx".format(versienummer)
     wb= load_workbook(bestandspad)
     ws=wb.active 
@@ -76,6 +81,9 @@ def output_1(version,entrance_angle_location,R_14knp,gm,dikte_huid_en_dek,loa,B,
     return None
 
 def output_globale_sterkte(Maximaal_moment, LMmilvda, Maximale_afschuiving, LMailvda, Maximale_doorbuiging, LMdilvda):
+    
+    """deze functie regelt de output van de globale sterkte waarden en zet ze op de juiste plek in de excel sheet"""
+    
     bestandspad="Antwoordenblad_MT1463_1466_V{0}.xlsx".format(versienummers)
     wb= load_workbook(bestandspad)
     ws=wb.active
