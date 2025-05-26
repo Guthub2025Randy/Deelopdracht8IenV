@@ -169,7 +169,7 @@ def calculateVullingT1(arr_volume, arr_tcg, moment_som, arr_vulling_pc, watergew
   plt.close()
   return volume_acc
 
-def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3, kracht_w_t3, h, COB, staalgewicht, plaatdikte_bh, kraan_lcg, SWLMax, dic_hull, plaatdikte_romp,  opwaartse_kracht):
+def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3, kracht_w_t3, h, COB, staalgewicht, plaatdikte_bh, kraan_lcg, SWLMax, dic_hull, plaatdikte_romp,  opwaartse_kracht, weight_transition_pieces):
   """
   Het doel van deze functie is twee lijsten te creëeren: een met alle krachten en een met de corresponderende posities. Alleen
   het gewicht van tank 2 wordt nog niet gevraagd als argument, zodat dat met deze lijsten kan worden berekend.
@@ -198,7 +198,7 @@ def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3,
   positie.append(positie_w_t3)
   positie.append(COB)
   positie.append(positie_w_t1)
-  krachten2, posities2 = calculateWeightKraan(krachten, positie, h, kraan_lcg, SWLMax)
+  krachten2, posities2 = calculateWeightKraan(krachten, positie, h, kraan_lcg, SWLMax, weight_transition_pieces)
   return krachten2, posities2
 
 def calculateKrachtensom1(krachten):

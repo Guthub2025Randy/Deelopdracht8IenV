@@ -32,13 +32,15 @@ length_schip = float(msp["Loa  [m]"])
 it = float(msp["Inertia WPA around COF [m4]"][0])
 l_shell = dic_shell_csa["X [m]"]
 i_x_shell = dic_shell_csa["INERTIA_X[m4]"]
+entrance_angle = float(msp["Waterline Entrace angle (WEA) [deg]"])
 lcg_TP = np.array([32,32,28,36])
 lengte_cm = np.linspace(-9, 141, 15001)
 transom_bhd_thickness = 0.01 # m
 rest_thickness = 0.012 # m
 straal_kraanhuis = 2
 print("De weerstand op 14 knopen is:")
-print(resistance.loc[8, '  Rtot [N]'])
+r_14knp = resistance.loc[8, '  Rtot [N]'] 
+print(r_14knp)
 kraan_lcg = 10 # importeren
 kraan_tcg = 8 # importeren
 kraan_vcg = h # importeren
@@ -69,14 +71,17 @@ lcg_kraanboom = kraan_lcg
 tcg_kraanboom = kraan_tcg+(0.5*jib_length*np.cos(np.deg2rad(60)))
 vcg_kraanboom = (h+1+(0.5*jib_length*np.sin(np.deg2rad(60))))
 lcg_heisgerei = kraan_lcg
-vcg_heisgerei = kraan_tcg+(jib_length*np.cos(np.deg2rad(60)))
+tcg_heisgerei = kraan_tcg+(jib_length*np.cos(np.deg2rad(60)))
 vcg_heisgerei = (h+1+(jib_length*np.sin(np.deg2rad(60))))
 
 weights_tp = np.array([weight_transition_piece, weight_transition_piece, weight_transition_piece, weight_transition_piece])
 
 def main():
+    #stabiliteitsmain hier. Die geeft terug; tankvullingen, weerstand, gm, lcg van tank 2
+    
+    
     return None
 
-stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces)
+stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces, it, entrance_angle, r_14knp, weight_transition_piece, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, zwenkhoek, giekhoek, jib_length, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei)
 
 sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp)
