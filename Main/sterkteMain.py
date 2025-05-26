@@ -37,11 +37,11 @@ def traagheidsmomentAsymptoot(traag_shell, l_shell, lengte_in_cm, huiddikte):
     funcPlotFill(lengte_in_cm, traag1, "Lengte van het schip (L) [m]", "Traagheidsmoment I [m4]", "Het traagheidsmoment I [m4] over de lengte van het schip L [m]", "Traagheidsmoment I [m4]", 'purple')
     return traag1
 
-def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, B_CSA2, lcg_TP, lengte_cm, STRAAL_TP, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, WEIGHT_KRAAN_TOTAAL, weights_TP):
+def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, B_CSA2, lcg_TP, lengte_cm, STRAAL_TP, rest_thickness, transom_bhd_thickness, kraan_lcg, SWLMAX, straal_kraanhuis, WEIGHT_KRAAN_TOTAAL, weights_TP):
     # Begin deelopdracht 8
     scaling = ((len(lengte_cm)-1)/(lengte_cm[-1] - lengte_cm[0]))
     opwaartse_Kracht = opwaartseKracht(B_CSA2, lengte_cm)  * scaling
-    I_traag = traagheidsmomentAsymptoot(i_x_shell, l_shell, lengte_cm, huiddikte)
+    I_traag = traagheidsmomentAsymptoot(i_x_shell, l_shell, lengte_cm, 0.012)
     Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm, scaling)
     kracht_TP = berekenKrachtVerdeling(lcg_TP, -weights_TP, lengte_cm, STRAAL_TP)
     funcPlotFill(lengte_cm, kracht_TP, "lengte", "gezeik", "transitionpieces", "meer gezeik", "black")
@@ -72,4 +72,5 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_ta
     #output_globale_sterkte(Maximaal_moment, LMmilvda, Maximale_afschuiving, LMailvda, Maximale_doorbuiging, LMdilvda)
     return
 
-sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, B_CSA2, lcg_TP, lengte_cm, STRAAL_TP, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, WEIGHT_KRAAN_TOTAAL, weights_TP)
+
+sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, B_CSA2, lcg_TP, lengte_cm, STRAAL_TP, rest_thickness, transom_bhd_thickness, kraan_lcg, SWLMAX, straal_kraanhuis, WEIGHT_KRAAN_TOTAAL, weights_TP)

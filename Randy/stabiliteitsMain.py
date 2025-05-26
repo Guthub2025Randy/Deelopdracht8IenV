@@ -13,7 +13,7 @@ from output_code import *
 
 versienummer = 1
 
-d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance = importGrasshopperFiles(versienummer)
+d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, B_CSA2 = importGrasshopperFiles(versienummer)
 print("De weerstand op 14 knopen is:")
 print(resistance.loc[8, '  Rtot [N]'])
 cob = msp["COB [m]"]
@@ -23,7 +23,7 @@ length_schip = float(msp["Loa  [m]"])
 it = float(msp["Inertia WPA around COF [m4]"][0])
 l_shell = dic_Shell_CSA["X [m]"]
 i_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
-B_CSA2 = dic_csa(df_csa)
+# = dic_csa(df_csa)
 lcg_tp = 32
 tcg_tp = -2
 vcg_tp = 25
