@@ -21,45 +21,40 @@ from importGrasshopperFiles import *
 Bovenstaande gegevens zijn nodig voor het antwoordblad.
 """
 GRAVITATION_CONSTANT = 9.81
+E = 205*(10**9)
 WATERDICHTHEID = 1025
 STAALGEWICHT = 7850
 WEIGHT_STAAL = 2.1*GRAVITATION_CONSTANT*STAALGEWICHT
 WEIGHT_WATER = GRAVITATION_CONSTANT*WATERDICHTHEID
-kraan_lcg = 10
-WEIGHT_TRANSITION_PIECE = 5395500
-SWLMAX = (WEIGHT_TRANSITION_PIECE)/0.94
-WEIGHT_KRAAN_HEISGEREI = -SWLMAX
-WEIGHT_KRAAN_BOOM = -SWLMAX*0.17
-WEIGHT_KRAAN_HUIS = -SWLMAX*0.34
-WEIGHT_TRANSITION_PIECES = WEIGHT_TRANSITION_PIECE*4
-WEIGHT_KRAAN_TOTAAL = WEIGHT_KRAAN_HEISGEREI + WEIGHT_KRAAN_HUIS + WEIGHT_KRAAN_BOOM 
+# Alles hierna zijn geen constantes
 """
-lcg_tp = kraan_lcg
-tcg_tp = 0
+kraan_lcg = importeren
+kraan_tcg = importeren
+kraan_vcg = importeren
+weight_transition_piece = 5395500
+transition_piece_amount = importeren
+swlmax = (weight_transition_piece)/0.94
+weight_kraan_heisgerei = -swlmax
+weight_kraan_boom = -swlmax*0.17
+weight_kraan_huis = -swlmax*0.34
+weight_transition_pieces = weight_transition_piece*transition_piece_amount
+weight_kraan_totaal = weight_kraan_heisgerei + weight_kraan_huis + weight_kraan_boom 
+straal_tp = 4
+lcg_tp = importeren
+tcg_tp = importeren
 vcg_tp = H+10
 lengte_kraan_fundatie = 1
-Draaihoogte_kraan = 1
+draaihoogte_kraan = 1
 jib_length = 32.5
-Zwenkhoek = 90
-Giekhoek = 60
-LCG_TP = 32
-TCG_TP = 0
-VCG_TP = H+10
-LCG_kraanhuis = kraan_lcg 
-TCG_kraanhuis = 8
-VCG_kraanhuis = H+1
-LCG_kraanboom = kraan_lcg
-TCG_kraanboom = 8+(0.5*32.5*np.cos(np.deg2rad(60)))
-VCG_kraanboom = (H+1+(0.5*32.5*np.sin(np.deg2rad(60))))
-LCG_heisgerei = kraan_lcg
-TCG_heisgerei = 8+(32.5*np.cos(np.deg2rad(60)))
-VCG_heisgerei = (H+1+(32.5*np.sin(np.deg2rad(60))))
+zwenkhoek = 90
+giekhoek = 60
+lcg_kraanhuis = kraan_lcg 
+tcg_kraanhuis = kraan_tcg
+vcg_kraanhuis = H+1
+lcg_kraanboom = kraan_lcg
+tcg_kraanboom = kraan_tcg+(0.5*jib_length*np.cos(np.deg2rad(60)))
+vcg_kraanboom = (H+1+(0.5*jib_length*np.sin(np.deg2rad(60))))
+lcg_heisgerei = kraan_lcg
+vcg_heisgerei = kraan_tcg+(jib_length*np.cos(np.deg2rad(60)))
+vcg_heisgerei = (H+1+(jib_length*np.sin(np.deg2rad(60))))
 """
-# Begin deelopdracht 8
-E = 205*(10**9)
-STRAAL_TP = 4
-
-
-
-
-

@@ -11,41 +11,7 @@ import matplotlib.pyplot as plt
 from schip_functies import *
 from output_code import *
 
-versienummer = 1
-
-d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, B_CSA2 = importGrasshopperFiles(versienummer)
-print("De weerstand op 14 knopen is:")
-print(resistance.loc[8, '  Rtot [N]'])
-cob = msp["COB [m]"]
-h = float(msp["H [m]"])
-bouyant_volume = float(msp["Buoyant Volume [m3]"])
-length_schip = float(msp["Loa  [m]"])
-it = float(msp["Inertia WPA around COF [m4]"][0])
-l_shell = dic_Shell_CSA["X [m]"]
-i_x_shell = dic_Shell_CSA["INERTIA_X[m4]"]
-# = dic_csa(df_csa)
-lcg_tp = 32
-tcg_tp = -2
-vcg_tp = 25
-lengte_kraan_fundatie = 4
-Draaihoogte_kraan = 1
-jib_length = 32.5
-Zwenkhoek = 90
-Giekhoek = 60
-LCG_TP = 32
-TCG_TP = -2
-VCG_TP = 25
-LCG_kraanhuis = kraan_lcg
-TCG_kraanhuis = 8
-VCG_kraanhuis = 16
-LCG_kraanboom = kraan_lcg
-TCG_kraanboom = 16.13
-VCG_kraanboom = 30.073
-LCG_heisgerei = kraan_lcg
-TCG_heisgerei = 24.25
-VCG_heisgerei = 44.146
-
-def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob):
+def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob, dbh1, h, swlmax):
     #Tank 3: er wordt een waarde gekozen voor het volume van tank 3. Vervolgens wordt hiervan het gewicht en
     #het zwaartepunt bepaald
     volume_t3 = d3["vol_3"][3]
@@ -55,9 +21,9 @@ def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness,
     #met de gewichten en aangrijpingspunten van de zwaartekrachten van alle massa's opgesteld met behulp van de
     #functie "positiesmetkrachtenlijst2". Vervolgens worden alle momenten bij elkaar opgeteld met de functie
     #"momentensom1". Voor meer informatie over deze functies, zie de docstrings in de functiebestanden.
-    krachten, posities = positiesmetkrachtenlijst1(dbh1, locatie_t3, kracht_t3, h, cob, WEIGHT_STAAL,
+    krachten, posities = positiesMetKrachtenLijst1(dbh1, locatie_t3, kracht_t3, h, cob, WEIGHT_STAAL,
                                                    transom_bhd_thickness, kraan_lcg, swlmax, dha, rest_thickness,
-                                                   calculateOpdrijvendeKracht(WEIGHT_WATER, bouyant_volume))
+                                                   calculateOpdrijvendeKracht(WEIGHT_WATER, bouyant_volume), weight_transition_pieces)
     eerste_moment = calculateMomentensom(posities, krachten)
     return eerste_moment, kracht_t3, locatie_t3, volume_t3
 
@@ -104,10 +70,10 @@ def tankTwee(krachten2, dbh1, locatie_t1, kracht_t1, locatie_t3, kracht_t3, h, c
     print(positie_t2[0])
     return volume_t2, kracht_t2, positie_t2
 
-def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume):
+def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces):
     # De eerste momentensom voor het dwarsscheepse momentenevenwicht    
     momentensom1_, kracht_t3, locatie_t3, volume_t3 = eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, 
-                                                                   rest_thickness, kraan_lcg, cob)
+                                                                   rest_thickness, kraan_lcg, cob, dbh1, h, swlmax, weight_transition_pieces)
     #Tank 1: op basis van het berekende transversale moment wordt de vulling en gewicht van de vulling van het water
     #in tank 1 bepaald.
     volume_t1, kracht_t1, locatie_t1 = tankEen(d1, momentensom1_)
@@ -138,11 +104,9 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
              0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
              bouyant_volume*WEIGHT_WATER, cob[0], cob[1], cob[2], 
              calculateKrachtensom1(krachten3)[0]+(bouyant_volume*WEIGHT_WATER), (calculateKrachtensom1(krachten3)[0]*(lcg_schip - cob[0])), 
-             (calculateKrachtensom1(krachten3)[0]*(tcg_schip - cob[1])), 4, -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT, lcg_tp, tcg_tp, vcg_tp, 0o3)
-    output_kraan(swlmax, -WEIGHT_TRANSITION_PIECE*GRAVITATION_CONSTANT, lengte_kraan_fundatie, Draaihoogte_kraan, jib_length, Zwenkhoek, 
+             (calculateKrachtensom1(krachten3)[0]*(tcg_schip - cob[1])), 4, -weight_transition_piece*GRAVITATION_CONSTANT, lcg_tp, tcg_tp, vcg_tp, 0o3)
+    output_kraan(swlmax, -weight_transition_piece*GRAVITATION_CONSTANT, lengte_kraan_fundatie, Draaihoogte_kraan, jib_length, Zwenkhoek, 
                  Giekhoek, LCG_TP, TCG_TP, VCG_TP, LCG_kraanhuis, TCG_kraanhuis, VCG_kraanhuis, LCG_kraanboom, TCG_kraanboom, 
                  VCG_kraanboom, LCG_heisgerei, TCG_heisgerei, VCG_heisgerei, 0o3)
     vul1, vul2, vul3 = vullingPercFunc(d1, d2, d3, momentensom1_, volume_t2, volume_t3)
     return
-
-stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_Shell_CSA, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume)
