@@ -1,0 +1,4 @@
+Name of HULL AREA, area [m2], lca [m], tca [m], vca [m] Group 22; Version 18.0
+Transom Area , 60.7033, -6.9194, 0, 7.1298
+Shell Area , 3682.6364, 49.1011, 0, 2.9331
+Deck Area , 2441.6664, 46.8531, 0, 8.98

@@ -1,0 +1,24 @@
+WB TANK 1 Group 22; Version 25.0
+Volume water ballast [m3],1351.2603
+COV WB [m],42.636, 6.9871, 3.6329
+Height of WB [% of h_tank],66.83
+h_tank [m],8.922
+Area WB plane [m2],319.3658
+COA WB plane [m],42.8613, 7.4602, 6.0206
+Inertia WB plane [m4],656.1539, 108180.4488, 108836.6026
+WB TANK 2 Group 22; Version 25.0
+Volume water ballast [m3],1701.5959
+COV WB [m],44.143, 0, 2.433
+Height of WB [% of h_tank],49.043
+h_tank [m],8.674
+Area WB plane [m2],400
+COA WB plane [m],44.143, 0, 4.56
+Inertia WB plane [m4],3333.3333, 53333.3333, 56666.6667
+WB TANK 3 Group 22; Version 25.0
+Volume water ballast [m3],1827.5121
+COV WB [m],42.7149, -7.1253, 4.4463
+Height of WB [% of h_tank],83.15
+h_tank [m],8.922
+Area WB plane [m2],334.1268
+COA WB plane [m],43.0166, -7.5686, 7.4766
+Inertia WB plane [m4],744.4875, 114226.1375, 114970.625

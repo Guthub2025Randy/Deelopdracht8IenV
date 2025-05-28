@@ -29,4 +29,4 @@ COF [m],39.7614, 0, 5.98
 Inertia WPA around COF [m4],75094.1382, 1.2553e+6, 1.3304e+6
 Wetted Shell Area [m2],2536.1556
 Wetted Transom Area [m2],12.2777
-Am [m2],117.0168
+Am [m2],0
