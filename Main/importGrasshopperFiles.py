@@ -82,7 +82,7 @@ def importGrasshopperFiles(versienummer):
         return dic, dic2, dic3
 
 
-    def file_to_dic(path):
+    def fileToDic(path):
         """
         deze functie heeft als doel uit het bestand MainShipParticulars de data te halen en in een dictionary te zetten. Omdat het 
         bestand ook kopjes bevat, worden alle regels waar geen komma in staat over geslagen. Bevat een regel dat wel, dan worden de
@@ -121,7 +121,7 @@ def importGrasshopperFiles(versienummer):
             dic[k] = v
         return dic
 
-    def dic_csa(df):
+    def dicCsa(df):
         """
         Deze functie zet de df van de bouyant_csa om in een dictionary.
         
@@ -159,7 +159,7 @@ def importGrasshopperFiles(versienummer):
         dic["Z_DECK[m]".format(df_I.iloc[0,11])] = df_I.iloc[:,10].to_numpy()
         return dic
 
-    def dic_csa_ballast_tanks(df_tank):
+    def dicCsaBallastTanks(df_tank):
         """
         Deze functie zet de df van de ballast tanks om in een dictionary.
         
@@ -179,15 +179,15 @@ def importGrasshopperFiles(versienummer):
         dic_tank[" crossarea_in_m2".format(df_tank.iloc[7,1])] = df_tank.iloc[:,1].to_numpy()
         return dic_tank
     
-    data_Tank_1 = datatanks(df_t1)
-    data_Tank_2 = datatanks(df_t2)
-    data_Tank_3 = datatanks(df_t3)
+    dara_tank_1 = datatanks(df_t1)
+    dara_tank_2 = datatanks(df_t2)
+    dara_tank_3 = datatanks(df_t3)
     data_bh1, data_bh2, data_bh = databh(df_bhd)
-    main_ship_particulars = file_to_dic(mainsp)
-    data_HA = dataha(df_had)    
-    dic_Shell_CrossSA = traagheidsdic(df_shell_csa)
-    dic_csa_tank_1 = dic_csa_ballast_tanks(df_tank1_csa)
-    dic_csa_tank_2 = dic_csa_ballast_tanks(df_tank2_csa)
-    dic_csa_tank_3 = dic_csa_ballast_tanks(df_tank3_csa)    
-    B_CSA2 = dic_csa(df_csa)
-    return data_Tank_1, data_Tank_2, data_Tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_HA, dic_Shell_CrossSA, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance, B_CSA2
+    main_ship_particulars = fileToDic(mainsp)
+    data_ha = dataha(df_had)    
+    dic_shell_cross_sa = traagheidsdic(df_shell_csa)
+    dic_csa_tank_1 = dicCsaBallastTanks(df_tank1_csa)
+    dic_csa_tank_2 = dicCsaBallastTanks(df_tank2_csa)
+    dic_csa_tank_3 = dicCsaBallastTanks(df_tank3_csa)    
+    bouyant_csa = dicCsa(df_csa)
+    return dara_tank_1, dara_tank_2, dara_tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_ha, dic_shell_cross_sa, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance, bouyant_csa

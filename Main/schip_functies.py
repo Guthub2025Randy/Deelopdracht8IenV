@@ -56,20 +56,20 @@ def interpolerenLocatie(dictionary_ballasttank, vulling_tank, tanknummer):
     vcg = vcg_interpol(vulling_tank)
     return np.array([lcg,tcg,vcg])
 
-def calculateWeightKraan(Krachten, Posities, H, kraan_lcg, SWLMax):
+def calculateWeightKraan(Krachten, Posities, h, kraan_lcg, SWLMax, weight_transition_pieces):
     """
     Deze functie heeft als doel aan twee lijsten, een met floats die krachten representeren, en aan een ander van arrays die
     elk een positie in het xyz vlak representeren, respectievelijk de zwaartekrachten en hun aangrijpingspunten toe te voegen.
     Ook het gewicht van de deklading (ZwaarteWindmolen) wordt toegevoegd. De aangevulde lijsten worden teruggegeven.
     """
     ZwaarteKheis = -SWLMax
-    arrayPositieKheis = np.array([kraan_lcg, 8+(32.5*np.cos(np.deg2rad(60))), (H+1+(32.5*np.sin(np.deg2rad(60))))])
+    arrayPositieKheis = np.array([kraan_lcg, 8+(32.5*np.cos(np.deg2rad(60))), (h+1+(32.5*np.sin(np.deg2rad(60))))])
     ZwaarteKboom = -SWLMax*0.17
-    arrayPositieKboom = np.array([kraan_lcg, 8+(0.5*32.5*np.cos(np.deg2rad(60))), (H+1+(0.5*32.5*np.sin(np.deg2rad(60))))])
+    arrayPositieKboom = np.array([kraan_lcg, 8+(0.5*32.5*np.cos(np.deg2rad(60))), (h+1+(0.5*32.5*np.sin(np.deg2rad(60))))])
     ZwaarteKhuis = -SWLMax*0.34
-    arrayPositieKhuis = np.array([kraan_lcg, 8, H+1])
-    ZwaarteWindmolen = -WEIGHT_TRANSITION_PIECES
-    arrayPositieWindmolen = np.array([32, -2, H+10])
+    arrayPositieKhuis = np.array([kraan_lcg, 8, h+1])
+    ZwaarteWindmolen = -weight_transition_pieces
+    arrayPositieWindmolen = np.array([32, -2, h+10])
     Posities.append(arrayPositieKheis)
     Krachten.append(ZwaarteKheis)
     Posities.append(arrayPositieKboom)
@@ -87,7 +87,7 @@ def calculateOpdrijvendeKracht(gewicht_water, onderwater_volume):
     opdrijvende_kracht = gewicht_water * onderwater_volume
     return opdrijvende_kracht
 
-def positiesmetkrachtenlijst1(dictionary_bulkheads, locatie3, kracht3, H, COB, Staalgewicht, Plaatdikte, kraan_lcg, SWLMax, dictionary_hull, Plaatdikte2, opdrijvende_kracht):
+def positiesMetKrachtenLijst1(dictionary_bulkheads, locatie3, kracht3, h, COB, Staalgewicht, Plaatdikte, kraan_lcg, SWLMax, dictionary_hull, Plaatdikte2, opdrijvende_kracht, weight_transition_pieces):
     """
     Deze functie doet exact hetzelfde als de bovenstaande functie, behalve dat hier het gewicht en zwaartepunt van tank 1
     niet als arguments worden gevraagd. Deze functie genereert dus lijsten waarmee een resultant transversaal moment kan worden
@@ -109,7 +109,7 @@ def positiesmetkrachtenlijst1(dictionary_bulkheads, locatie3, kracht3, H, COB, S
             krachten.append(float(-value[0]*Staalgewicht*Plaatdikte))
         else:
             krachten.append(float(-value[0]*Staalgewicht*Plaatdikte2))
-    krachten1, posities1 = calculateWeightKraan(krachten, posities, H, kraan_lcg, SWLMax)
+    krachten1, posities1 = calculateWeightKraan(krachten, posities, h, kraan_lcg, SWLMax, weight_transition_pieces)
     krachten1.append(float(-kracht3))
     krachten1.append(opdrijvende_kracht)
     posities1.append(locatie3)
@@ -169,7 +169,7 @@ def calculateVullingT1(arr_volume, arr_tcg, moment_som, arr_vulling_pc, watergew
   plt.close()
   return volume_acc
 
-def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3, kracht_w_t3, h, COB, staalgewicht, plaatdikte_bh, kraan_lcg, SWLMax, dic_hull, plaatdikte_romp,  opwaartse_kracht):
+def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3, kracht_w_t3, h, COB, staalgewicht, plaatdikte_bh, kraan_lcg, SWLMax, dic_hull, plaatdikte_romp,  opwaartse_kracht, weight_transition_pieces):
   """
   Het doel van deze functie is twee lijsten te creëeren: een met alle krachten en een met de corresponderende posities. Alleen
   het gewicht van tank 2 wordt nog niet gevraagd als argument, zodat dat met deze lijsten kan worden berekend.
@@ -198,7 +198,7 @@ def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3,
   positie.append(positie_w_t3)
   positie.append(COB)
   positie.append(positie_w_t1)
-  krachten2, posities2 = calculateWeightKraan(krachten, positie, h, kraan_lcg, SWLMax)
+  krachten2, posities2 = calculateWeightKraan(krachten, positie, h, kraan_lcg, SWLMax, weight_transition_pieces)
   return krachten2, posities2
 
 def calculateKrachtensom1(krachten):
@@ -436,7 +436,7 @@ def doorbuiging(w_acc, lengte_schip, C):
     return w
 # x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam
 
-def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, STRAAL_TP):
+def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_tp):
     """de input van deze functie is het zwaartepunt van één Transition Piece, de totale kracht van alle transition pieces
     en een array over de lengte van het schip die te vinden is in de main. dan maakt hij eerst het bereik waar het parabolisch profiel van de TP's
     te vinden is. dan maakt hij van de fysieke positie een index in een array. in het 2de deel van de functie bereidt hij parabool waarden voor.
@@ -444,14 +444,14 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, STRAAL_TP)
     en dan zorgt hij ervoor dat de som gelijk is aan de totale kracht."""
     start = lengte_in_cm[0]
     eind = lengte_in_cm[-1]
-    begin = max(zwaartepunt_tp - STRAAL_TP, start)
-    eind = min(zwaartepunt_tp + STRAAL_TP, eind)
+    begin = max(zwaartepunt_tp - straal_tp, start)
+    eind = min(zwaartepunt_tp + straal_tp, eind)
     idx_begin = int(begin - start)
     idx_eind = int(eind - start)
 
     bereik = np.arange(idx_begin, idx_eind + 1)
     afstanden = (bereik + start) - zwaartepunt_tp
-    x_norm = afstanden / STRAAL_TP
+    x_norm = afstanden / straal_tp
 
     profiel = np.clip(1 - x_norm**2, 0, None)
     profiel /= profiel.sum()
