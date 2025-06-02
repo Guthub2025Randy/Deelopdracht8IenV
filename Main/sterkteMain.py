@@ -55,3 +55,4 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_ta
     maximale_spanning = 10
     return maximale_spanning
 
+
