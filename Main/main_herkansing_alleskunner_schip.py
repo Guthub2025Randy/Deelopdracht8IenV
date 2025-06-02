@@ -24,64 +24,63 @@ import numpy as np
 
 versienummer = 1
 
-d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, bouyant_csa = importGrasshopperFiles(versienummer)
-cob = msp["COB [m]"]
-h = float(msp["H [m]"])
-bouyant_volume = float(msp["Buoyant Volume [m3]"])
-length_schip = float(msp["Loa  [m]"])
-it = float(msp["Inertia WPA around COF [m4]"][0])
-l_shell = dic_shell_csa["X [m]"]
-i_x_shell = dic_shell_csa["INERTIA_X[m4]"]
-entrance_angle = float(msp["Waterline Entrace angle (WEA) [deg]"])
-lcg_TP = np.array([32,32,28,36])
-lengte_cm = np.linspace(-9, 141, 15001)
-transom_bhd_thickness = 0.01 # m
-rest_thickness = 0.012 # m
-straal_kraanhuis = 2
-print("De weerstand op 14 knopen is:")
-r_14knp = resistance.loc[8, '  Rtot [N]'] 
-print(r_14knp)
-kraan_lcg = 10 # importeren
-kraan_tcg = 8 # importeren
-kraan_vcg = h # importeren
-weight_transition_piece = 5395500
-transition_piece_amount = 4 # importeren
-swlmax = (weight_transition_piece)/0.94
-weight_kraan_heisgerei = -swlmax
-weight_kraan_boom = -swlmax*0.17
-weight_kraan_huis = -swlmax*0.34
-weight_transition_pieces = weight_transition_piece*transition_piece_amount
-weight_kraan_totaal = weight_kraan_heisgerei + weight_kraan_huis + weight_kraan_boom 
-straal_tp = 4
-lcg_tp = 32
-tcg_tp = -2
-vcg_tp = 25
-#lcg_tp = importeren
-#tcg_tp = importeren
-#vcg_tp = h+10
-lengte_kraan_fundatie = 4
-draaihoogte_kraan = 1
-jib_length = 32.5
-zwenkhoek = 90
-giekhoek = 60
-lcg_kraanhuis = kraan_lcg 
-tcg_kraanhuis = kraan_tcg
-vcg_kraanhuis = h+1
-lcg_kraanboom = kraan_lcg
-tcg_kraanboom = kraan_tcg+(0.5*jib_length*np.cos(np.deg2rad(60)))
-vcg_kraanboom = (h+1+(0.5*jib_length*np.sin(np.deg2rad(60))))
-lcg_heisgerei = kraan_lcg
-tcg_heisgerei = kraan_tcg+(jib_length*np.cos(np.deg2rad(60)))
-vcg_heisgerei = (h+1+(jib_length*np.sin(np.deg2rad(60))))
 
-weights_tp = np.array([weight_transition_piece, weight_transition_piece, weight_transition_piece, weight_transition_piece])
 
-def main():
+def main(versienummer):
     #stabiliteitsmain hier. Die geeft terug; tankvullingen, weerstand, gm, lcg van tank 2
-    
-    
+    d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, bouyant_csa = importGrasshopperFiles(versienummer)
+    cob = msp["COB [m]"]
+    h = float(msp["H [m]"])
+    bouyant_volume = float(msp["Buoyant Volume [m3]"])
+    length_schip = float(msp["Loa  [m]"])
+    it = float(msp["Inertia WPA around COF [m4]"][0])
+    l_shell = dic_shell_csa["X [m]"]
+    i_x_shell = dic_shell_csa["INERTIA_X[m4]"]
+    entrance_angle = float(msp["Waterline Entrace angle (WEA) [deg]"])
+    lcg_TP = np.array([32,32,28,36])
+    lengte_cm = np.linspace(-9, 141, 15001)
+    transom_bhd_thickness = 0.01 # m
+    rest_thickness = 0.012 # m
+    straal_kraanhuis = 2
+    print("De weerstand op 14 knopen is:")
+    r_14knp = resistance.loc[8, '  Rtot [N]'] 
+    print(r_14knp)
+    kraan_lcg = 10 # importeren
+    kraan_tcg = 8 # importeren
+    kraan_vcg = h # importeren
+    weight_transition_piece = 5395500
+    transition_piece_amount = 4 # importeren
+    swlmax = (weight_transition_piece)/0.94
+    weight_kraan_heisgerei = -swlmax
+    weight_kraan_boom = -swlmax*0.17
+    weight_kraan_huis = -swlmax*0.34
+    weight_transition_pieces = weight_transition_piece*transition_piece_amount
+    weight_kraan_totaal = weight_kraan_heisgerei + weight_kraan_huis + weight_kraan_boom 
+    straal_tp = 4
+    lcg_tp = 32
+    tcg_tp = -2
+    vcg_tp = 25
+    #lcg_tp = importeren
+    #tcg_tp = importeren
+    #vcg_tp = h+10
+    lengte_kraan_fundatie = 4
+    draaihoogte_kraan = 1
+    jib_length = 32.5
+    zwenkhoek = 90
+    giekhoek = 60
+    lcg_kraanhuis = kraan_lcg 
+    tcg_kraanhuis = kraan_tcg
+    vcg_kraanhuis = h+1
+    lcg_kraanboom = kraan_lcg
+    tcg_kraanboom = kraan_tcg+(0.5*jib_length*np.cos(np.deg2rad(60)))
+    vcg_kraanboom = (h+1+(0.5*jib_length*np.sin(np.deg2rad(60))))
+    lcg_heisgerei = kraan_lcg
+    tcg_heisgerei = kraan_tcg+(jib_length*np.cos(np.deg2rad(60)))
+    vcg_heisgerei = (h+1+(jib_length*np.sin(np.deg2rad(60))))
+    weights_tp = np.array([weight_transition_piece, weight_transition_piece, weight_transition_piece, weight_transition_piece])
+        
+    stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces, it, entrance_angle, r_14knp, weight_transition_piece, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, zwenkhoek, giekhoek, jib_length, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei)
+    sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp)
     return None
 
-stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces, it, entrance_angle, r_14knp, weight_transition_piece, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, zwenkhoek, giekhoek, jib_length, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei)
-
-sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp)
+main(versienummer)

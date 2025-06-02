@@ -99,6 +99,7 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     posities3, krachten3 = removeBuoyantForce(posities2, krachten2, cob, calculateOpdrijvendeKracht(WEIGHT_WATER, bouyant_volume))
     lcg_schip, tcg_schip, vcg_schip = calculateZwaartepuntschip(posities3, krachten3)
     G_M = calculateG_M(bouyant_volume, SIt, vcg_schip, cob[2], it)
+    print("De G_M van het schip is:")
     print(G_M)
     output_1(versienummer, str(entrance_angle), r_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 
              0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
@@ -109,4 +110,4 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
                  giekhoek, lcg_tp, tcg_tp, vcg_tp, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, 
                  vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, 0o3)
     vul1, vul2, vul3 = vullingPercFunc(d1, d2, d3, momentensom1_, volume_t2, volume_t3)
-    return
+    return 
