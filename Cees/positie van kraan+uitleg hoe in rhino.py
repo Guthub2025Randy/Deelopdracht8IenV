@@ -19,6 +19,7 @@ het is wel van belang dat als we kraan verplaatsen dat het punt wat via point aa
 """
 
 import os
+import rhinoscriptsyntax as rs
 
 ghdoc_path = ghenv.Component.OnPingDocument().FilePath
 
@@ -28,12 +29,16 @@ if ghdoc_path:
     full_path = os.path.join(folder, filename)
 
     if Pt_Kraan:
-        kraan = Pt_Kraan
-        content = f"{kraan.X},{kraan.Y},{kraan.Z}"
+        point = rs.coerce3dpoint(Pt_Kraan)  # Zet Guid om naar Point3d
 
-        with open(full_path, "w") as f:
-            f.write(content)
+        if point:
+            content = f"{point.X},{point.Y},{point.Z}"
+
+            with open(full_path, "w") as f:
+                f.write(content)
+        else:
+            print("Het geselecteerde object is geen punt.")
     else:
         print("Er is geen punt ingevoerd voor de kraanpositie.")
 else:
-    print("Sla eerst het Grasshopper-bestand op.")
+    print("Het Grasshopper-bestand is nog niet opgeslagen.")
