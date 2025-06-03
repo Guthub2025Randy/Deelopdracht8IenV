@@ -29,6 +29,12 @@ def importGrasshopperFiles(versienummer):
     df_tank3_csa = pd.read_csv("Tank3_CSA_Gr22_V{0}.0.txt".format(versienummer), header=2)
     # Einde bestanden voor deelopdracht 8
     resistance =pd.read_csv("ResistanceData_Gr22_V{0}.0.txt".format(versienummer),header=6)
+    df_k = pd.read_csv("Kraanpositie_V {0}.0.txt".format(versienummer), header=None)
+    df_tp = pd.read_csv("tpdata_V {0}.0.txt".format(versienummer), header = None)
+    positie_kraan = df_k.to_numpy()[0]
+    lcg_totaal = df_tp.iloc[-1,0]/1000
+    df_tp = df_tp.drop(df_tp.tail(1).index)
+    posities_tp = df_tp.iloc[:,0]/1000
 
 
     """
@@ -190,4 +196,4 @@ def importGrasshopperFiles(versienummer):
     dic_csa_tank_2 = dicCsaBallastTanks(df_tank2_csa)
     dic_csa_tank_3 = dicCsaBallastTanks(df_tank3_csa)    
     bouyant_csa = dicCsa(df_csa)
-    return dara_tank_1, dara_tank_2, dara_tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_ha, dic_shell_cross_sa, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance, bouyant_csa
+    return dara_tank_1, dara_tank_2, dara_tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_ha, dic_shell_cross_sa, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance, bouyant_csa, positie_kraan, posities_tp

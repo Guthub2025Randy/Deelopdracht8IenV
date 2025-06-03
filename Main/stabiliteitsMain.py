@@ -110,4 +110,4 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
                  giekhoek, lcg_tp, tcg_tp, vcg_tp, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, 
                  vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, 0o3)
     vul1, vul2, vul3 = vullingPercFunc(d1, d2, d3, momentensom1_, volume_t2, volume_t3)
-    return 
+    return G_M
