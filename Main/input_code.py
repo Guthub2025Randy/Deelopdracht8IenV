@@ -6,11 +6,14 @@ Created on Tue Feb 18 14:37:02 2025
 """
 import pandas as pd
 import numpy as np
+
+from scipy import interpolate as ip
+import matplotlib.pyplot as plt
 """
 deze code heeft als doel de data uit de textbestanden te halen en in een vorm te zetten die later bruikbaar is. De meeste
 data zal worden geplaatst in dictionaries.
 """
-versienummer = 8
+versienummer = 1
 
 df_tv1 = pd.read_csv("Tank1_Diagram_Volume_Gr22_V{0}.0.txt".format(versienummer), header=2)
 df_twp1 = pd.read_csv("Tank1_Diagram_Waterplane_Gr22_V{0}.0.txt".format(versienummer), header=2)
@@ -185,3 +188,32 @@ def dic_csa_ballast_tanks(df_tank):
     dic_tank["x_in_m".format(df_tank.iloc[7,0])] = df_tank.iloc[:,0].to_numpy()
     dic_tank[" crossarea_in_m2".format(df_tank.iloc[7,1])] = df_tank.iloc[:,1].to_numpy()
     return dic_tank
+
+def calcNeutraleAs(lengte_schip, tussenstappen_lengte, hoogte_neutrale_as):
+    volledig = ip.interp1d(tussenstappen_lengte, hoogte_neutrale_as, kind="quadratic", fill_value="extrapolate")
+    volledig2 = volledig(lengte_schip)
+    return volledig2
+
+def calcKiel(lengte_schip, tussenstappen_lengte, hoogte_kiel):
+    geinterpoleerd= ip.interp1d(tussenstappen_lengte, hoogte_kiel, kind="quadratic", fill_value="extrapolate")
+    geinterpoleerd2=geinterpoleerd(lengte_schip)
+    return geinterpoleerd2 
+
+def calcVezelafstand(centroidCM, kielCM):
+    vezelafstand= centroidCM-kielCM
+    return vezelafstand
+
+
+lengte_schip = np.linspace(-9, 141, 150001)
+tussenstappen_lengte = dic_Shell_CSA["CENTROID_X[m]"]
+hoogte_neutrale_as = dic_Shell_CSA["CENTROID_Z[m]"]
+hoogte_kiel=dic_Shell_CSA["Z_Keel[m]"]
+
+centroid_z_in_cm = calcNeutraleAs(lengte_schip, tussenstappen_lengte, hoogte_neutrale_as)
+kiel_z_in_cm = calcKiel(lengte_schip, tussenstappen_lengte, hoogte_kiel)
+vezelafstand_in_cm = calcVezelafstand(centroid_z_in_cm, kiel_z_in_cm)
+
+
+plt.plot(lengte_schip, centroid_z_in_cm)
+plt.plot(lengte_schip, kiel_z_in_cm)
+plt.plot(lengte_schip, vezelafstand_in_cm)
