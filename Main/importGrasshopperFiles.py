@@ -6,6 +6,7 @@ Created on Tue Feb 18 14:37:02 2025
 """
 import pandas as pd
 import numpy as np
+
 """
 deze code heeft als doel de data uit de textbestanden te halen en in een vorm te zetten die later bruikbaar is. De meeste
 data zal worden geplaatst in dictionaries.

@@ -27,6 +27,7 @@ versienummers = np.array([1,2,3,4,5])
 def main(versienummers):
     for i in versienummers:
         versienummer = i
+        print(f"Dit is versie {i}")
         #stabiliteitsmain hier. Die geeft terug; tankvullingen, weerstand, gm, lcg van tank 2
         d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, bouyant_csa, positie_kraan, posities_tp = importGrasshopperFiles(versienummer)
         cob = msp["COB [m]"]
@@ -68,7 +69,7 @@ def main(versienummers):
         jib_length = 32.5
         zwenkhoek = 90
         giekhoek = 60
-        lcg_kraanhuis = kraan_lcg 
+        lcg_kraanhuis = kraan_lcg
         tcg_kraanhuis = kraan_tcg
         vcg_kraanhuis = h+1
         lcg_kraanboom = kraan_lcg
@@ -84,8 +85,9 @@ def main(versienummers):
             while maximum_sterkte > VLOEIGRENS:
                 rest_thickness += 0.001
                 maximum_sterkte, q, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
-                print(maximum_sterkte)
-                print(rest_thickness)
+            print("De maximaal bereikte spanning en de bijbehorende plaatdikte:")
+            print(maximum_sterkte)
+            print(rest_thickness)
             plotApprovedValues(lengte_cm, q, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag)
         else:
             print("G_M voldoet niet")

@@ -15,11 +15,10 @@ from openpyxl import load_workbook
 from scipy.integrate import cumulative_trapezoid as cumtrapz
 from importGrasshopperFiles import *
 
-#Rtot_14knp = resistance.iloc[8,3] 
-#entrance_angle = resistance.iloc[14,1]
 """
-Bovenstaande gegevens zijn nodig voor het antwoordblad.
+Dit is onze bibliotheek met onze globale variabelen. Ondertussen lekker leeg, zoals het hoort blijkbaar.
 """
+
 GRAVITATION_CONSTANT = 9.81
 E = 205*(10**9)
 WATERDICHTHEID = 1025
@@ -27,35 +26,3 @@ STAALGEWICHT = 7850
 WEIGHT_STAAL = 2.1*GRAVITATION_CONSTANT*STAALGEWICHT
 WEIGHT_WATER = GRAVITATION_CONSTANT*WATERDICHTHEID
 VLOEIGRENS = 190*(10**6)
-# Alles hierna zijn geen constantes ze staan wel nog in het bestand zodat we de waardes kunnen opzoeken wanneer dat eventueel nodig is
-"""
-kraan_lcg = importeren
-kraan_tcg = importeren
-kraan_vcg = importeren
-weight_transition_piece = 5395500
-transition_piece_amount = importeren
-swlmax = (weight_transition_piece)/0.94
-weight_kraan_heisgerei = -swlmax
-weight_kraan_boom = -swlmax*0.17
-weight_kraan_huis = -swlmax*0.34
-weight_transition_pieces = weight_transition_piece*transition_piece_amount
-weight_kraan_totaal = weight_kraan_heisgerei + weight_kraan_huis + weight_kraan_boom 
-straal_tp = 4
-lcg_tp = importeren
-tcg_tp = importeren
-vcg_tp = H+10
-lengte_kraan_fundatie = 1
-draaihoogte_kraan = 1
-jib_length = 32.5
-zwenkhoek = 90
-giekhoek = 60
-lcg_kraanhuis = kraan_lcg 
-tcg_kraanhuis = kraan_tcg
-vcg_kraanhuis = H+1
-lcg_kraanboom = kraan_lcg
-tcg_kraanboom = kraan_tcg+(0.5*jib_length*np.cos(np.deg2rad(60)))
-vcg_kraanboom = (H+1+(0.5*jib_length*np.sin(np.deg2rad(60))))
-lcg_heisgerei = kraan_lcg
-vcg_heisgerei = kraan_tcg+(jib_length*np.cos(np.deg2rad(60)))
-vcg_heisgerei = (H+1+(jib_length*np.sin(np.deg2rad(60))))
-"""
