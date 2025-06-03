@@ -1,3 +1,21 @@
+"""
+Hoe stel ik dit op in Rhino en grasshopper?
+
+1) maak in punt op het punt dat je wil hebben in je txt bestand (in dit geval dus de transitionpieces)
+2) group dit punt met zijn object, zodat als je een tp verplaatst dit punt ook mee beweegt. 
+3) in grasshopper: params-->point-->rechtermuis op point-->set multiple points--> klik al je gemaakte punten aan-->enter
+4) in grasshopper: maths--> scripts-->python 3 script
+5) voeg de onderstaande code toe aan dit script(rechtermuis --> open script editor)
+6) noem de bovenste input "Pt_TP" en de onderste "version"
+7) connect je point met Pt_TP en version met version
+8) rechter muisklik op Pt_TP en klik "list acces"
+
+
+
+
+"""
+
+
 import os
 import rhinoscriptsyntax as rs
 
