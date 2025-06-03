@@ -56,29 +56,29 @@ def interpolerenLocatie(dictionary_ballasttank, vulling_tank, tanknummer):
     vcg = vcg_interpol(vulling_tank)
     return np.array([lcg,tcg,vcg])
 
-def calculateWeightKraan(Krachten, Posities, h, kraan_lcg, SWLMax, weight_transition_pieces):
+def calculateWeightKraan(krachten, posities, h, kraan_lcg, swlmax, weight_transition_pieces):
     """
     Deze functie heeft als doel aan twee lijsten, een met floats die krachten representeren, en aan een ander van arrays die
     elk een positie in het xyz vlak representeren, respectievelijk de zwaartekrachten en hun aangrijpingspunten toe te voegen.
     Ook het gewicht van de deklading (ZwaarteWindmolen) wordt toegevoegd. De aangevulde lijsten worden teruggegeven.
     """
-    ZwaarteKheis = -SWLMax
-    arrayPositieKheis = np.array([kraan_lcg, 8+(32.5*np.cos(np.deg2rad(60))), (h+1+(32.5*np.sin(np.deg2rad(60))))])
-    ZwaarteKboom = -SWLMax*0.17
-    arrayPositieKboom = np.array([kraan_lcg, 8+(0.5*32.5*np.cos(np.deg2rad(60))), (h+1+(0.5*32.5*np.sin(np.deg2rad(60))))])
-    ZwaarteKhuis = -SWLMax*0.34
-    arrayPositieKhuis = np.array([kraan_lcg, 8, h+1])
-    ZwaarteWindmolen = -weight_transition_pieces
-    arrayPositieWindmolen = np.array([32, -2, h+10])
-    Posities.append(arrayPositieKheis)
-    Krachten.append(ZwaarteKheis)
-    Posities.append(arrayPositieKboom)
-    Krachten.append(ZwaarteKboom)
-    Posities.append(arrayPositieKhuis)
-    Krachten.append(ZwaarteKhuis)
-    Posities.append(arrayPositieWindmolen)
-    Krachten.append(ZwaarteWindmolen)
-    return Krachten, Posities
+    zwaarte_kheis = -swlmax
+    array_positie_kheis = np.array([kraan_lcg, 8+(32.5*np.cos(np.deg2rad(60))), (h+1+(32.5*np.sin(np.deg2rad(60))))])
+    zwaarte_kboom = -swlmax*0.17
+    array_positie_kboom = np.array([kraan_lcg, 8+(0.5*32.5*np.cos(np.deg2rad(60))), (h+1+(0.5*32.5*np.sin(np.deg2rad(60))))])
+    zwaarte_khuis = -swlmax*0.34
+    array_positie_khuis = np.array([kraan_lcg, 8, h + 1])
+    zwaarte_windmolen = -weight_transition_pieces
+    array_positie_windmolen = np.array([32, -2, h + 10])
+    posities.append(array_positie_kheis)
+    krachten.append(zwaarte_kheis)
+    posities.append(array_positie_kboom)
+    krachten.append(zwaarte_kboom)
+    posities.append(array_positie_khuis)
+    krachten.append(zwaarte_khuis)
+    posities.append(array_positie_windmolen)
+    krachten.append(zwaarte_windmolen)
+    return krachten, posities
 
 def calculateOpdrijvendeKracht(gewicht_water, onderwater_volume):
     """
@@ -87,7 +87,7 @@ def calculateOpdrijvendeKracht(gewicht_water, onderwater_volume):
     opdrijvende_kracht = gewicht_water * onderwater_volume
     return opdrijvende_kracht
 
-def positiesMetKrachtenLijst1(dictionary_bulkheads, locatie3, kracht3, h, COB, Staalgewicht, Plaatdikte, kraan_lcg, SWLMax, dictionary_hull, Plaatdikte2, opdrijvende_kracht, weight_transition_pieces):
+def positiesMetKrachtenLijst1(dictionary_bulkheads, locatie3, kracht3, h, cob, STAALGEWICHT, plaatdikte, kraan_lcg, swlmax, dictionary_hull, plaatdikte2, opdrijvende_kracht, weight_transition_pieces):
     """
     Deze functie doet exact hetzelfde als de bovenstaande functie, behalve dat hier het gewicht en zwaartepunt van tank 1
     niet als arguments worden gevraagd. Deze functie genereert dus lijsten waarmee een resultant transversaal moment kan worden
@@ -99,21 +99,21 @@ def positiesMetKrachtenLijst1(dictionary_bulkheads, locatie3, kracht3, h, COB, S
     krachten1 = []
     for key, value in dictionary_bulkheads.items():
         posities.append(value[1:4])
-        krachten.append(float(-value[0]*Staalgewicht*Plaatdikte))
+        krachten.append(float(-value[0]*STAALGEWICHT*plaatdikte))
     for key, value in dictionary_hull.items():
         x = float(value[1])
         y = float(value[2])
         z = float(value[3])
         posities.append(np.array([x, y, z]))
         if key == "Transom Area ":
-            krachten.append(float(-value[0]*Staalgewicht*Plaatdikte))
+            krachten.append(float(-value[0]*STAALGEWICHT*plaatdikte))
         else:
-            krachten.append(float(-value[0]*Staalgewicht*Plaatdikte2))
-    krachten1, posities1 = calculateWeightKraan(krachten, posities, h, kraan_lcg, SWLMax, weight_transition_pieces)
+            krachten.append(float(-value[0]*STAALGEWICHT*plaatdikte2))
+    krachten1, posities1 = calculateWeightKraan(krachten, posities, h, kraan_lcg, swlmax, weight_transition_pieces)
     krachten1.append(float(-kracht3))
     krachten1.append(opdrijvende_kracht)
     posities1.append(locatie3)
-    posities1.append(COB)
+    posities1.append(cob)
     return krachten1, posities1
 
 def calculateMoment(positie,kracht):
@@ -169,7 +169,7 @@ def calculateVullingT1(arr_volume, arr_tcg, moment_som, arr_vulling_pc, watergew
   plt.close()
   return volume_acc
 
-def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3, kracht_w_t3, h, COB, staalgewicht, plaatdikte_bh, kraan_lcg, SWLMax, dic_hull, plaatdikte_romp,  opwaartse_kracht, weight_transition_pieces):
+def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3, kracht_w_t3, h, cob, staalgewicht, plaatdikte_bh, kraan_lcg, swlmax, dic_hull, plaatdikte_romp,  opwaartse_kracht, weight_transition_pieces):
   """
   Het doel van deze functie is twee lijsten te creëeren: een met alle krachten en een met de corresponderende posities. Alleen
   het gewicht van tank 2 wordt nog niet gevraagd als argument, zodat dat met deze lijsten kan worden berekend.
@@ -196,9 +196,9 @@ def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3,
   krachten.append(opwaartse_kracht)
   krachten.append(-kracht_w_t1)
   positie.append(positie_w_t3)
-  positie.append(COB)
+  positie.append(cob)
   positie.append(positie_w_t1)
-  krachten2, posities2 = calculateWeightKraan(krachten, positie, h, kraan_lcg, SWLMax, weight_transition_pieces)
+  krachten2, posities2 = calculateWeightKraan(krachten, positie, h, kraan_lcg, swlmax, weight_transition_pieces)
   return krachten2, posities2
 
 def calculateKrachtensom1(krachten):
@@ -317,7 +317,6 @@ def opwaartseKracht(dictio_CSA, lengte_schip):
         Onderwater_volume.append(oppervlakte_cm[i]*dx)
     Onderwater_volume.append(0)
     opwaartse_kracht_cm = np.array(Onderwater_volume)*WEIGHT_WATER
-    funcPlotFill(lengte_schip, -opwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Opwaartse kracht (p) in [N]", "De opwaartse kracht (p) in [N] over de lengte van het schip (L) [m]", "Opwaartse kracht (p) in [N]", 'b')
     return opwaartse_kracht_cm
 
 def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, Lengte_schip_csa_shell, lengte_schip):
@@ -343,47 +342,14 @@ def ballastLoop(x_in_m, opp, lengte_schip):
 def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip, scaling):
     oppervlakte1 = dic_tank[" crossarea_in_m2"]
     lps1 = dic_tank["x_in_m"]
-    #leng_1 = int(((lps1[-1] - lps1[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
-    #rescaling_length1 = np.linspace(lps1[0], lps1[-1], leng_1)
-    #oppervlakteInterp1 = ip.interp1d(lps1, oppervlakte1, kind='cubic', fill_value=donnot)
-    #oppervlakte1_cm = oppervlakteInterp1(rescaling_length1)
-    #Water_volume1 = []
     oppervlakte2 = dic_tank_2[" crossarea_in_m2"]
     lps2 = dic_tank_2["x_in_m"]
-    #leng_2 = int(((lps2[-1] - lps2[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
-    #rescaling_length2 = np.linspace(lps2[0], lps2[-1], leng_2)
-    #oppervlakteInterp2 = ip.interp1d(lps2, oppervlakte2, kind='cubic', fill_value=donnot)
-    #oppervlakte2_cm = oppervlakteInterp2(rescaling_length2)
-    #Water_volume2 = []
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
-    """
-    leng_3 = int(((lps3[-1] - lps3[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
-    rescaling_length3 = np.linspace(lps3[0], lps3[-1], leng_3)
-    oppervlakteInterp3 = ip.interp1d(lps3, oppervlakte3, kind='cubic', fill_value=donnot)
-    oppervlakte3_cm = oppervlakteInterp3(rescaling_length3)
-    Water_volume3 = []
-    for i in range(len(oppervlakte1_cm)-1):
-        dx1 = rescaling_length1[i+1]-rescaling_length1[i]
-        Water_volume1.append(oppervlakte1_cm[i]*dx1)
-    for i in range(len(oppervlakte2_cm)-1):
-        dx2 = rescaling_length2[i+1]-rescaling_length2[i]
-        Water_volume2.append(oppervlakte2_cm[i]*dx2)
-    for i in range(len(oppervlakte3_cm)-1):
-        dx3 = rescaling_length3[i+1]-rescaling_length3[i]
-        Water_volume3.append(oppervlakte3_cm[i]*dx3)
-    Water_volume1.append(0)
-    Water_volume2.append(0)
-    Water_volume3.append(0)
-    Neerwaartse_kracht1_pre = np.array(Water_volume1)*WEIGHT_WATER
-    Neerwaartse_kracht2_pre = np.array(Water_volume2)*WEIGHT_WATER
-    Neerwaartse_kracht3_pre = np.array(Water_volume3)*WEIGHT_WATER
-    """
     Neerwaartse_kracht1 = ballastLoop(lps1, oppervlakte1, lengte_schip)
     Neerwaartse_kracht2 = ballastLoop(lps2, oppervlakte2, lengte_schip)
     Neerwaartse_kracht3 = ballastLoop(lps3, oppervlakte3, lengte_schip)
     Neerwaartse_kracht_cm = (Neerwaartse_kracht1 + Neerwaartse_kracht2 + Neerwaartse_kracht3) * scaling
-    funcPlotFill(lengte_schip, Neerwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Neerwaartse kracht (Ballast) [N]", "De verdeelde belasting van het ballastwater over de lengte van het schip", "Ballast belasting [N]", 'r')
     return -Neerwaartse_kracht_cm
 
 def dwarskracht(q_x, lengte_schip):
@@ -430,8 +396,13 @@ def doorbuiging(w_acc, lengte_schip, C):
     return w
 # x_plot, y_plot, x_naam, y_naam, titel_naam, functie_naam
 
-def plotApprovedValues(lengte_schip, q, dwarskracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w):
-    funcPlotFill(lengte_cm, -q, "Lengte van het schip (L) in [m]", "Netto verdeelde belasting (q) in [N]", "De netto verdeelde belasting", 'Netto load',"black")
+def plotApprovedValues(lengte_schip, q, dwarskracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag):
+    # Niet nodige plots achter de hashtags
+    # funcPlotFill(lengte_schip, Neerwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Neerwaartse kracht (Ballast) [N]", "De verdeelde belasting van het ballastwater over de lengte van het schip", "Ballast belasting [N]", 'r')
+    # funcPlotFill(lengte_schip, -opwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Opwaartse kracht (p) in [N]", "De opwaartse kracht (p) in [N] over de lengte van het schip (L) [m]", "Opwaartse kracht (p) in [N]", 'b')
+
+    funcPlotFill(lengte_schip, traag, "Lengte van het schip (L) [m]", "Traagheidsmoment I [m4]", "Het traagheidsmoment I [m4] over de lengte van het schip L [m]", "Traagheidsmoment I [m4]", 'purple')
+    funcPlotFill(lengte_schip, -q, "Lengte van het schip (L) in [m]", "Netto verdeelde belasting (q) in [N]", "De netto verdeelde belasting", 'Netto load',"black")
     funcPlotFill(lengte_schip, dwarskracht, "Lengte van het schip L [m]", "Dwarskracht V(x) [N]", "De dwarskracht V(x) [N] over de lengte van het schip L [m]", "Dwarskracht V(x)", 'orange')
     funcPlotFill(lengte_schip, buigend_moment, "Lengte van het schip L [m]", "Buigend moment M(x) [Nm]", "Het buigend moment M(x) [Nm] over de lengte van het schip L [m]", "Buigend moment M(x)", 'yellow')
     funcPlotFill(lengte_schip, reduct_m, "Lengte van het schip (L) in [m]", "Gereduceerde moment (M/(E*I)) in [Nm]", "Het gereduceerde moment", 'Gereduceerde moment', 'black')
@@ -603,3 +574,16 @@ def calcParaboolFunctie(locatie, totaal_gewicht, arr_lengte, straal):
     q_out[i_start+i] = q[i]
   return q_out
 
+def calcNeutraleAs(lengte_schip, tussenstappen_lengte, hoogte_neutrale_as):
+    volledig = ip.interp1d(tussenstappen_lengte, hoogte_neutrale_as, kind="quadratic", fill_value="extrapolate")
+    volledig2 = volledig(lengte_schip)
+    return volledig2
+
+def calcKiel(lengte_schip, tussenstappen_lengte, hoogte_kiel):
+    geinterpoleerd= ip.interp1d(tussenstappen_lengte, hoogte_kiel, kind="quadratic", fill_value="extrapolate")
+    geinterpoleerd2=geinterpoleerd(lengte_schip)
+    return geinterpoleerd2 
+
+def calcVezelafstand(centroidCM, kielCM):
+    vezelafstand= centroidCM-kielCM
+    return vezelafstand

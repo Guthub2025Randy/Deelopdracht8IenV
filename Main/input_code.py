@@ -207,7 +207,7 @@ def calcVezelafstand(centroidCM, kielCM):
 lengte_schip = np.linspace(-9, 141, 150001)
 tussenstappen_lengte = dic_Shell_CSA["CENTROID_X[m]"]
 hoogte_neutrale_as = dic_Shell_CSA["CENTROID_Z[m]"]
-hoogte_kiel=dic_Shell_CSA["Z_Keel[m]"]
+hoogte_kiel = dic_Shell_CSA["Z_Keel[m]"]
 
 centroid_z_in_cm = calcNeutraleAs(lengte_schip, tussenstappen_lengte, hoogte_neutrale_as)
 kiel_z_in_cm = calcKiel(lengte_schip, tussenstappen_lengte, hoogte_kiel)

@@ -30,11 +30,7 @@ def importGrasshopperFiles(versienummer):
     # Einde bestanden voor deelopdracht 8
     resistance =pd.read_csv("ResistanceData_Gr22_V{0}.0.txt".format(versienummer),header=6)
     df_k = pd.read_csv("Kraanpositie_V {0}.0.txt".format(versienummer), header=None)
-    df_tp = pd.read_csv("tpdata_V {0}.0.txt".format(versienummer), header = None)
-    positie_kraan = df_k.to_numpy()[0]
-    lcg_totaal = df_tp.iloc[-1,0]/1000
-    df_tp = df_tp.drop(df_tp.tail(1).index)
-    posities_tp = df_tp.iloc[:,0]/1000
+    df_tp = pd.read_csv("tpdata_V0{0}.0.txt".format(versienummer), header = None)
 
 
     """
@@ -42,6 +38,11 @@ def importGrasshopperFiles(versienummer):
     bij elkaar te krijgen worden de dataframes van deze twee soorten csv files bij elkaar gevoegd. Vervolgens wordt er een extra
     kolom met het tanknummer toegevoegd en worden de onnodige kolommen verwijderd.
     """
+    
+    positie_kraan = df_k.to_numpy()[0]/1000
+    lcg_totaal = df_tp.iloc[-1,0]/1000
+    df_tp = df_tp.drop(df_tp.tail(1).index)
+    posities_tp = df_tp.iloc[:,0]/1000
 
     df_t1 = pd.concat([df_tv1, df_twp1])
     df_t2 = pd.concat([df_tv2, df_twp2])

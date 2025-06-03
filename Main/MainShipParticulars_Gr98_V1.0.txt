@@ -15,7 +15,7 @@ heel [deg],0
 WATERLINE ENTRANCE ANGLE
 Waterline Entrace angle (WEA) [deg],46.5347
 Location of WEA [%Bwl],30
-XYZ location of WEA [m],139.2924, 3.5964, 7.988
+XYZ location of WEA [m],139.2924, -3.5964, 7.988
 VOLUME RELATED DATA (MOULDED)
 Buoyant Volume [m3],23903.7739
 Total Volume [m3],23940.6786

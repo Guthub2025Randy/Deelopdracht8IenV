@@ -26,6 +26,7 @@ WATERDICHTHEID = 1025
 STAALGEWICHT = 7850
 WEIGHT_STAAL = 2.1*GRAVITATION_CONSTANT*STAALGEWICHT
 WEIGHT_WATER = GRAVITATION_CONSTANT*WATERDICHTHEID
+VLOEIGRENS = 190*(10**6)
 # Alles hierna zijn geen constantes ze staan wel nog in het bestand zodat we de waardes kunnen opzoeken wanneer dat eventueel nodig is
 """
 kraan_lcg = importeren

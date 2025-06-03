@@ -37,8 +37,11 @@ def main(versienummers):
         l_shell = dic_shell_csa["X [m]"]
         i_x_shell = dic_shell_csa["INERTIA_X[m4]"]
         entrance_angle = float(msp["Waterline Entrace angle (WEA) [deg]"])
+        tussenstappen_lengte = dic_shell_csa["CENTROID_X[m]"]
+        hoogte_neutrale_as = dic_shell_csa["CENTROID_Z[m]"]
+        hoogte_kiel = dic_shell_csa["Z_Keel[m]"] # , tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel
         lcg_TP = np.array([32,32,28,36])
-        lengte_cm = np.linspace(-9, 141, 15001)
+        lengte_cm = np.linspace(l_shell[0], l_shell[-1], int(((l_shell[-1] - l_shell[0]) * 100) + 1))
         transom_bhd_thickness = 0.01 # m
         rest_thickness = 0.012 # m
         straal_kraanhuis = 2
@@ -59,10 +62,7 @@ def main(versienummers):
         straal_tp = 4
         lcg_tp = 32
         tcg_tp = -2
-        vcg_tp = 25
-        #lcg_tp = importeren
-        #tcg_tp = importeren
-        #vcg_tp = h+10
+        vcg_tp = h+10
         lengte_kraan_fundatie = 4
         draaihoogte_kraan = 1
         jib_length = 32.5
@@ -80,14 +80,16 @@ def main(versienummers):
         weights_tp = np.array([weight_transition_piece, weight_transition_piece, weight_transition_piece, weight_transition_piece])
         G_M = stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces, it, entrance_angle, r_14knp, weight_transition_piece, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, zwenkhoek, giekhoek, jib_length, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei)
         if G_M > 1:
-            maximum_sterkte, doorbuig = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp)
-            while maximum_sterkte > vloeigrens:
+            maximum_sterkte, q, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
+            while maximum_sterkte > VLOEIGRENS:
                 rest_thickness += 0.001
-                maximum_sterkte,  = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp)
+                maximum_sterkte, q, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
+                print(maximum_sterkte)
+                print(rest_thickness)
+            plotApprovedValues(lengte_cm, q, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag)
         else:
             print("G_M voldoet niet")
             return None
-        
     return None
 
 main(versienummers)
