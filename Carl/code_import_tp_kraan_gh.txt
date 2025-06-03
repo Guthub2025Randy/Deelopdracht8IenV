@@ -1,0 +1,6 @@
+df_k = pd.read_csv("Kraanpositie_V {0}.0.txt".format(versienummer), header=None)
+df_tp = pd.read_csv("tpdata_V {0}.0.txt".format(versienummer), header = None)
+positie_kraan = df_k.to_numpy()[0]
+lcg_totaal = df_tp.iloc[-1,0]/1000
+df_tp = df_tp.drop(df_tp.tail(1).index)
+posities_tp = df_tp.iloc[:,0]/1000
