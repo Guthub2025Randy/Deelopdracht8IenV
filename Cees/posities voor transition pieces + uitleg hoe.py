@@ -10,6 +10,7 @@ Hoe stel ik dit op in Rhino en grasshopper?
 7) connect je point met Pt_TP en version met version
 8) rechter muisklik op Pt_TP en klik "list acces"
 
+in de txt file krijg je nu eerst van elke TP de LCG,VCG en TCG en het laatste getal is altijd het zwaartepunt van alle TPs
 
 
 
@@ -24,37 +25,40 @@ ghdoc_path = ghenv.Component.OnPingDocument().FilePath
 if ghdoc_path:
     folder = os.path.dirname(ghdoc_path)
 
-    # Zorg dat versie een getal is
     version_value = version[0] if isinstance(version, list) else version
-    filename = f"tpdata_V{int(version_value):02d}.0.txt"
+    filename = f"tpdata_V{int(version_value):2d}.0.txt"
     full_path = os.path.join(folder, filename)
 
-    if Pt_TP and len(Pt_TP) == 4:
+    if Pt_TP and len(Pt_TP) >= 1:
         lines = []
-        centroid_x = 0
-        centroid_y = 0
-        centroid_z = 0
+        sum_x = 0
+        sum_y = 0
+        sum_z = 0
+        valid_points = 0
 
         for i, pt_guid in enumerate(Pt_TP):
             pt = rs.coerce3dpoint(pt_guid)
             if pt:
                 lines.append(f"{pt.X},{pt.Y},{pt.Z}")
-                centroid_x += pt.X
-                centroid_y += pt.Y
-                centroid_z += pt.Z
+                sum_x += pt.X
+                sum_y += pt.Y
+                sum_z += pt.Z
+                valid_points += 1
             else:
                 print(f"Punt {i + 1} is geen geldig puntobject.")
-                break
-        else:
-            # Alleen als alle 4 succesvol zijn
-            centroid_x /= 4
-            centroid_y /= 4
-            centroid_z /= 4
+
+        if valid_points > 0:
+            centroid_x = sum_x / valid_points
+            centroid_y = sum_y / valid_points
+            centroid_z = sum_z / valid_points
             lines.append(f"{centroid_x},{centroid_y},{centroid_z}")
 
             with open(full_path, "w") as f:
                 f.write("\n".join(lines))
+        else:
+            print("Geen geldige punten gevonden.")
     else:
-        print("Voer exact 4 punten in voor de Transition Pieces.")
+        print("Voer ten minste één punt in voor de Transition Pieces.")
 else:
     print("Sla eerst het Grasshopper-bestand op.")
+
