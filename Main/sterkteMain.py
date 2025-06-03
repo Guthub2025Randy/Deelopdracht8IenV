@@ -11,7 +11,7 @@ from schip_functies import *
 from output_code import *
 
 def traagheidsmomentAsymptoot(traag_shell, l_shell, lengte_in_cm, huiddikte):
-    traag1 = traagheidsmomentOverLengte(traag_shell, l_shell, lengte_in_cm)*huiddikte
+    traag1 = traagheidsmomentOverLengte(traag_shell, l_shell, lengte_in_cm)
     asymptootwaarde = 0.01
     for idx, val in enumerate(traag1):
         if idx > (len(traag1) - 100):
@@ -26,24 +26,17 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_ta
     I_traag = traagheidsmomentAsymptoot(i_x_shell, l_shell, lengte_cm, 0.012)
     Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm, scaling)
     kracht_TP = berekenKrachtVerdeling(lcg_TP, -weights_TP, lengte_cm, straal_tp)
-    funcPlotFill(lengte_cm, kracht_TP, "lengte", "gezeik", "transitionpieces", "meer gezeik", "black")
     kracht_kraan = calcParaboolFunctie(kraan_lcg, weight_kraan_totaal, lengte_cm, straal_kraanhuis)
-    funcPlotFill(lengte_cm, kracht_kraan, "lengte", "gezeik", "kraan", "meer gezeik", "black")
     neerwaartse_kracht_1 = calculateSpiegel(lengte_cm, dha, transom_bhd_thickness)
-    funcPlotFill(lengte_cm, neerwaartse_kracht_1, "lengte", "gezeik", "spiegel", "meer gezeik", "black")
     neerwaartse_kracht_2 = calculateTrapezium(lengte_cm, dbh, transom_bhd_thickness)
-    funcPlotFill(lengte_cm, neerwaartse_kracht_2, "lengte", "gezeik", "bulkheads", "meer gezeik", "black")
     neerwaartse_kracht_3 = calculateHuid(lengte_cm, 1, dic_shell_csa)
-    funcPlotFill(lengte_cm, neerwaartse_kracht_3, "lengte", "gezeik", "huid", "meer gezeik", "black")
     q = opwaartse_Kracht + Kracht_Ballast + kracht_kraan + kracht_TP + neerwaartse_kracht_2 + neerwaartse_kracht_3 + neerwaartse_kracht_1
     #plotten van q
-    funcPlotFill(lengte_cm, -q, "Lengte van het schip (L) in [m]", "Netto verdeelde belasting (q) in [N]", "De netto verdeelde belasting", 'Netto load',"black")
     V = dwarskracht(q, lengte_cm)
     M = buigendMoment(V, lengte_cm)
-    Reduct_M = reducMoment(M, I_traag)
+    reduct_m = reducMoment(M, I_traag)
     #plotten van het gereduceerde moment.
-    funcPlotFill(lengte_cm,Reduct_M, "Lengte van het schip (L) in [m]", "Gereduceerde moment (M/(E*I)) in [Nm]", "Het gereduceerde moment", 'Gereduceerde moment', 'black')
-    hoekverdraai_accent = hoekverdraaiingAcc(Reduct_M, lengte_cm)
+    hoekverdraai_accent = hoekverdraaiingAcc(reduct_m, lengte_cm)
     doorbuig_acc = doorbuigingAcc(hoekverdraai_accent, lengte_cm)
     # hoekverdraaing (phi) = phi_accent + C
     # Doorbuiging (w) = w_acc +C
@@ -53,6 +46,6 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_ta
     doorbuig = doorbuiging(doorbuig_acc, lengte_cm, C)
     #output_globale_sterkte(Maximaal_moment, LMmilvda, Maximale_afschuiving, LMailvda, Maximale_doorbuiging, LMdilvda)
     maximale_spanning = 10
-    return maximale_spanning
+    return maximale_spanning, 
 
 
