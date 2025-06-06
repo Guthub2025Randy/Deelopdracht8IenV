@@ -32,27 +32,12 @@ def importGrasshopperFiles(versienummer):
     resistance =pd.read_csv("ResistanceData_Gr22_V{0}.0.txt".format(versienummer),header=6)
     df_k = pd.read_csv("Kraanpositie_V {0}.0.txt".format(versienummer), header=None)
     df_tp = pd.read_csv("tpdata_V0{0}.0.txt".format(versienummer), header = None)
-
-
+    input_data = "InputData_Gr22_V{0}.0.txt".format(versienummer)
     """
     Gegevens van de tanks: er zijn per tank twee csv files: "diagram volume" en "diagram waterplane". Om alle gegevens per tank 
     bij elkaar te krijgen worden de dataframes van deze twee soorten csv files bij elkaar gevoegd. Vervolgens wordt er een extra
     kolom met het tanknummer toegevoegd en worden de onnodige kolommen verwijderd.
     """
-    
-    positie_kraan = df_k.to_numpy()[0]/1000
-    lcg_totaal = df_tp.iloc[-1,0]/1000
-    df_tp = df_tp.drop(df_tp.tail(1).index)
-    posities_tp = df_tp.iloc[:,0]/1000
-
-    df_t1 = pd.concat([df_tv1, df_twp1])
-    df_t2 = pd.concat([df_tv2, df_twp2])
-    df_t3 = pd.concat([df_tv3, df_twp3])
-
-    df_t1["tanknummer"] = [1]*len(df_t1)
-    df_t2["tanknummer"] = [2]*len(df_t2)
-    df_t3["tanknummer"] = [3]*len(df_t3)
-    #df_bhd = df_bhd.drop(columns=[" x_min [m]", " x_max [m]"], axis=1)
 
     def datatanks(df_t):
         """
@@ -109,13 +94,6 @@ def importGrasshopperFiles(versienummer):
                 else:
                     continue
         return dic
-
-    """
-    tot slot moet de data uit het hullareadata bestand gehaald worden. Eerst moeten de kolomtitels van de vca en tca verwisseld worden,
-    omdat grasshopper deze niet correct genereert.
-    """
-    
-    df_had = df_had.rename(columns={" vca [m]":"tcg", " tca [m] Group 22; Version {0}":"vca".format(versienummer)})
     
     def dataha(df):
         """
@@ -187,6 +165,29 @@ def importGrasshopperFiles(versienummer):
         dic_tank[" crossarea_in_m2".format(df_tank.iloc[7,1])] = df_tank.iloc[:,1].to_numpy()
         return dic_tank
     
+
+    positie_kraan = df_k.to_numpy()[0]/1000
+    cg_tp_tot = df_tp.iloc[-1,:]/1000
+    df_tp = df_tp.drop(df_tp.tail(1).index)
+    lcg_tp = df_tp.iloc[:,0]/1000
+    tcg_tp = df_tp.iloc[:,1]/1000
+    vcg_tp = df_tp.iloc[:,2]/1000
+    
+
+    df_t1 = pd.concat([df_tv1, df_twp1])
+    df_t2 = pd.concat([df_tv2, df_twp2])
+    df_t3 = pd.concat([df_tv3, df_twp3])
+
+    df_t1["tanknummer"] = [1]*len(df_t1)
+    df_t2["tanknummer"] = [2]*len(df_t2)
+    df_t3["tanknummer"] = [3]*len(df_t3)
+
+    """
+    Eerst moet de data uit het hullareadata bestand gehaald worden. Eerst moeten de kolomtitels van de vca en tca verwisseld worden,
+    omdat grasshopper deze niet correct genereert. Tot slot worden alle functies uitgevoerd.
+    """
+    dic_input = fileToDic(input_data)
+    df_had = df_had.rename(columns={" vca [m]":"tcg", " tca [m] Group 22; Version {0}":"vca".format(versienummer)})
     dara_tank_1 = datatanks(df_t1)
     dara_tank_2 = datatanks(df_t2)
     dara_tank_3 = datatanks(df_t3)
@@ -198,4 +199,4 @@ def importGrasshopperFiles(versienummer):
     dic_csa_tank_2 = dicCsaBallastTanks(df_tank2_csa)
     dic_csa_tank_3 = dicCsaBallastTanks(df_tank3_csa)    
     bouyant_csa = dicCsa(df_csa)
-    return dara_tank_1, dara_tank_2, dara_tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_ha, dic_shell_cross_sa, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance, bouyant_csa, positie_kraan, posities_tp
+    return dara_tank_1, dara_tank_2, dara_tank_3, data_bh1, data_bh2, data_bh, main_ship_particulars, data_ha, dic_shell_cross_sa, dic_csa_tank_1, dic_csa_tank_2, dic_csa_tank_3, resistance, bouyant_csa, positie_kraan, lcg_tp, cg_tp_tot, dic_input, tcg_tp, vcg_tp

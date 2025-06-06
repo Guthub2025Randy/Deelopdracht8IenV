@@ -103,3 +103,55 @@ def plotApprovedValues(lengte_schip, q, dwarskracht, buigend_moment, neutrale_as
     funcPlotFill(lengte_zonder_randwaardes, w, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
     funcPlotFill(lengte_zonder_randwaardes, spanning, "Lengte van het schip L [m]", "Buigspanning B(x) [Pa]", "De buigspanningslijn over de scheepslengte", "Resultaat", 'gold')
     return None
+
+def mainValuesAssign(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, bouyant_csa, positie_kraan, lcg_tp, cg_tp_totaal, dic_input, tcg_tp_lijst, vcg_tp_lijst):
+    cob = msp["COB [m]"]
+    h = float(msp["H [m]"])
+    bouyant_volume = float(msp["Buoyant Volume [m3]"])
+    length_schip = float(msp["Loa  [m]"])
+    it = float(msp["Inertia WPA around COF [m4]"][0])
+    l_shell = dic_shell_csa["X [m]"]
+    i_x_shell = dic_shell_csa["INERTIA_X[m4]"]
+    entrance_angle = float(msp["Waterline Entrace angle (WEA) [deg]"])
+    tussenstappen_lengte = dic_shell_csa["CENTROID_X[m]"]
+    hoogte_neutrale_as = dic_shell_csa["CENTROID_Z[m]"]
+    hoogte_kiel = dic_shell_csa["Z_Keel[m]"]
+    lcgs_tp = lcg_tp
+    transition_piece_amount = len(lcgs_tp)
+    lengte_cm = np.linspace(l_shell[0], l_shell[-1], int(((l_shell[-1] - l_shell[0]) * 100) + 1))
+    transom_bhd_thickness = 0.01 # m
+    rest_thickness = int(dic_input["mean shell thickness [mm]"]) / 1000 # m
+    straal_kraanhuis = 2
+    print("De weerstand op 14 knopen is:")
+    r_14knp = resistance.loc[8, '  Rtot [N]']
+    print(r_14knp)
+    kraan_lcg = float(positie_kraan[0])
+    kraan_tcg = float(positie_kraan[1])
+    kraan_vcg = float(positie_kraan[2])
+    weight_transition_piece = 5395500
+    swlmax = (weight_transition_piece)/0.94
+    weight_kraan_heisgerei = -swlmax
+    weight_kraan_boom = -swlmax*0.17
+    weight_kraan_huis = -swlmax*0.34
+    weight_transition_pieces = weight_transition_piece*transition_piece_amount
+    weight_kraan_totaal = weight_kraan_heisgerei + weight_kraan_huis + weight_kraan_boom 
+    straal_tp = 4
+    lcg_tp = cg_tp_totaal[0]
+    tcg_tp = cg_tp_totaal[1]
+    vcg_tp = cg_tp_totaal[2] + 10
+    lengte_kraan_fundatie = 4
+    draaihoogte_kraan = 1
+    jib_length = 32.5
+    zwenkhoek = 90
+    giekhoek = 60
+    lcg_kraanhuis = kraan_lcg
+    tcg_kraanhuis = kraan_tcg
+    vcg_kraanhuis = h + 1
+    lcg_kraanboom = kraan_lcg
+    tcg_kraanboom = kraan_tcg + (0.5 * jib_length * np.cos(np.deg2rad(giekhoek)))
+    vcg_kraanboom = (h + 1 + (0.5 * jib_length * np.sin(np.deg2rad(giekhoek))))
+    lcg_heisgerei = kraan_lcg
+    tcg_heisgerei = kraan_tcg + (jib_length * np.cos(np.deg2rad(giekhoek)))
+    vcg_heisgerei = (h + 1 + (jib_length * np.sin(np.deg2rad(giekhoek))))
+    weights_tp = np.array([weight_transition_piece, weight_transition_piece, weight_transition_piece, weight_transition_piece])
+    return cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, entrance_angle, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel, lcgs_tp, lengte_cm, transom_bhd_thickness, rest_thickness, straal_kraanhuis, r_14knp, kraan_lcg, kraan_tcg, kraan_vcg, weight_transition_piece, transition_piece_amount, swlmax, weight_kraan_heisgerei, weight_kraan_boom, weight_kraan_huis, weight_transition_pieces, weight_kraan_totaal, straal_tp, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, jib_length, zwenkhoek, giekhoek, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, weights_tp

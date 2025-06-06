@@ -328,13 +328,13 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     G_M = calculateG_M(bouyant_volume, SIt, vcg_schip, cob[2], it)
     print("De G_M van het schip is:")
     print(G_M)
-    output_1(versienummer, str(entrance_angle), r_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 
-             0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
-             bouyant_volume*WEIGHT_WATER, cob[0], cob[1], cob[2], 
-             calculateKrachtensom1(krachten3)[0]+(bouyant_volume*WEIGHT_WATER), (calculateKrachtensom1(krachten3)[0]*(lcg_schip - cob[0])), 
-             (calculateKrachtensom1(krachten3)[0]*(tcg_schip - cob[1])), 4, -weight_transition_piece*GRAVITATION_CONSTANT, lcg_tp, tcg_tp, vcg_tp, 0o3)
-    output_kraan(swlmax, -weight_transition_piece*GRAVITATION_CONSTANT, lengte_kraan_fundatie, draaihoogte_kraan, jib_length, zwenkhoek, 
-                 giekhoek, lcg_tp, tcg_tp, vcg_tp, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, 
-                 vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, 0o3)
     vul1, vul2, vul3 = vullingPercFunc(d1, d2, d3, momentensom1_, volume_t2, volume_t3)
+    output1(versienummer, str(entrance_angle), r_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 
+            0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
+            bouyant_volume*WEIGHT_WATER, cob[0], cob[1], cob[2], 
+            calculateKrachtensom1(krachten3)[0]+(bouyant_volume*WEIGHT_WATER), (calculateKrachtensom1(krachten3)[0]*(lcg_schip - cob[0])), 
+            (calculateKrachtensom1(krachten3)[0]*(tcg_schip - cob[1])), 4, -weight_transition_piece*GRAVITATION_CONSTANT, lcg_tp, tcg_tp, vcg_tp, 0o3)
+    outputKraan(swlmax, -weight_transition_piece*GRAVITATION_CONSTANT, lengte_kraan_fundatie, draaihoogte_kraan, jib_length, zwenkhoek, 
+                giekhoek, lcg_tp, tcg_tp, vcg_tp, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, 
+                vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, 0o3)
     return G_M
