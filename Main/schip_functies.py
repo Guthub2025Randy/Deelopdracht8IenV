@@ -100,7 +100,7 @@ def plotApprovedValues(lengte_schip, q, dwarskracht, buigend_moment, neutrale_as
     funcPlotFill(lengte_zonder_randwaardes, phi_accent, "Lengte van het schip L [m]", "φ(x)' [deg]", "De hoekverdraaiing in graden φ(x)' [deg] over de lengte van het schip L [m]", "De hoekverdraaiing φ(x)' [deg]", 'green')
     funcPlotFill(lengte_zonder_randwaardes, w_acc, "Lengte van het schip L [m]", "Doorbuiging w'(x) [m]", "Doorbuiging w'(x) [m] over de lengte van het schip L [m]", "Doorbuiging w'(x) [m]", 'brown')
     funcPlotFill(lengte_zonder_randwaardes, phi, "Lengte van het schip L [m]", "φ(x) [deg]", "Relatieve hoek in graden over de lengte van het schip", "Hoekverdraaiing φ(x) [deg]", "y")
-    funcPlotFill(lengte_zonder_randwaardes, w, "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
+    funcPlotFill(calcGarbageValues(lengte_zonder_randwaardes), calcGarbageValues(w), "Lengte van het schip L [m]", "Relatieve Doorbuiging w(x) [m]", "De relatieve doorbuiging over de lengte van het schip", "Doorbuiging w(x) [m]", "b")
     funcPlotFill(lengte_zonder_randwaardes, spanning, "Lengte van het schip L [m]", "Buigspanning B(x) [Pa]", "De buigspanningslijn over de scheepslengte", "Resultaat", 'gold')
     return None
 

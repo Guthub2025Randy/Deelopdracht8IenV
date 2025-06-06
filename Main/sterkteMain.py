@@ -136,9 +136,9 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_tp)
 def calculateSpiegel(arr_lengte, dic, huiddikte):
   fg_totaal = dic["Transom Area "][0]*huiddikte*WEIGHT_STAAL
   scaling = int(((len(arr_lengte)-1)/(arr_lengte[-1] - arr_lengte[0])))
-  fg_per_cm = fg_totaal/(scaling/20)
+  fg_per_cm = (1.5*fg_totaal)/(scaling/10)
   arr_gewicht = np.zeros(len(arr_lengte))
-  for i in range(int(scaling*0.5)):
+  for i in range(int(scaling)):
     arr_gewicht[i] += fg_per_cm
   return -arr_gewicht*(scaling/10)
 

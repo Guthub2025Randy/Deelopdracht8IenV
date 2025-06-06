@@ -93,5 +93,6 @@ def outputGlobaleSterkte(maximaal_moment, lmmilvda, maximale_afschuiving, lmailv
     ws["D95"] = lmailvda #Locatie Maximale afschuiving in lengte vanaf de achterloodlijn
     ws["D96"] = maximale_doorbuiging
     ws["D97"] = lmdilvda #Locatie Maximale doorbuiging in lengte vanaf de achterloodlijn
+    wb.save(bestandspad)
     return None
 
