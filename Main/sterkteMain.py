@@ -86,7 +86,6 @@ def hoekverdraaiingAcc(gereduceerd_moment_uitkomst, lengte_schip):
 
 def doorbuigingAcc(phi_accent, lengte_schip):
     w_acc = cumtrapz(lengte_schip, phi_accent, initial = 0)
-    w_acc[0]=0
     return w_acc
 
 #phi
@@ -135,8 +134,8 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_tp)
 
 def calculateSpiegel(arr_lengte, dic, huiddikte):
   fg_totaal = dic["Transom Area "][0]*huiddikte*WEIGHT_STAAL
-  scaling = int(((len(arr_lengte)-1)/(arr_lengte[-1] - arr_lengte[0])))
-  fg_per_cm = (1.5*fg_totaal)/(scaling/10)
+  scaling = int(((len(arr_lengte))/(arr_lengte[-1] - arr_lengte[0])))
+  fg_per_cm = (1.25*fg_totaal)/(scaling/10)
   arr_gewicht = np.zeros(len(arr_lengte))
   for i in range(int(scaling)):
     arr_gewicht[i] += fg_per_cm
@@ -283,7 +282,7 @@ def calcVezelafstand(centroid_cm, kiel_cm):
 
 def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel):
     scaling = ((len(lengte_cm)-1)/(lengte_cm[-1] - lengte_cm[0]))
-    opwaartse_Kracht = opwaartseKracht(bouyant_csa, lengte_cm)  * scaling
+    opwaartse_Kracht = opwaartseKracht(bouyant_csa, lengte_cm) * scaling
     traag = traagheidsmomentAsymptoot(i_x_shell, l_shell, lengte_cm, rest_thickness)
     Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm, scaling)
     kracht_TP = berekenKrachtVerdeling(lcgs_tp, -weights_tp, lengte_cm, straal_tp)

@@ -40,7 +40,7 @@ def main(versienummers):
             print(maximum_sterkte)
             print(rest_thickness)
             plotApprovedValues(lengte_cm, q, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag)
-            outputGlobaleSterkte(max(calcGarbageValues(buigend_moment)), lengte_cm[np.argmax(calcGarbageValues(buigend_moment))], 1, 1, max(calcGarbageValues(calcGarbageValues(calcGarbageValues(w)))), lengte_cm[np.argmax(calcGarbageValues(calcGarbageValues(calcGarbageValues(w))))], versienummer)
+            outputGlobaleSterkte(max(calcGarbageValues(buigend_moment)), lengte_cm[np.argmax(calcGarbageValues(buigend_moment))], 1, 1, min(calcGarbageValues(calcGarbageValues(calcGarbageValues(w)))), lengte_cm[np.argmin(calcGarbageValues(calcGarbageValues(calcGarbageValues(w))))], versienummer)
         else:
             print("G_M voldoet niet")
             return None
