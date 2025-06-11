@@ -241,7 +241,7 @@ def calculateG_M(onderwatervolume, SIt, KG, KB, It):
 def eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, rest_thickness, kraan_lcg, cob, dbh1, h, swlmax, weight_transition_pieces):
     #Tank 3: er wordt een waarde gekozen voor het volume van tank 3. Vervolgens wordt hiervan het gewicht en
     #het zwaartepunt bepaald
-    volume_t3 = 8000.8358 # d3["vol_3"][4] - 625
+    volume_t3 = d3["vol_3"][4] - 625
     kracht_t3 = volume_t3*WEIGHT_WATER
     locatie_t3 = interpolerenLocatie(d3, volume_t3, 3)
     #Tank 1: om de vulling van tank 1 te bepalen worden alle momenten bij elkaar opgeteld. Eerst worden er lijsten

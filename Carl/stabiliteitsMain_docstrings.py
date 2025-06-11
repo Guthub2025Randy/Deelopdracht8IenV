@@ -107,93 +107,93 @@ def calculateMomentensom(posities, krachten):
     return momentensom
 
 def calculateVullingT1(arr_volume, arr_tcg, moment_som, arr_vulling_pc, watergewicht):
-  """
-  Deze functie berekent het volume van tank 1 aan de hand van het transversale moment door een volume te
-  kiezen dat dit moment compenseert. Eerst wordt er op basis van de arrays met de waarden voor het
-  volume en het tcg op de bekende vullingsgraden een array met de momenten op die vullingsgraden opgesteld.
-  Vervolgens wordt deze array geïnterpoleerd en uitgezet tegenover het volume. Ten slotte wordt de volumewaarde
-  die correspondeert met het opgegeven transversale moment (moment_som[0]) bepaald en teruggegeven.
-  Inputs:
-  arr_volume (np.array): de array met tankvolumes uit het tankbestand uit grasshopper in m³
-  arr_tcg (np.array): de array met tcg's van de tankvulling bij de vullingen van arr_volume
-  moment_som (np.array): het te corrigeren moment in Nm
-  arr_vulling_pc (np.array): de array met vullingspercentages die overeenkomen met de vullingen van arr_volume
-  water_gewicht (float): dichtheid water in N/m³
-  Returns:
-  volume_acc(float): volume van het water in tank1 om transversaal krachtevenwicht te krijgen in m³
-  """
-  arr_moment = arr_volume*arr_tcg*watergewicht
-  f = ip.interp1d(arr_moment,arr_volume, kind="cubic")
-  volume_acc = f(moment_som[0])
-  #grafiek
-  f2 = ip.interp1d(arr_vulling_pc, arr_volume, kind="cubic")
-  xnew = np.linspace(arr_vulling_pc[0], arr_vulling_pc[-1], 10000)
-  ynew = f2(xnew)
-  plt.figure(figsize=(8,5))
-  plt.plot(xnew, ynew, linestyle='-', color = "b", label='Tankvolume vs moment Tank 1')
-  plt.plot(arr_vulling_pc, arr_volume,'o', color='r')
-  plt.xlabel("Vullingspercentage (%)")
-  plt.ylabel("Volume (m³)")
-  plt.title("Verband tussen vullingspercentage en volume in tank 1")
-  plt.legend()
-  plt.grid(True)
-  plt.show()
-  plt.close()
-  return volume_acc
+    """
+    Deze functie berekent het volume van tank 1 aan de hand van het transversale moment door een volume te
+    kiezen dat dit moment compenseert. Eerst wordt er op basis van de arrays met de waarden voor het
+    volume en het tcg op de bekende vullingsgraden een array met de momenten op die vullingsgraden opgesteld.
+    Vervolgens wordt deze array geïnterpoleerd en uitgezet tegenover het volume. Ten slotte wordt de volumewaarde
+    die correspondeert met het opgegeven transversale moment (moment_som[0]) bepaald en teruggegeven.
+    Inputs:
+    arr_volume (np.array): de array met tankvolumes uit het tankbestand uit grasshopper in m³
+    arr_tcg (np.array): de array met tcg's van de tankvulling bij de vullingen van arr_volume
+    moment_som (np.array): het te corrigeren moment in Nm
+    arr_vulling_pc (np.array): de array met vullingspercentages die overeenkomen met de vullingen van arr_volume
+    water_gewicht (float): dichtheid water in N/m³
+    Returns:
+    volume_acc(float): volume van het water in tank1 om transversaal krachtevenwicht te krijgen in m³
+    """
+    arr_moment = arr_volume*arr_tcg*watergewicht
+    f = ip.interp1d(arr_moment,arr_volume, kind="cubic")
+    volume_acc = f(moment_som[0])
+    #grafiek
+    f2 = ip.interp1d(arr_vulling_pc, arr_volume, kind="cubic")
+    xnew = np.linspace(arr_vulling_pc[0], arr_vulling_pc[-1], 10000)
+    ynew = f2(xnew)
+    plt.figure(figsize=(8,5))
+    plt.plot(xnew, ynew, linestyle='-', color = "b", label='Tankvolume vs moment Tank 1')
+    plt.plot(arr_vulling_pc, arr_volume,'o', color='r')
+    plt.xlabel("Vullingspercentage (%)")
+    plt.ylabel("Volume (m³)")
+    plt.title("Verband tussen vullingspercentage en volume in tank 1")
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+    plt.close()
+    return volume_acc
 
 def positiesmetkrachtenlijst2(dic_bulk, positie_w_t1, kracht_w_t1, positie_w_t3, kracht_w_t3, h, cob, staalgewicht, plaatdikte_bh, kraan_lcg, swl_max, dic_hull, plaatdikte_romp,  opwaartse_kracht, weight_transition_pieces):
-  """
-  Het doel van deze functie is twee lijsten te creëeren: een met alle krachten en een met de corresponderende posities. Alleen
-  het gewicht van tank 2 wordt nog niet gevraagd als argument, zodat dat met deze lijsten kan worden berekend.
-  De krachten lijst bestaat uit floats terwijl de positielijst uit lijsten bestaat. Deze lijsten bevatten steeds drie elementen,
-  respectievelijk de lcg, tcg en vcg van de massa (of het cob in het geval van de opdrijvende kracht). Hiervoor wordt er geïtereerd
-  over de dictionaries waar de gegevens van de romp en schotten instaan, om daar de oppervlakten en zwaartepunten uit te halen. De
-  oppervlakten worden met het staalgewicht en de dikte vermenigvuldigd om de massa te krijgen. Vervolgens worden de zwaartekrachten
-  van de vullingen van tank 1 en tank 3 toegevoegd en de opdrijvende kracht, alsook hun zwaartepunten. Tot slot worden de gegevens
-  kraan toegevoegd door middel van de kraanfunctie, die de zwaartekracht en zwaartepunt van de kraan bepaalt.
-  Deze functie doet exact hetzelfde als de functie calcPositiesmekrachtenlijst2, behalve dat hier het gewicht en zwaartepunt van tank 1
-  niet als arguments worden gevraagd. Deze functie genereert dus lijsten waarmee een resultant transversaal moment kan worden
-  berekend dat gelijk gecorrigeerd moet worden door de vulling van tank 1.
-  Inputs:
-  dic_bulkheads (dictionary): dictionary met gegevens van de tankschotten, afkomstig uit het bhdata bestand
-  positie_w_t1 (np.array): locatie van het zwaartepunt van de vulling van tank 1
-  kracht_w_t1 (float): gewicht van de vulling van tank 1 in N
-  positie_w_t3 (np.array): locatie van het zwaartepunt van de vulling van tank 3 (x, y en z-coördinaten).
-  kracht_w_t3 (float): gewicht van de vulling van tank 3 in N
-  h (float): holte in m
-  cob (np.array): drukkingspunt (x,y en z-coördinaten)
-  staalgewicht (float): dichtheid van staal in kg/m³
-  plaatdikte_bh (float): plaatdikte van de schotten en spiegel in m
-  kraan_lcg (float): lcg van de kraan
-  swl_max (float): in N
-  dictionary_hull (dictionary): dictionary met de gegevens van de romp uit het HullAreaData bestand
-  plaatdikte_romp (float): plaatdikte van de huid, dek en bodem in m
-  opwaartse_kracht (float): in N
-  weight_transition_pieces (float): gewicht van alle transition pieces tezamen in N
-  Returns:
-  krachten2 (list): lijst met alle krachten
-  posties2 (list): lijst met alle aangrijppunten van de krachten
-  """
-  krachten = []
-  positie = []
-  for x in dic_bulk:
-    krachten.append(-dic_bulk[x][0]*staalgewicht*plaatdikte_bh)
-    positie.append(dic_bulk[x][1:])
-  for x in dic_hull:
-    if x == "Transom Area ":
-      krachten.append(-dic_hull[x][0]*staalgewicht*plaatdikte_bh)
-      positie.append(dic_hull[x][1:])
-    else:
-      krachten.append(-dic_hull[x][0]*staalgewicht*plaatdikte_romp)
-      positie.append(dic_hull[x][1:])
-  krachten.append(-kracht_w_t3)
-  krachten.append(opwaartse_kracht)
-  krachten.append(-kracht_w_t1)
-  positie.append(positie_w_t3)
-  positie.append(cob)
-  positie.append(positie_w_t1)
-  krachten2, posities2 = calculateWeightKraan(krachten, positie, h, kraan_lcg, swl_max, weight_transition_pieces)
-  return krachten2, posities2
+    """
+    Het doel van deze functie is twee lijsten te creëeren: een met alle krachten en een met de corresponderende posities. Alleen
+    het gewicht van tank 2 wordt nog niet gevraagd als argument, zodat dat met deze lijsten kan worden berekend.
+    De krachten lijst bestaat uit floats terwijl de positielijst uit lijsten bestaat. Deze lijsten bevatten steeds drie elementen,
+    respectievelijk de lcg, tcg en vcg van de massa (of het cob in het geval van de opdrijvende kracht). Hiervoor wordt er geïtereerd
+    over de dictionaries waar de gegevens van de romp en schotten instaan, om daar de oppervlakten en zwaartepunten uit te halen. De
+    oppervlakten worden met het staalgewicht en de dikte vermenigvuldigd om de massa te krijgen. Vervolgens worden de zwaartekrachten
+    van de vullingen van tank 1 en tank 3 toegevoegd en de opdrijvende kracht, alsook hun zwaartepunten. Tot slot worden de gegevens
+    kraan toegevoegd door middel van de kraanfunctie, die de zwaartekracht en zwaartepunt van de kraan bepaalt.
+    Deze functie doet exact hetzelfde als de functie calcPositiesmekrachtenlijst2, behalve dat hier het gewicht en zwaartepunt van tank 1
+    niet als arguments worden gevraagd. Deze functie genereert dus lijsten waarmee een resultant transversaal moment kan worden
+    berekend dat gelijk gecorrigeerd moet worden door de vulling van tank 1.
+    Inputs:
+    dic_bulkheads (dictionary): dictionary met gegevens van de tankschotten, afkomstig uit het bhdata bestand
+    positie_w_t1 (np.array): locatie van het zwaartepunt van de vulling van tank 1
+    kracht_w_t1 (float): gewicht van de vulling van tank 1 in N
+    positie_w_t3 (np.array): locatie van het zwaartepunt van de vulling van tank 3 (x, y en z-coördinaten).
+    kracht_w_t3 (float): gewicht van de vulling van tank 3 in N
+    h (float): holte in m
+    cob (np.array): drukkingspunt (x,y en z-coördinaten)
+    staalgewicht (float): dichtheid van staal in kg/m³
+    plaatdikte_bh (float): plaatdikte van de schotten en spiegel in m
+    kraan_lcg (float): lcg van de kraan
+    swl_max (float): in N
+    dictionary_hull (dictionary): dictionary met de gegevens van de romp uit het HullAreaData bestand
+    plaatdikte_romp (float): plaatdikte van de huid, dek en bodem in m
+    opwaartse_kracht (float): in N
+    weight_transition_pieces (float): gewicht van alle transition pieces tezamen in N
+    Returns:
+    krachten2 (list): lijst met alle krachten
+    posties2 (list): lijst met alle aangrijppunten van de krachten
+    """
+    krachten = []
+    positie = []
+    for x in dic_bulk:
+      krachten.append(-dic_bulk[x][0]*staalgewicht*plaatdikte_bh)
+      positie.append(dic_bulk[x][1:])
+    for x in dic_hull:
+      if x == "Transom Area ":
+        krachten.append(-dic_hull[x][0]*staalgewicht*plaatdikte_bh)
+        positie.append(dic_hull[x][1:])
+      else:
+        krachten.append(-dic_hull[x][0]*staalgewicht*plaatdikte_romp)
+        positie.append(dic_hull[x][1:])
+    krachten.append(-kracht_w_t3)
+    krachten.append(opwaartse_kracht)
+    krachten.append(-kracht_w_t1)
+    positie.append(positie_w_t3)
+    positie.append(cob)
+    positie.append(positie_w_t1)
+    krachten2, posities2 = calculateWeightKraan(krachten, positie, h, kraan_lcg, swl_max, weight_transition_pieces)
+    return krachten2, posities2
 
 def calculateKrachtensom1(krachten):
     """
@@ -222,19 +222,19 @@ def calculateVullingT2(Krachtensom, watergewicht):
     return Volume_T2
 
 def calculateKrachtsom2(krachtsom1, dic, plaatdikte, staalgewicht):
-  """
-  Deze functie neemt de eerste krachtsom en voegt hier het gewicht van de bulkheads van tank 2 aan toe.
-  Inputs:
-  krachtensom1 (float): som van alle krachten behalve die van de schotten van tank 2 in N
-  dic (dictionary): dictionary met gegevens van de tankschotten uit het bestand BHData
-  plaatdikte (float): plaatdikte van de schotten in m
-  staalgewicht (float): dichtheid van staal in N/m³
-  """
-  oppervlakte_bh_tank2 = 0
-  for x in dic:
-    oppervlakte_bh_tank2 += dic[x][0]
-  tweedekrachtsom = krachtsom1 + (oppervlakte_bh_tank2*plaatdikte*staalgewicht)
-  return tweedekrachtsom
+    """
+    Deze functie neemt de eerste krachtsom en voegt hier het gewicht van de bulkheads van tank 2 aan toe.
+    Inputs:
+    krachtensom1 (float): som van alle krachten behalve die van de schotten van tank 2 in N
+    dic (dictionary): dictionary met gegevens van de tankschotten uit het bestand BHData
+    plaatdikte (float): plaatdikte van de schotten in m
+    staalgewicht (float): dichtheid van staal in N/m³
+    """
+    oppervlakte_bh_tank2 = 0
+    for x in dic:
+      oppervlakte_bh_tank2 += dic[x][0]
+    tweedekrachtsom = krachtsom1 + (oppervlakte_bh_tank2*plaatdikte*staalgewicht)
+    return tweedekrachtsom
 
 def lcgTank2(momentensom2,krachtensom2):
     """
@@ -280,23 +280,23 @@ def calculateIttanks(Dictionary_Traagheidsmoment1, Dictionary_Traagheidsmoment2,
     return SIt
 
 def removeBuoyantForce(lijst_positie, lijst_krachten, center_buoyancy, kracht_opdrijvend):
-  """
-  Deze functie haalt de cob en de opdrijvende kracht uit de lijsten met alle massa's en alle posities,
-  zodat hiermee de totale zwaartepunten kunnen worden bepaald.
-  lijst_positie (list): lijst met aangrijpingspunten van alle krachten
-  lijst_krachten (list): lijst met grootten van alle krachten in N
-  center_buoyancy (np.array): drukkingspunt
-  kracht_opdrijvend (float): opdrijvende kracht in N
-  Returns:
-  lijst_positie (list): lijst met zwaartepunten van alle onderdelen van het schip
-  lijst_krachten (list): lijst met zwaartekrachten van elk onderdeel van het schip
-  """
-  lijst_positie = [arr for arr in lijst_positie if not np.array_equal(arr, center_buoyancy)]
-  for element in lijst_krachten:
-    if element == kracht_opdrijvend:
-      lijst_krachten.remove(element)
-      break
-  return lijst_positie, lijst_krachten
+    """
+    Deze functie haalt de cob en de opdrijvende kracht uit de lijsten met alle massa's en alle posities,
+    zodat hiermee de totale zwaartepunten kunnen worden bepaald.
+    lijst_positie (list): lijst met aangrijpingspunten van alle krachten
+    lijst_krachten (list): lijst met grootten van alle krachten in N
+    center_buoyancy (np.array): drukkingspunt
+    kracht_opdrijvend (float): opdrijvende kracht in N
+    Returns:
+    lijst_positie (list): lijst met zwaartepunten van alle onderdelen van het schip
+    lijst_krachten (list): lijst met zwaartekrachten van elk onderdeel van het schip
+    """
+    lijst_positie = [arr for arr in lijst_positie if not np.array_equal(arr, center_buoyancy)]
+    for element in lijst_krachten:
+      if element == kracht_opdrijvend:
+        lijst_krachten.remove(element)
+        break
+    return lijst_positie, lijst_krachten
 
 def calculateZwaartepuntschip(posities, krachten):
     """

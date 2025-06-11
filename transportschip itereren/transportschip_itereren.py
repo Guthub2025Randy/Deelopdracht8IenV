@@ -63,7 +63,7 @@ def calculateWeightKraan(Krachten, Posities, H, kraan_lcg, SWLMax):
     elk een positie in het xyz vlak representeren, respectievelijk de zwaartekrachten en hun aangrijpingspunten toe te voegen.
     Ook het gewicht van de deklading (ZwaarteWindmolen) wordt toegevoegd. De aangevulde lijsten worden teruggegeven.
     """
-    ZwaarteWindmolen = -5395500*8
+    ZwaarteWindmolen = -WEIGHT_TRANSITION_PIECES
     arrayPositieWindmolen = np.array([35, -2, H+10])
     Posities.append(arrayPositieWindmolen)
     Krachten.append(ZwaarteWindmolen)
