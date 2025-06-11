@@ -282,15 +282,15 @@ def calcVezelafstand(centroid_cm, kiel_cm):
 
 def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel):
     scaling = ((len(lengte_cm)-1)/(lengte_cm[-1] - lengte_cm[0]))
-    opwaartse_Kracht = opwaartseKracht(bouyant_csa, lengte_cm) * scaling
+    opwaartse_kracht = opwaartseKracht(bouyant_csa, lengte_cm) * scaling
     traag = traagheidsmomentAsymptoot(i_x_shell, l_shell, lengte_cm, rest_thickness)
-    Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm, scaling)
-    kracht_TP = berekenKrachtVerdeling(lcgs_tp, -weights_tp, lengte_cm, straal_tp)
+    kracht_ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm, scaling)
+    kracht_tp = berekenKrachtVerdeling(lcgs_tp, -weights_tp, lengte_cm, straal_tp)
     kracht_kraan = calcParaboolFunctie(kraan_lcg, weight_kraan_totaal, lengte_cm, straal_kraanhuis)
     neerwaartse_kracht_1 = calculateSpiegel(lengte_cm, dha, transom_bhd_thickness)
     neerwaartse_kracht_2 = calculateTrapezium(lengte_cm, dbh, transom_bhd_thickness)
     neerwaartse_kracht_3 = calculateHuid(lengte_cm, 1, dic_shell_csa)
-    q = opwaartse_Kracht + Kracht_Ballast + kracht_kraan + kracht_TP + neerwaartse_kracht_2 + neerwaartse_kracht_3 + neerwaartse_kracht_1
+    q = opwaartse_kracht + kracht_ballast + kracht_kraan + kracht_tp + neerwaartse_kracht_2 + neerwaartse_kracht_3 + neerwaartse_kracht_1
     #plotten van q
     dwars_kracht = dwarskracht(q, lengte_cm)
     #numpy masking is onze keuze voor randwaardes
@@ -311,4 +311,4 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_ta
     vezelafstand_in_cm = calcVezelafstand(centroid_z_in_cm, kiel_z_in_cm)
     spanning = calcGarbageValues(buigend_moment * vezelafstand_in_cm) / traag    
     maximale_spanning = max(spanning)
-    return maximale_spanning, q, dwars_kracht, buigend_moment, centroid_z_in_cm, spanning, reduct_m, hoekverdraai_accent, doorbuig_acc, hoekverdraai, doorbuig, traag
+    return maximale_spanning, q, dwars_kracht, buigend_moment, centroid_z_in_cm, spanning, reduct_m, hoekverdraai_accent, doorbuig_acc, hoekverdraai, doorbuig, traag, opwaartse_kracht, neerwaartse_kracht_3, kracht_ballast, neerwaartse_kracht_2, neerwaartse_kracht_1, kracht_kraan, kracht_tp

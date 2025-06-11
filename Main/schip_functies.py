@@ -86,14 +86,29 @@ def calculateWeightKraan(krachten, posities, h, kraan_lcg, swlmax, weight_transi
     krachten.append(zwaarte_windmolen)
     return krachten, posities
 
+def plotVerdeeldeBelasting(lengte_schip, csa, shell, ballast, tankwanden, spiegel, kraan, lading, verdeelde_belasting):
+    plt.figure(figsize=(30,20))
+    plt.title("Verdeelde belasting per onderdeel")
+    plt.plot(lengte_schip, -csa, label="Opdrijvende kracht", color='darkblue', linewidth=0.7)
+    plt.plot(lengte_schip, -shell, label="Huid", color='orange', linewidth=0.7)
+    plt.plot(lengte_schip, -ballast, label="Ballastwater", color='green', linewidth=0.7)
+    plt.plot(lengte_schip, -tankwanden, label="Tankwanden", color='brown', linewidth=0.7)
+    plt.plot(lengte_schip, -spiegel, label="Spiegel", color='pink', linewidth=0.7)
+    plt.plot(lengte_schip, -kraan, label="Kraan", color='grey', linewidth=0.7)
+    plt.plot(lengte_schip, -lading, label="Transition pieces", color='lightblue', linewidth=0.7)
+    plt.plot(lengte_schip, -verdeelde_belasting, label="Verdeelde belasting", color='cyan', linewidth=0.7)
+    plt.xlabel("x [m]")
+    plt.ylabel("Belasting [N]")
+    plt.legend()
+    plt.show()
+    plt.close()
+    return None
 
-def plotApprovedValues(lengte_schip, q, dwarskracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag):
-    # Niet nodige plots achter de hashtags
-    # funcPlotFill(lengte_schip, Neerwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Neerwaartse kracht (Ballast) [N]", "De verdeelde belasting van het ballastwater over de lengte van het schip", "Ballast belasting [N]", 'r')
-    # funcPlotFill(lengte_schip, -opwaartse_kracht_cm, "Lengte van het schip (L) [m]", "Opwaartse kracht (p) in [N]", "De opwaartse kracht (p) in [N] over de lengte van het schip (L) [m]", "Opwaartse kracht (p) in [N]", 'b')
+def plotApprovedValues(lengte_schip, q, dwarskracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, csa, shell, ballast, tankwanden, spiegel, kraan, lading):
     lengte_zonder_randwaardes = calcGarbageValues(lengte_schip)
     funcPlotFill(lengte_zonder_randwaardes, traag, "Lengte van het schip (L) [m]", "Traagheidsmoment I [m4]", "Het traagheidsmoment I [m4] over de lengte van het schip L [m]", "Traagheidsmoment I [m4]", 'purple')
     funcPlotFill(lengte_schip, -q, "Lengte van het schip (L) in [m]", "Netto verdeelde belasting (q) in [N]", "De netto verdeelde belasting", 'Netto load',"black")
+    plotVerdeeldeBelasting(lengte_schip, csa, shell, ballast, tankwanden, spiegel, kraan, lading, q)
     funcPlotFill(lengte_schip, dwarskracht, "Lengte van het schip L [m]", "Dwarskracht V(x) [N]", "De dwarskracht V(x) [N] over de lengte van het schip L [m]", "Dwarskracht V(x)", 'orange')
     funcPlotFill(lengte_schip, buigend_moment, "Lengte van het schip L [m]", "Buigend moment M(x) [Nm]", "Het buigend moment M(x) [Nm] over de lengte van het schip L [m]", "Buigend moment M(x)", 'yellow')
     funcPlotFill(lengte_zonder_randwaardes, reduct_m, "Lengte van het schip (L) in [m]", "Gereduceerde moment (M/(E*I)) in [Nm]", "Het gereduceerde moment", 'Gereduceerde moment', 'black')
