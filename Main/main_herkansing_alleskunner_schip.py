@@ -15,14 +15,14 @@ Original file is located at
 """
 
 from bibliotheek import *
-from schip_functies import *
+from schipFuncties import *
 from sterkteMain import *
 from stabiliteitsMain import *
 from importGrasshopperFiles import *
 import matplotlib.pyplot as plt
 import numpy as np
 
-versienummers = np.array([1,2,3])
+versienummers = np.array([1,2,3,4,5,6,7,8,9])
 
 def main(versienummers):
     g_m_en = []
@@ -36,7 +36,7 @@ def main(versienummers):
         g_m = stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces, it, entrance_angle, r_14knp, weight_transition_piece, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, zwenkhoek, giekhoek, jib_length, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei)
         g_m_en.append(g_m)
         if g_m > 1:
-            """maximum_sterkte, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
+            maximum_sterkte, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
             while maximum_sterkte > VLOEIGRENS:
                 rest_thickness += 0.001
                 maximum_sterkte, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
@@ -44,15 +44,10 @@ def main(versienummers):
             print(maximum_sterkte)
             print(rest_thickness)
             plotApprovedValues(lengte_cm, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading)
-            outputGlobaleSterkte(max(calcGarbageValues(buigend_moment)), lengte_cm[np.argmax(calcGarbageValues(buigend_moment))], 1, 1, min(calcGarbageValues(calcGarbageValues(calcGarbageValues(w)))), lengte_cm[np.argmin(calcGarbageValues(calcGarbageValues(calcGarbageValues(w))))], versienummer)"""
+            outputGlobaleSterkte(max(calcGarbageValues(buigend_moment)), lengte_cm[np.argmax(calcGarbageValues(buigend_moment))], 1, 1, min(calcGarbageValues(calcGarbageValues(calcGarbageValues(w)))), lengte_cm[np.argmin(calcGarbageValues(calcGarbageValues(calcGarbageValues(w))))], versienummer)
         else:
             print("G_M voldoet niet")
             return None
     return g_m_en, weerstanden
 
 g_m_enen, weerstanden = main(versienummers)
-plt.bar(versienummers, g_m_enen)
-plt.xlabel("versies")
-plt.ylabel("G_M")
-plt.title("G_M variatie over de verschillende schepen")
-plt.show()
