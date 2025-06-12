@@ -8,8 +8,8 @@ Created on Wed May  7 11:11:28 2025
 from importGrasshopperFiles import *
 from bibliotheek import *
 import matplotlib.pyplot as plt
-from schip_functies import *
-from output_code import *
+from schipFuncties import *
+from outputCode import *
 
 def calculateOpdrijvendeKracht(onderwater_volume):
     """
@@ -401,7 +401,7 @@ def tankEen(dictio_1, momentensom):
     kr_t1 (float): gewicht vulling tank 1
     loca_t1 (np.array): zwaartepunt vulling tank 1
     """    
-    volu_t1 = calculateVullingT1(dictio_1['vol_1'], dictio_1['tcg_1'], momentensom, dictio_1['vulling_%_1'][:7], WEIGHT_WATER)
+    volu_t1 = calculateVullingT1(dictio_1['vol_1'], dictio_1['tcg_1'], momentensom, dictio_1['vulling_%_1'][:7])
     kr_t1 = volu_t1*WEIGHT_WATER
     loca_t1 = interpolerenLocatie(dictio_1, volu_t1, 1)
     return volu_t1, kr_t1, loca_t1

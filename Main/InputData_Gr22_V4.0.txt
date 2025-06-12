@@ -1,11 +1,11 @@
 INPUT DATA Group 22; Version 4.0
-Loa [m],150
+Loa [m],135
 Boa [m],24
 Doa [m],15
-Tmoulded [m],7.991
+Tmoulded [m],7.988
 Lpp/L0.85H [-],0.94
 % Length aft Shoulder [%],49
-Midship Length [m],53.298
+Midship Length [m],47.9682
 Location of midship [% of Lpp],50
 Bilge Radius [m],1
 % Length fwd shoulder [%],38
@@ -13,7 +13,7 @@ Location of bow intermediate curve [%],61
 Bow tangency shear angle [deg],46
 heel [deg],0
 trim [deg],0
-mean shell thickness [mm],9
+mean shell thickness [mm],12
 Number of ordinates [-],8
 number of waterlines [-],4
 number of buttocks [-],4

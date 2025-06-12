@@ -18,9 +18,8 @@ from bibliotheek import *
 from schipFuncties import *
 from sterkteMain import *
 from stabiliteitsMain import *
-from importGrasshopperFiles import *
-import matplotlib.pyplot as plt
-import numpy as np
+from importGrasshopperFiles import importGrasshopperFiles
+from outputCode import *
 
 versienummers = np.array([1,2,3,4,5,6,7,8,9])
 

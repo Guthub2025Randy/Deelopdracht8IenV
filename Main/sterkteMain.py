@@ -7,8 +7,8 @@ Created on Mon May 12 13:21:19 2025
 from importGrasshopperFiles import *
 from bibliotheek import *
 import matplotlib.pyplot as plt
-from schip_functies import *
-from output_code import *
+from schipFuncties import *
+from outputCode import *
 
 # Begin deelopdracht 8
 def opwaartseKracht(dictio_CSA, lengte_schip):

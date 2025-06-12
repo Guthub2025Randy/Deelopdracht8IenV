@@ -4,8 +4,6 @@ Created on Wed May  7 11:08:35 2025
 
 @author: CWMaz
 """
-
-from openpyxl import load_workbook
 from bibliotheek import *
 
 def outputKraan(swlmax, gewichttransitionpiece, lengte_kraan_fundatie, draaihoogte_kraan, jib_length, zwenkhoek, giekhoek, lcg_tp, tcg_tp, vcg_tp, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, versienummer):
