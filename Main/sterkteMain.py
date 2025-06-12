@@ -7,8 +7,8 @@ Created on Mon May 12 13:21:19 2025
 from importGrasshopperFiles import *
 from bibliotheek import *
 import matplotlib.pyplot as plt
-from schip_functies import *
-from output_code import *
+from schipFuncties import *
+from outputCode import *
 
 # Begin deelopdracht 8
 def opwaartseKracht(dictio_CSA, lengte_schip):
@@ -86,7 +86,6 @@ def hoekverdraaiingAcc(gereduceerd_moment_uitkomst, lengte_schip):
 
 def doorbuigingAcc(phi_accent, lengte_schip):
     w_acc = cumtrapz(lengte_schip, phi_accent, initial = 0)
-    w_acc[0]=0
     return w_acc
 
 #phi
@@ -98,8 +97,6 @@ def hoekverdraaiing(phi_acc, lengte_schip, c):
 #w
 def doorbuiging(w_acc, lengte_schip, c):
     w = w_acc + c*(lengte_schip - lengte_schip[0])
-    w[0]=0
-    w[-1]=0
     return w
 
 def traagheidsmomentAsymptoot(traag_shell, l_shell, lengte_in_cm, huiddikte):
@@ -137,10 +134,10 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_tp)
 
 def calculateSpiegel(arr_lengte, dic, huiddikte):
   fg_totaal = dic["Transom Area "][0]*huiddikte*WEIGHT_STAAL
-  scaling = int(((len(arr_lengte)-1)/(arr_lengte[-1] - arr_lengte[0])))
-  fg_per_cm = fg_totaal/(scaling/10)
+  scaling = int(((len(arr_lengte))/(arr_lengte[-1] - arr_lengte[0])))
+  fg_per_cm = (1.25*fg_totaal)/(scaling/10)
   arr_gewicht = np.zeros(len(arr_lengte))
-  for i in range(int(scaling*1.5)):
+  for i in range(int(scaling)):
     arr_gewicht[i] += fg_per_cm
   return -arr_gewicht*(scaling/10)
 
@@ -275,26 +272,25 @@ def calcNeutraleAs(lengte_schip, tussenstappen_lengte, hoogte_neutrale_as):
     return volledig2
 
 def calcKiel(lengte_schip, tussenstappen_lengte, hoogte_kiel):
-    geinterpoleerd= ip.interp1d(tussenstappen_lengte, hoogte_kiel, kind="quadratic", fill_value="extrapolate")
-    geinterpoleerd2=geinterpoleerd(lengte_schip)
+    geinterpoleerd = ip.interp1d(tussenstappen_lengte, hoogte_kiel, kind="quadratic", fill_value="extrapolate")
+    geinterpoleerd2 = geinterpoleerd(lengte_schip)
     return geinterpoleerd2 
 
-def calcVezelafstand(centroidCM, kielCM):
-    vezelafstand= centroidCM-kielCM
+def calcVezelafstand(centroid_cm, kiel_cm):
+    vezelafstand= centroid_cm - kiel_cm
     return vezelafstand
 
-def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcg_TP, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_TP, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel):
-    # Begin deelopdracht 8
+def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel):
     scaling = ((len(lengte_cm)-1)/(lengte_cm[-1] - lengte_cm[0]))
-    opwaartse_Kracht = opwaartseKracht(bouyant_csa, lengte_cm)  * scaling
+    opwaartse_kracht = opwaartseKracht(bouyant_csa, lengte_cm) * scaling
     traag = traagheidsmomentAsymptoot(i_x_shell, l_shell, lengte_cm, rest_thickness)
-    Kracht_Ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm, scaling)
-    kracht_TP = berekenKrachtVerdeling(lcg_TP, -weights_TP, lengte_cm, straal_tp)
+    kracht_ballast = ballastwaterKracht(dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, lengte_cm, scaling)
+    kracht_tp = berekenKrachtVerdeling(lcgs_tp, -weights_tp, lengte_cm, straal_tp)
     kracht_kraan = calcParaboolFunctie(kraan_lcg, weight_kraan_totaal, lengte_cm, straal_kraanhuis)
     neerwaartse_kracht_1 = calculateSpiegel(lengte_cm, dha, transom_bhd_thickness)
     neerwaartse_kracht_2 = calculateTrapezium(lengte_cm, dbh, transom_bhd_thickness)
     neerwaartse_kracht_3 = calculateHuid(lengte_cm, 1, dic_shell_csa)
-    q = opwaartse_Kracht + Kracht_Ballast + kracht_kraan + kracht_TP + neerwaartse_kracht_2 + neerwaartse_kracht_3 + neerwaartse_kracht_1
+    q = opwaartse_kracht + kracht_ballast + kracht_kraan + kracht_tp + neerwaartse_kracht_2 + neerwaartse_kracht_3 + neerwaartse_kracht_1
     #plotten van q
     dwars_kracht = dwarskracht(q, lengte_cm)
     #numpy masking is onze keuze voor randwaardes
@@ -310,12 +306,9 @@ def sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_ta
     c = doorbuig_acc[-1]/length_schip
     hoekverdraai = hoekverdraaiing(hoekverdraai_accent, lengte_zonder_rand, c)
     doorbuig = doorbuiging(doorbuig_acc, lengte_zonder_rand, c)
-    #output_globale_sterkte(Maximaal_moment, LMmilvda, Maximale_afschuiving, LMailvda, Maximale_doorbuiging, LMdilvda)
     centroid_z_in_cm = calcNeutraleAs(lengte_cm, tussenstappen_lengte, hoogte_neutrale_as)
     kiel_z_in_cm = calcKiel(lengte_cm, tussenstappen_lengte, hoogte_kiel)
     vezelafstand_in_cm = calcVezelafstand(centroid_z_in_cm, kiel_z_in_cm)
     spanning = calcGarbageValues(buigend_moment * vezelafstand_in_cm) / traag    
     maximale_spanning = max(spanning)
-    return maximale_spanning, q, dwars_kracht, buigend_moment, centroid_z_in_cm, spanning, reduct_m, hoekverdraai_accent, doorbuig_acc, hoekverdraai, doorbuig, traag
-
-
+    return maximale_spanning, q, dwars_kracht, buigend_moment, centroid_z_in_cm, spanning, reduct_m, hoekverdraai_accent, doorbuig_acc, hoekverdraai, doorbuig, traag, opwaartse_kracht, neerwaartse_kracht_3, kracht_ballast, neerwaartse_kracht_2, neerwaartse_kracht_1, kracht_kraan, kracht_tp
