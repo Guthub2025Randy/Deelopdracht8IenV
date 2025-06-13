@@ -127,7 +127,8 @@ def importGrasshopperFiles(versienummer):
 
     def traagheidsdic(df_I):
         """
-        deze functie vraagt een dataframe en plaatst de relevante data in een dictionary en geeft deze vervolgens terug
+        deze functie vraagt een dataframe en plaatst de relevante data in een 
+        dictionary en geeft deze vervolgens terug
         """
         dic = {}
         dic["X [m]".format(df_I.iloc[0,11])] = df_I.iloc[:,0].to_numpy()
