@@ -21,7 +21,7 @@ from stabiliteitsMain import *
 from importGrasshopperFiles import importGrasshopperFiles
 from outputCode import *
 
-versienummers = np.array([1,2,3,4,5,6,7,8,9])
+versienummers = np.array([1,2,3])
 
 def main(versienummers):
     g_m_en = []
@@ -31,19 +31,24 @@ def main(versienummers):
         print(f"Dit is versie {i}")
         d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, bouyant_csa, positie_kraan, lcg_tp, cg_tp_totaal, dic_input, tcg_tp, vcg_tp = importGrasshopperFiles(versienummer)
         cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, entrance_angle, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel, lcgs_tp, lengte_cm, transom_bhd_thickness, rest_thickness, straal_kraanhuis, r_14knp, kraan_lcg, kraan_tcg, kraan_vcg, weight_transition_piece, transition_piece_amount, swlmax, weight_kraan_heisgerei, weight_kraan_boom, weight_kraan_huis, weight_transition_pieces, weight_kraan_totaal, straal_tp, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, jib_length, zwenkhoek, giekhoek, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, weights_tp = mainValuesAssign(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, resistance, bouyant_csa, positie_kraan, lcg_tp, cg_tp_totaal, dic_input, tcg_tp, vcg_tp)
-        weerstanden.append(r_14knp)
-        g_m = stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces, it, entrance_angle, r_14knp, weight_transition_piece, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, zwenkhoek, giekhoek, jib_length, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei)
-        g_m_en.append(g_m)
+        # Het inladen van alle gegevens en daarna de naamgeving van die gegevens is een conversie van de oude code. Hierdoor past het niet op 1 pagina.
+        g_m, deplacement, lcg_schip, tcg_schip, vcg_schip = stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_lcg, d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, swlmax, weight_transition_pieces, it, entrance_angle, r_14knp, weight_transition_piece, lcg_tp, tcg_tp, vcg_tp, lengte_kraan_fundatie, draaihoogte_kraan, zwenkhoek, giekhoek, jib_length, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei)
+        # De stabiliteit wordt berekent en als deze voldoet aan de eisen worden de rest van de eisen van het schip bekeken. Dit maakt het iteratieve proces efficienter.
         if g_m > 1:
-            maximum_sterkte, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
-            while maximum_sterkte > VLOEIGRENS:
+            g_m_en.append(g_m)
+            weerstanden.append(r_14knp)
+            maximum_spanning, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
+            # De maximaal behaalde spanning bij de initiele condities uit rhino en grasshopper worden gebruikt als basis om verder te kijken naar hoe dik te scheepsplaten moeten zijn.
+            while maximum_spanning > VLOEIGRENS:
                 rest_thickness += 0.001
-                maximum_sterkte, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
+                maximum_spanning, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading = sterkteMain(d1, d2, d3, dbh1, dbh2, dbh, msp, dha, dic_shell_csa, dic_csa_tank1, dic_csa_tank2, dic_csa_tank3, cob, h, bouyant_volume, length_schip, it, l_shell, i_x_shell, bouyant_csa, lcgs_tp, lengte_cm, straal_tp, rest_thickness, transom_bhd_thickness, kraan_lcg, swlmax, straal_kraanhuis, weight_kraan_totaal, weights_tp, tussenstappen_lengte, hoogte_neutrale_as, hoogte_kiel)
             print("De maximaal bereikte spanning en de bijbehorende plaatdikte:")
-            print(maximum_sterkte)
+            print(maximum_spanning)
             print(rest_thickness)
             plotApprovedValues(lengte_cm, verdeelde_belasting, dwars_kracht, buigend_moment, neutrale_as, spanning, reduct_m, phi_accent, w_acc, phi, w, traag, opdrijvende_kracht, shell, ballast, tankwanden, spiegel, kraan, lading)
             outputGlobaleSterkte(max(calcGarbageValues(buigend_moment)), lengte_cm[np.argmax(calcGarbageValues(buigend_moment))], 1, 1, min(calcGarbageValues(calcGarbageValues(calcGarbageValues(w)))), lengte_cm[np.argmin(calcGarbageValues(calcGarbageValues(calcGarbageValues(w))))], versienummer)
+            output1(versienummer, str(entrance_angle), r_14knp, g_m, rest_thickness * 1000, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 0, 0, STAALGEWICHT, WATERDICHTHEID, deplacement, lcg_schip, tcg_schip, vcg_schip, bouyant_volume*WEIGHT_WATER, cob[0], cob[1], cob[2], transition_piece_amount, -weight_transition_piece*GRAVITATION_CONSTANT, lcg_tp, tcg_tp, vcg_tp, versienummer)
+            outputKraan(swlmax, -weight_transition_piece*GRAVITATION_CONSTANT, lengte_kraan_fundatie, draaihoogte_kraan, jib_length, zwenkhoek, giekhoek, lcg_tp, tcg_tp, vcg_tp, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, versienummer)
         else:
             print("G_M voldoet niet")
             return None
