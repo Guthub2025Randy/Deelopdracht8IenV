@@ -45,6 +45,12 @@ def interpolerenLocatie(dictionary_ballasttank, vulling_tank, tanknummer):
     Deze functie bepaalt van het water een ballasttank het zwaartepunt. Als input neemt hij de dictionary waarin de zwaartepunten
     van de tank bij gegeven vullingen staat, de werkelijke vulling, en het tanknummer. Door interpolatie worden het zwaartepunt
     bepaald en teruggegeven als array.
+    Inputs:
+    dictionary_ballasttank (dictionary): dictionary met data uit van de ballasttank
+    vulling_tank (float): het volume van de vulling van de tank in m³
+    tanknummer (int): het nummer van de tank
+    Returns:
+    np.array([lcg,tcg,vcg]): het zwaartepunt van de vulling van de tank (array)
     """
     vol_key = f"vol_{tanknummer}"
     lcg_key = f"lcg_{tanknummer}"
@@ -67,6 +73,16 @@ def calculateWeightKraan(krachten, posities, h, kraan_lcg, swlmax, weight_transi
     Deze functie heeft als doel aan twee lijsten, een met floats die krachten representeren, en aan een ander van arrays die
     elk een positie in het xyz vlak representeren, respectievelijk de zwaartekrachten en hun aangrijpingspunten toe te voegen.
     Ook het gewicht van de deklading (ZwaarteWindmolen) wordt toegevoegd. De aangevulde lijsten worden teruggegeven.
+    Inputs:
+    krachten (list): lijst met de alle zwaartekrachten van de onderdelen van het schip (nog zonder de kraan)
+    posities: lijst met de alle zwaartepunten van de onderdelen van het schip (nog zonder de kraan)
+    h (float): holte in m
+    kraan_lcg (float): x-coördinaat van het zwaartepunt van de kraan
+    swl_max (float): in N
+    weight_transition_pieces (float): het gewicht van alle transition pieces samen in N
+    Returns:
+    krachten (list): lijst met de alle zwaartekrachten van de onderdelen van het schip (nu met de kraan)
+    posities (list): lijst met de alle zwaartepunten van de onderdelen van het schip (nu met de kraan)
     """
     zwaarte_kheis = -swlmax
     array_positie_kheis = np.array([kraan_lcg, 8+(32.5*np.cos(np.deg2rad(60))), (h+1+(32.5*np.sin(np.deg2rad(60))))])

@@ -39,7 +39,7 @@ def outputKraan(swlmax, gewichttransitionpiece, lengte_kraan_fundatie, draaihoog
     wb.save(bestandspad)
     return None
 
-def output1(version, entrance_angle_location, r_14knp, gm, dikte_huid_en_dek, loa, b, h, t, trim, heel, dichtheid_staal, dichtheid_water, deplacement, l_c_g, t_c_g, v_c_g, opdrijvendekracht, l_c_b, t_c_b, v_c_b, dvf, dlm, dtm, aantal_transition_pieces, massa_transition_pieces, lcg_tp, tcg_tp, vcg_tp, versienummer):
+def output1(version, entrance_angle_location, r_14knp, gm, dikte_huid_en_dek, loa, b, h, t, trim, heel, dichtheid_staal, dichtheid_water, deplacement, l_c_g, t_c_g, v_c_g, opdrijvendekracht, l_c_b, t_c_b, v_c_b, aantal_transition_pieces, massa_transition_pieces, lcg_tp, tcg_tp, vcg_tp, versienummer):
     """
     deze functie regelt een deel van de output en zorgt er voor dat het op de juiste plek in het excel document komt te staan.
     """
@@ -67,9 +67,9 @@ def output1(version, entrance_angle_location, r_14knp, gm, dikte_huid_en_dek, lo
     ws["D44"] = l_c_b #LCB
     ws["D45"] = t_c_b #TCB
     ws["D46"] = v_c_b #VCB
-    ws["D49"] = dvf#Afwijking van verticaal krachtevenwicht
-    ws["D50"] = dlm#Afwijking van longitudinaal momentevenwicht
-    ws["D51"] = dtm#Afwijking van transversaal momentevenwicht
+    ws["D49"] = deplacement + opdrijvendekracht #Afwijking van verticaal krachtevenwicht
+    ws["D50"] = deplacement*(l_c_g - l_c_b) #Afwijking van longitudinaal momentevenwicht
+    ws["D51"] = deplacement*(t_c_g - t_c_b)#Afwijking van transversaal momentevenwicht
     ws["D55"] = aantal_transition_pieces
     ws["D56"] = massa_transition_pieces
     ws["D57"] = lcg_tp

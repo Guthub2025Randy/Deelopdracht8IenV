@@ -4,12 +4,9 @@ Created on Wed May  7 11:11:28 2025
 
 @author: randy
 """
-# De main herschrijven haha, hier is het deel wat bij deelopdracht 7 hoort
-from importGrasshopperFiles import *
 from bibliotheek import *
 import matplotlib.pyplot as plt
 from schipFuncties import *
-from outputCode import *
 
 def calculateOpdrijvendeKracht(onderwater_volume):
     """
@@ -472,10 +469,10 @@ def tankTwee(krachten2, dbh1, locatie_t1, kracht_t1, locatie_t3, kracht_t3, h, c
     krachten_bh1, posities_bh1 = positiesmetkrachtenlijst2(dbh1, locatie_t1, kracht_t1, locatie_t3, kracht_t3, h, 
                                                            cob, transom_bhd_thickness, kraan_lcg, swlmax, dha, 
                                                            rest_thickness, calculateOpdrijvendeKracht(bouyant_volume), weight_transition_pieces)
-    TweedeMomentensom = calculateMomentensom(posities_bh1, krachten_bh1)
-    TweedeKrachtensom = calculateKrachtsom2(krachtensom, dbh2, transom_bhd_thickness)
+    tweedeMomentensom = calculateMomentensom(posities_bh1, krachten_bh1)
+    tweedeKrachtensom = calculateKrachtsom2(krachtensom, dbh2, transom_bhd_thickness)
     vcgt2 = interpolerenLocatie(d2, volume_t2, 2)[2]
-    positie_t2 = np.array([lcgTank2(TweedeMomentensom,TweedeKrachtensom)[0], 0, vcgt2])
+    positie_t2 = np.array([lcgTank2(tweedeMomentensom, tweedeKrachtensom)[0], 0, vcgt2])
     print("De langscheepse positie van tank 2 moet zijn:")
     print(positie_t2[0])
     return volume_t2, kracht_t2, positie_t2
@@ -527,7 +524,7 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     tcg_hijsgerij: y-coördinaat van zwaartepunt van hijsgerij
     vcg_hijsgerij: z-coördinaat van zwaartepunt van hijsgerij
     Returns:
-    G_M: gecorrigeerde metacentrumafstand G'M in m
+    g_m: gecorrigeerde metacentrumafstand G'M in m
     """
     # De eerste momentensom voor het dwarsscheepse momentenevenwicht    
     momentensom1_, kracht_t3, locatie_t3, volume_t3 = eersteMoment(d3, bouyant_volume, transom_bhd_thickness, dha, 
@@ -547,7 +544,7 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     #Stabiliteit: met de functie "traagheidsmomenten_ballasttanks" wordt de som van de traagheidsmomenten van de
     #vrije vloeistofoppervlakten van de tanks berekend. Voor meer informatie over deze functie, zie de docstring
     #in het functiebestand.
-    SIt = calculateIttanks(d1["inertia_1"], d2["inertia_2"], d3["inertia_3"], d1["vol_1"],
+    si_t = calculateIttanks(d1["inertia_1"], d2["inertia_2"], d3["inertia_3"], d1["vol_1"],
                                           d2["vol_2"], d3["vol_3"], volume_t1, volume_t2, volume_t3)
     #Stabiliteit: om de totale zwaartepunten van het schip te berekenen, moeten het gewicht en zwaartepunt van het water in
     #tank 2 worden toegevoegd aan de lijsten met krachten en posities en de opdrijvende kracht en het
@@ -556,16 +553,9 @@ def stabilitietsMain(versienummer, transom_bhd_thickness, rest_thickness, kraan_
     posities2.append(positie_t2)
     posities3, krachten3 = removeBuoyantForce(posities2, krachten2, cob, calculateOpdrijvendeKracht(bouyant_volume))
     lcg_schip, tcg_schip, vcg_schip = calculateZwaartepuntschip(posities3, krachten3)
-    G_M = calculateG_M(bouyant_volume, SIt, vcg_schip, cob[2], it)
+    g_m = calculateG_M(bouyant_volume, si_t, vcg_schip, cob[2], it)
     print("De G_M van het schip is:")
-    print(G_M)
+    print(g_m)
     vul1, vul2, vul3 = vullingPercFunc(d1, d2, d3, momentensom1_, volume_t2, volume_t3)
-    output1(versienummer, str(entrance_angle), r_14knp, G_M, 20, msp["Loa  [m]"], msp["B [m]"], h, msp["T moulded [m]"], 
-            0, 0, STAALGEWICHT, WATERDICHTHEID, calculateKrachtensom1(krachten3)[0], lcg_schip, tcg_schip, vcg_schip, 
-            bouyant_volume*WEIGHT_WATER, cob[0], cob[1], cob[2], 
-            calculateKrachtensom1(krachten3)[0]+(bouyant_volume*WEIGHT_WATER), (calculateKrachtensom1(krachten3)[0]*(lcg_schip - cob[0])), 
-            (calculateKrachtensom1(krachten3)[0]*(tcg_schip - cob[1])), 4, -weight_transition_piece*GRAVITATION_CONSTANT, lcg_tp, tcg_tp, vcg_tp, 0o3)
-    outputKraan(swlmax, -weight_transition_piece*GRAVITATION_CONSTANT, lengte_kraan_fundatie, draaihoogte_kraan, jib_length, zwenkhoek, 
-                giekhoek, lcg_tp, tcg_tp, vcg_tp, lcg_kraanhuis, tcg_kraanhuis, vcg_kraanhuis, lcg_kraanboom, tcg_kraanboom, 
-                vcg_kraanboom, lcg_heisgerei, tcg_heisgerei, vcg_heisgerei, 0o3)
-    return G_M
+    deplacement = calculateKrachtensom1(krachten3)[0]
+    return g_m, deplacement, lcg_schip, tcg_schip, vcg_schip

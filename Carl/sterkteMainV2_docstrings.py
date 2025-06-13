@@ -7,29 +7,29 @@ Created on Mon May 12 13:21:19 2025
 from importGrasshopperFiles import *
 from bibliotheek import *
 import matplotlib.pyplot as plt
-from schipFuncties import *
-from outputCode import *
+from schip_functies import *
+from output_code import *
 
 # Begin deelopdracht 8
-def opwaartseKracht(dictio_csa, lengte_schip):
+def opwaartseKracht(dictio_CSA, lengte_schip):
     """
     functie bepaalt de verdeelde belasting tgv de opwaartse kracht op elke cm van het schip
     Inputs:
-    dictio_csa (dictionary): data van crosssectionareas van het onderwaterschip
+    dictio_CSA (dictionary): data van crosssectionareas van het onderwaterschip
     lengte_schip (np.array): x-coördinaten op elke centimeter van het schip
     Returns:
     opwaartse_kracht_cm (np.array): verdeelde belasting tgv de opwaartse kracht op elke cm van het schip in N/m
     """
-    oppervlakte = dictio_csa[" crossarea_in_m2"]
-    lps = dictio_csa["x_in_m"]
+    oppervlakte = dictio_CSA[" crossarea_in_m2"]
+    lps = dictio_CSA["x_in_m"]
     oppervlakteInterp = ip.interp1d(lps, oppervlakte, kind='quadratic', fill_value='extrapolate')
     oppervlakte_cm = oppervlakteInterp(lengte_schip)
-    onderwater_volume = []
+    Onderwater_volume = []
     for i in range(len(oppervlakte_cm)-1):
         dx = lengte_schip[i+1]-lengte_schip[i]
-        onderwater_volume.append(oppervlakte_cm[i]*dx)
-    onderwater_volume.append(0)
-    opwaartse_kracht_cm = np.array(onderwater_volume)*WEIGHT_WATER
+        Onderwater_volume.append(oppervlakte_cm[i]*dx)
+    Onderwater_volume.append(0)
+    opwaartse_kracht_cm = np.array(Onderwater_volume)*WEIGHT_WATER
     return opwaartse_kracht_cm
 
 def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, lengte_schip_csa_shell, lengte_schip):
@@ -41,8 +41,8 @@ def traagheidsmomentOverLengte(traagheidsmoment_csa_shell, lengte_schip_csa_shel
     Returns:
     traagheidsmoment_csa_shell_cm (np.array): traagheidsmoment op elke cm van het schip
     """
-    interpoleerNaarCm = ip.interp1d(lengte_schip_csa_shell, traagheidsmoment_csa_shell, kind='cubic')
-    traagheidsmoment_csa_shell_cm = interpoleerNaarCm(lengte_schip)
+    interpoleer_naar_cm = ip.interp1d(lengte_schip_csa_shell, traagheidsmoment_csa_shell, kind='cubic')
+    traagheidsmoment_csa_shell_cm = interpoleer_naar_cm(lengte_schip)
     return traagheidsmoment_csa_shell_cm
 
 def ballastLoop(x_in_m, opp, lengte_schip):
@@ -52,21 +52,21 @@ def ballastLoop(x_in_m, opp, lengte_schip):
     x_in_m (np.array): x-coördinaten op een aantal plekken op het schip
     opp (np.array): de oppervlaktes van de doorsneden van de tankvulling op de x-coördinaten van x_in_m
     Returns:
-    neerwaartse_kracht (np.array): de verdeelde belasting tgv het gewicht van de vulling van de ballasttank
+    Neerwaartse_kracht (np.array): de verdeelde belasting tgv het gewicht van de vulling van de ballasttank
     """
     leng_scale = int(((x_in_m[-1] - x_in_m[0])*(len(lengte_schip)/(lengte_schip[-1] - lengte_schip[0]))))
     donnot = np.array([0.0])
     rescaling_length = np.linspace(x_in_m[0], x_in_m[-1], leng_scale)
     oppervlakteInterp = ip.interp1d(x_in_m, opp, kind='quadratic', fill_value=donnot)
     oppervlakte_cm = oppervlakteInterp(rescaling_length)
-    water_volume = []
+    Water_volume = []
     for i in range(len(oppervlakte_cm)-1):
         dx = rescaling_length[i+1] - rescaling_length[i]
-        water_volume.append(oppervlakte_cm[i]*dx)
-    water_volume.append(0)
-    neerwaartse_kracht_pre = np.array(water_volume)*WEIGHT_WATER
-    neerwaartse_kracht = np.interp(lengte_schip, rescaling_length, neerwaartse_kracht_pre, left=0, right=0)
-    return neerwaartse_kracht
+        Water_volume.append(oppervlakte_cm[i]*dx)
+    Water_volume.append(0)
+    Neerwaartse_kracht_pre = np.array(Water_volume)*WEIGHT_WATER
+    Neerwaartse_kracht = np.interp(lengte_schip, rescaling_length, Neerwaartse_kracht_pre, left=0, right=0)
+    return Neerwaartse_kracht
 
 def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip, scaling):
     """
@@ -77,7 +77,7 @@ def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip, scaling):
     dic_tank_3 (dictionary): data van tank 3
     lengte_schip (np.array): x-coördinaten op elke centimeter van het schip    
     Returns:
-    neerwaartse_kracht_cm (np.array): de verdeelde belasting tgv het gewicht van de vullingen van de ballasttanks samen op elke cm in N/m
+    Neerwaartse_kracht_cm (np.array): de verdeelde belasting tgv het gewicht van de vullingen van de ballasttanks samen op elke cm in N/m
     """
     oppervlakte1 = dic_tank[" crossarea_in_m2"]
     lps1 = dic_tank["x_in_m"]
@@ -85,11 +85,11 @@ def ballastwaterKracht(dic_tank, dic_tank_2, dic_tank_3, lengte_schip, scaling):
     lps2 = dic_tank_2["x_in_m"]
     oppervlakte3 = dic_tank_3[" crossarea_in_m2"]
     lps3 = dic_tank_3["x_in_m"]
-    neerwaartse_kracht1 = ballastLoop(lps1, oppervlakte1, lengte_schip)
-    neerwaartse_kracht2 = ballastLoop(lps2, oppervlakte2, lengte_schip)
-    neerwaartse_kracht3 = ballastLoop(lps3, oppervlakte3, lengte_schip)
-    neerwaartse_kracht_cm = (neerwaartse_kracht1 + neerwaartse_kracht2 + neerwaartse_kracht3) * scaling
-    return -neerwaartse_kracht_cm
+    Neerwaartse_kracht1 = ballastLoop(lps1, oppervlakte1, lengte_schip)
+    Neerwaartse_kracht2 = ballastLoop(lps2, oppervlakte2, lengte_schip)
+    Neerwaartse_kracht3 = ballastLoop(lps3, oppervlakte3, lengte_schip)
+    Neerwaartse_kracht_cm = (Neerwaartse_kracht1 + Neerwaartse_kracht2 + Neerwaartse_kracht3) * scaling
+    return -Neerwaartse_kracht_cm
 
 def dwarskracht(q_x, lengte_schip):
     """
@@ -235,81 +235,83 @@ def parabolischProfielTP(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_tp)
       kracht[int(bereik[0]*100)+i] = profiel[i]
     return kracht
 
+# deze functie moeten nog geplot worden. met lengte op de x-as en krachtverdeling op de y-as. met als title: "Krachtverdeling over het Schip"
+
 def calculateSpiegel(arr_lengte, dic, huiddikte):
-    """
-    functie bepaalt de verdeelde belasting tgv het gewicht van de spiegel
-    Inputs: 
-    arr_lengte (np.array): x-coördinaten op elke centimeter van het schip
-    dic (dictionary): data van de romp
-    huiddikte (float): in m
-    Returns:
-    arr_gewicht (array): verdeelde belasting tgv het gewicht van de spiegel op elke cm van het schip in N/m
-    """
-    fg_totaal = dic["Transom Area "][0]*huiddikte*WEIGHT_STAAL
-    scaling = int(((len(arr_lengte))/(arr_lengte[-1] - arr_lengte[0])))
-    fg_per_cm = (1.25*fg_totaal)/(scaling/10)
-    arr_gewicht = np.zeros(len(arr_lengte))
-    for i in range(int(scaling)):
-      arr_gewicht[i] += fg_per_cm
-    return -arr_gewicht*(scaling/10)
+   """
+   functie bepaalt de verdeelde belasting tgv het gewicht van de spiegel
+   Inputs: 
+   arr_lengte (np.array): x-coördinaten op elke centimeter van het schip
+   dic (dictionary): data van de romp
+   huiddikte (float): in m
+   Returns:
+   arr_gewicht (array): verdeelde belasting tgv het gewicht van de spiegel op elke cm van het schip in N/m
+   """
+  fg_totaal = dic["Transom Area "][0]*huiddikte*WEIGHT_STAAL
+  scaling = int(((len(arr_lengte))/(arr_lengte[-1] - arr_lengte[0])))
+  fg_per_cm = (1.25*fg_totaal)/(scaling/10)
+  arr_gewicht = np.zeros(len(arr_lengte))
+  for i in range(int(scaling)):
+    arr_gewicht[i] += fg_per_cm
+  return -arr_gewicht*(scaling/10)
 
 def calculateHuid(arr_x, huiddikte, dic_shell):
-    """
-    functie berekent de verdeelde belasting van de huid. 
-    Inputs:
-    arr_x: array met de lengtewaardes van het schip per centimeter
-    huiddikte: in m (float)
-    dic_csa: dictionary met de waarden uit het shell_csa bestand
-    Returns:
-    arr_gewicht: een array met de waarden van de verdeelde belasting tgv het gewicht van de huid in N/m op elke centimeter van de lengte. 
-    """
-    x = dic_shell["X [m]"]
-    w = np.zeros(len(arr_x))
-    w = dic_shell["CROSS SECTION AREA OF SHELL PLATING [m2]"]*WEIGHT_STAAL*huiddikte
-    f = ip.interp1d(x,w, kind='cubic')
-    arr_gewicht = f(arr_x)
-    return -arr_gewicht
+  """
+  functie berekent de verdeelde belasting van de huid. 
+  Inputs:
+  arr_x: array met de lengtewaardes van het schip per centimeter
+  huiddikte: in m (float)
+  dic_csa: dictionary met de waarden uit het shell_csa bestand
+  Returns:
+  arr_gewicht: een array met de waarden van de verdeelde belasting tgv het gewicht van de huid in N/m op elke centimeter van de lengte. 
+  """
+  x = dic_shell["X [m]"]
+  w = np.zeros(len(arr_x))
+  w = dic_shell["CROSS SECTION AREA OF SHELL PLATING [m2]"]*WEIGHT_STAAL*huiddikte
+  f = ip.interp1d(x,w, kind='cubic')
+  arr_gewicht = f(arr_x)
+  return -arr_gewicht
 
 def calculateTrapezium(arr_lengte, dic_bh, huiddikte):
-    """
-    functie bepaalt de verdeelde belasting van de tankschotten op basis van een trapeziumvorminge benadering. 
-    Inputs: 
-    arr_lengte (np.array): array met de lengtewaardes van het schip per centimeter
-    dic_schot (dictionary): de dictionary met de waarden uit het BHData bestand
-    Returns:
-    arr_gewicht (np.array): array met de verdeelde belasting van de tankschotten op elke centimeter lengte
-    """
-    arr_gewicht = np.zeros(len(arr_lengte))
-    for x in dic_bh:
-      xmin = dic_bh[x][4]
-      xmax = dic_bh[x][5]
-      lcg = dic_bh[x][1]
-      A = dic_bh[x][0]*WEIGHT_STAAL*huiddikte
-      ixb = int(round(xmin*100)-100*arr_lengte[0])
-      ixe = int(round(xmax*100)-100*arr_lengte[0])
-      lcg_l = lcg - xmin
-      if lcg == xmin + (xmax-xmin)/2:
-        a = A/(xmax-xmin)
-        b = A/(xmax-xmin)
-      elif lcg == xmin + (xmax-xmin)/3:
-        a = A/(xmax-xmin)*2
-        b = 0
-      elif lcg == xmin + 2*(xmax-xmin)/3:
-        a = 0
-        b = A/(xmax-xmin)*2
-      elif lcg < xmin + (xmax-xmin)/3 or lcg > xmin + 2*(xmax-xmin)/3:
-        print(f"error: object moet opgedeeld worden")
-        exit
-      elif lcg < xmin + (xmax-xmin)/2:
-        a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
-        b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
-      else:
-        a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
-        b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
-      arr = np.linspace(a,b,ixe-ixb)
-      for i in range(len(arr)):
-        arr_gewicht[ixb+i] = arr_gewicht[ixb+i]+arr[i]
-    return -arr_gewicht
+  """
+  functie bepaalt de verdeelde belasting van de tankschotten op basis van een trapeziumvorminge benadering. 
+  Inputs: 
+  arr_lengte (np.array): array met de lengtewaardes van het schip per centimeter
+  dic_schot (dictionary): de dictionary met de waarden uit het BHData bestand
+  Returns:
+  arr_gewicht (np.array): array met de verdeelde belasting van de tankschotten op elke centimeter lengte
+  """
+  arr_gewicht = np.zeros(len(arr_lengte))
+  for x in dic_bh:
+    xmin = dic_bh[x][4]
+    xmax = dic_bh[x][5]
+    lcg = dic_bh[x][1]
+    A = dic_bh[x][0]*WEIGHT_STAAL*huiddikte
+    ixb = int(round(xmin*100)-100*arr_lengte[0])
+    ixe = int(round(xmax*100)-100*arr_lengte[0])
+    lcg_l = lcg - xmin
+    if lcg == xmin + (xmax-xmin)/2:
+      a = A/(xmax-xmin)
+      b = A/(xmax-xmin)
+    elif lcg == xmin + (xmax-xmin)/3:
+      a = A/(xmax-xmin)*2
+      b = 0
+    elif lcg == xmin + 2*(xmax-xmin)/3:
+      a = 0
+      b = A/(xmax-xmin)*2
+    elif lcg < xmin + (xmax-xmin)/3 or lcg > xmin + 2*(xmax-xmin)/3:
+      print(f"error: object moet opgedeeld worden")
+      exit
+    elif lcg < xmin + (xmax-xmin)/2:
+      a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+      b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+    else:
+      a = 4*A/(xmax-xmin) -  6*A*lcg_l/(xmax-xmin)**2
+      b = 6*A*lcg_l/(xmax-xmin)**2-2*A/(xmax-xmin)
+    arr = np.linspace(a,b,ixe-ixb)
+    for i in range(len(arr)):
+      arr_gewicht[ixb+i] = arr_gewicht[ixb+i]+arr[i]
+  return -arr_gewicht
 
 def parabolischProfielKraan(zwaartepunt_tp, totaal_kracht, lengte_in_cm, straal_kraanhuis):
     """
@@ -358,34 +360,34 @@ def berekenKrachtVerdeling(lading_posities, massas, lengte_in_cm, straal):
     return krachtverdeling
 
 def calcParaboolFunctie(locatie, totaal_gewicht, arr_lengte, straal):
-    """
-    Functie stelt een paraboolvormige verdeelde belasting op voor een belasting dat een cirkelvormig contactoppervlak heeft met het dek en 
-    een homogene masseverdeling heeft.
-    Inputs:
-    locatie: de x-coördinaat van het zwaartepunt van de last in m (float/int)
-    totaal_gewicht: het gewicht van de last in N (float)
-    straal: straal van het contactoppervlak in m (float)
-    arr_lengte: array met de x-coördinaat met van elke centimeter lengte van het schip (np.array)
-    Returns:
-    q_out (np.array): verdeelde belasting van de cirkelvormige belasting in N/m
-    """
-    n_points = 2 * straal * 100 + 1
-    x = np.linspace(-straal, straal, n_points)
-    
-    #Hertzian pressure distribution: q(x) = q0 * sqrt(1 - (2x/L)^2)
-    #Totale last = (π/4) * q0 * L → solve for q0
-    q0 = (4 / np.pi) * totaal_gewicht / (2*straal)
-    q = q0 * np.sqrt(1 - (2 * x / (2*straal))**2)
-    
-    #Kleine negatieve waarden corrigeren
-    q = np.where(q <= 0, q, 0)
-    
-    #Op de juiste plaats in array zetten
-    i_start = int((locatie - straal - arr_lengte[0])*100)
-    q_out = np.zeros(len(arr_lengte))
-    for i in range(len(q)):
-      q_out[i_start+i] = q[i]
-    return q_out
+  """
+  Functie stelt een paraboolvormige verdeelde belasting op voor een belasting dat een cirkelvormig contactoppervlak heeft met het dek en 
+  een homogene masseverdeling heeft.
+  Inputs:
+  locatie: de x-coördinaat van het zwaartepunt van de last in m (float/int)
+  totaal_gewicht: het gewicht van de last in N (float)
+  straal: straal van het contactoppervlak in m (float)
+  arr_lengte: array met de x-coördinaat met van elke centimeter lengte van het schip (np.array)
+  Returns:
+  q_out (np.array): verdeelde belasting van de cirkelvormige belasting in N/m
+  """
+  n_points = 2 * straal * 100 + 1
+  x = np.linspace(-straal, straal, n_points)
+
+  #Hertzian pressure distribution: q(x) = q0 * sqrt(1 - (2x/L)^2)
+  #Totale last = (π/4) * q0 * L → solve for q0
+  q0 = (4 / np.pi) * totaal_gewicht / (2*straal)
+  q = q0 * np.sqrt(1 - (2 * x / (2*straal))**2)
+
+  #Kleine negatieve waarden corrigeren
+  q = np.where(q <= 0, q, 0)
+
+  #Op de juiste plaats in array zetten
+  i_start = int((locatie - straal - arr_lengte[0])*100)
+  q_out = np.zeros(len(arr_lengte))
+  for i in range(len(q)):
+    q_out[i_start+i] = q[i]
+  return q_out
 
 def calcNeutraleAs(lengte_schip, tussenstappen_lengte, hoogte_neutrale_as):
     """
