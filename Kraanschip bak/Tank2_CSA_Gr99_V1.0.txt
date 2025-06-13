@@ -1,8 +1,0 @@
-TANK 2 FILLING CROSS SECTION AREAS Group 99; Version 1.0
-Number of rows, 5
-x_in_m, crossarea_in_m2
-19.668,69.993
-24.9588,69.993
-30.2496,69.993
-35.5404,69.993
-40.8312,69.993

@@ -1,4 +1,0 @@
-TANK 1 FILLING CROSS SECTION AREAS Group 99; Version 1.0
-Number of rows, 1
-x_in_m, crossarea_in_m2
-0,0
